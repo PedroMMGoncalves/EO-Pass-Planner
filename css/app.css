@@ -1,0 +1,45 @@
+/* app.css: provisional styles using the colour tokens.
+   Typography (Barlow, vendored), layout and print field sheet: not implemented yet. */
+
+:root {
+  --paper: #E9EEF0;
+  --ink: #17283A;
+  --rule: #B9C4CB;
+  --surface: #F7F9FA;
+  --warn: #B3261E;
+  --radius-control: 6px;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.5 system-ui, sans-serif;
+}
+
+.top {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.wordmark { font-size: 1.95rem; margin: 0; }
+.badge { margin: 0 0 0 auto; font-variant-numeric: tabular-nums; }
+
+main { padding: 1rem 1.5rem; max-width: 72ch; }
+
+button {
+  font: inherit;
+  color: var(--surface);
+  background: var(--ink);
+  border: 0;
+  border-radius: var(--radius-control);
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+}
+
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+.is-warn { color: var(--warn); }

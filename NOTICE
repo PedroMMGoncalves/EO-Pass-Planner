@@ -1,0 +1,14 @@
+EO Pass Planner
+Copyright (c) 2026 Pedro Gonçalves. MIT License (see LICENSE).
+
+This is a clean-room JavaScript reimplementation inspired by
+eo-overpass-predictor, Copyright (c) 2026 Julian Manning, MIT License:
+https://github.com/julianManning/eo-overpass-predictor
+
+No code from that project is included. Its method (SGP4 propagation,
+swath/ROI intersection in a local equal-area projection, daytime/descending
+filters, edge margin, TLE age) inspired this one. Its Python code is used
+only as a test oracle in CI.
+
+Third-party libraries in vendor/ keep their own licences; see vendor/README.md
+and vendor/licenses/.

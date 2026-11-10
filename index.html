@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EO Pass Planner</title>
+  <meta name="description" content="Previsão de passagens de satélites de observação da Terra sobre uma região de interesse.">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="top">
+    <h1 class="wordmark">EO Pass Planner</h1>
+    <p id="freshness" class="badge" aria-live="polite"></p>
+    <button id="lang" type="button">English</button>
+  </header>
+  <main>
+    <p id="status" aria-live="polite">A carregar dados…</p>
+    <h2 id="catalogue-heading">Instrumentos no catálogo</h2>
+    <ul id="catalogue"></ul>
+  </main>
+</body>
+</html>

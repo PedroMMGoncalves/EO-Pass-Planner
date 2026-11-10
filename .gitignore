@@ -1,0 +1,10 @@
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Specification and assistant files (kept local)
+SPEC.md
+CLAUDE.md
+.claude/

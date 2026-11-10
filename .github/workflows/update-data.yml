@@ -1,0 +1,58 @@
+# Fetch TLEs (ESA acquisition plans to follow) and commit them as static JSON.
+name: update-data
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - run: pip install "requests==2.32.*"
+
+      - name: Fetch data
+        id: fetch
+        # The script writes good data even when some sources fail (exit 1),
+        # so commit first and fail the job afterwards.
+        run: |
+          set +e
+          python scripts/update_data.py --changes-file "$RUNNER_TEMP/changes.txt"
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Validate catalogue against fetched names
+        run: python scripts/validate_catalogue.py
+
+      - name: Commit if data changed
+        run: |
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          { echo "data: automated update"; echo; cat "$RUNNER_TEMP/changes.txt"; } > "$RUNNER_TEMP/msg.txt"
+          git commit -F "$RUNNER_TEMP/msg.txt"
+          git push
+
+      - name: Fail if any source failed
+        if: steps.fetch.outputs.code != '0'
+        run: |
+          echo "update_data.py reported errors; see the Fetch data step and data/meta.json."
+          exit 1

@@ -1,0 +1,9 @@
+{
+  "name": "eo-pass-planner",
+  "private": true,
+  "type": "module",
+  "description": "No dependencies. This file only marks js/ as ES modules for node --test.",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.js\""
+  }
+}

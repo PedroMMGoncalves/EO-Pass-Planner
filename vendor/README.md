@@ -12,6 +12,7 @@ exposed. Licence texts are in [`licenses/`](licenses/).
 | `proj4.js` | [proj4js](https://github.com/proj4js/proj4js) | 2.22.0 | MIT | ROI-centred LAEA projection, user CRS input |
 | `polygon-clipping.js` | [polygon-clipping](https://github.com/mfogel/polygon-clipping) | 0.15.7 | MIT | planar swath/ROI intersection |
 | `geographiclib-geodesic.js` | [geographiclib-geodesic](https://github.com/geographiclib/geographiclib-js) | 2.2.0 | MIT | WGS84 geodesics (Karney) for swath construction |
+| `fileformats.js` | [@tmcw/togeojson](https://github.com/placemark/togeojson), [shpjs](https://github.com/calvinmetcalf/shapefile-js) | 7.1.3, 6.2.0 | BSD-2-Clause, MIT | ROI files: KML/KMZ and zipped Shapefile (loaded on demand) |
 | `maplibre/` | [MapLibre GL JS](https://github.com/maplibre/maplibre-gl-js) | 6.17.0 | BSD-3-Clause | globe map (ESM build: `maplibre-gl.mjs` loads `maplibre-gl-worker.mjs` from the same folder) |
 | `tz-lookup.js` | [tz-lookup](https://github.com/darkskyapp/tz-lookup-oss) | 6.1.25 | CC0-1.0 | IANA time zone of the ROI anchor |
 
@@ -23,6 +24,9 @@ Bundled transitive dependencies (inside the files above):
 | robust-predicates | 3.0.3 | Unlicense | `polygon-clipping.js` |
 | mgrs | 1.0.0 | MIT | `proj4.js` |
 | wkt-parser | 1.6.0 | MIT | `proj4.js` |
+| but-unzip | 0.1.10 | Apache-2.0 | `fileformats.js` (also used directly for KMZ) |
+| parsedbf | 2.0.0 | MIT | `fileformats.js` |
+| proj4 (second copy, via shpjs) | 2.x | MIT | `fileformats.js` |
 
 Known quirk: proj4 2.22.0 returns `NaN` for `+proj=laea` unless `+x_0=0 +y_0=0`
 are written explicitly. `geometry.js` must always build the LAEA string with
@@ -53,5 +57,5 @@ rate limits. An imagery basemap is not included yet. Its candidate sources
 (EOX Sentinel-2 cloudless, Esri World Imagery) have licence terms that still
 need checking.
 
-Still to vendor (later steps): terra-draw + MapLibre adapter, @tmcw/togeojson,
-JSZip, shpjs.
+Polygon and rectangle drawing is implemented in `js/roi.js` (about 100 lines)
+instead of vendoring terra-draw, to keep one small, testable code path.

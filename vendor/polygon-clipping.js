@@ -1,4 +1,4 @@
-/*! polygon-clipping 0.15.7 (MIT), vendored by scripts/vendor.sh; see vendor/README.md */
+/*! polygon-clipping bundle, vendored by scripts/vendor.sh (versions and licences: vendor/README.md) */
 var Dt=Object.create;var Et=Object.defineProperty;var Vt=Object.getOwnPropertyDescriptor;var Wt=Object.getOwnPropertyNames;var Zt=Object.getPrototypeOf,Jt=Object.prototype.hasOwnProperty;var Ht=(w,v)=>()=>(v||w((v={exports:{}}).exports,v),v.exports);var Kt=(w,v,G,k)=>{if(v&&typeof v=="object"||typeof v=="function")for(let z of Wt(v))!Jt.call(w,z)&&z!==G&&Et(w,z,{get:()=>v[z],enumerable:!(k=Vt(v,z))||k.enumerable});return w};var te=(w,v,G)=>(G=w!=null?Dt(Zt(w)):{},Kt(v||!w||!w.__esModule?Et(G,"default",{value:w,enumerable:!0}):G,w));var mt=Ht((it,rt)=>{(function(w,v){typeof it=="object"&&typeof rt<"u"?rt.exports=v():typeof define=="function"&&define.amd?define(v):(w=typeof globalThis<"u"?globalThis:w||self,w.polygonClipping=v())})(it,(function(){"use strict";/**
  * splaytree v3.1.2
  * Fast Splay tree for Node and browser

@@ -2,15 +2,21 @@
  * main.js: UI wiring, state and the simulation clock.
  *
  * Inputs:  data/catalogue.json, data/tles.json, data/meta.json (relative paths);
- *          user actions (globe click, coordinates, window, instruments).
+ *          user actions (globe click or drawing, typed coordinates, ROI files,
+ *          buffer, window, instruments); the URL hash.
  * Outputs: DOM updates, the live globe, pass computation in a Web Worker,
- *          the answer sentence, table, absences and CSV export.
+ *          the answer sentence, table, absences, CSV export and a shareable
+ *          URL that reproduces the query.
  *
- * Limitations: point ROIs only for now (polygon drawing and file upload are
- * not implemented yet); no URL sharing yet; cloud forecast not yet included.
+ * Limitations: polygons with more than 300 vertices are simplified before
+ * computation (the change in area is shown); cloud forecast not yet included.
  */
 
 import tzlookup from '../vendor/tz-lookup.js';
+import {
+  CRS, RoiError, parseCoordinates, readRoiFile, simplifyRoi, bufferRoi, createDrawer, parseHash, buildHash,
+} from './roi.js';
+import { roiAnchor, prepareRoi, polygonsOf } from './geometry.js';
 import { loadCatalogue, filterEntries, entryStyle, shortName } from './catalogue.js';
 import { loadTles, loadMeta, dataFreshness } from './tle.js';
 import { t, setLang, getLang, formatDateTime, formatTimeSec } from './i18n.js';
@@ -115,26 +121,110 @@ function renderPlay() {
 
 // ---------- ROI ----------
 
-function setRoi(lat, lon) {
-  if (!(Math.abs(lat) <= 90 && Math.abs(lon) <= 180)) {
-    $('#roi-error').textContent = t('roi_bad');
-    $('#roi-error').hidden = false;
-    return;
-  }
-  $('#roi-error').hidden = true;
-  state.roi = { type: 'Point', coordinates: [lon, lat] };
-  try { state.tz = tzlookup(lat, lon); } catch { state.tz = 'UTC'; }
-  $('#lat').value = lat.toFixed(5);
-  $('#lon').value = lon.toFixed(5);
-  globe.setRoi(state.roi);
+let drawer;
+
+function showRoiError(err) {
+  const el = $('#roi-error');
+  if (!err) { el.hidden = true; return; }
+  const key = err instanceof RoiError ? err.message : null;
+  el.textContent = key ? t(key) : t('file_read', { msg: err.message ?? String(err) });
+  el.hidden = false;
+}
+
+function lonLatBounds(geom) {
+  const pts = geom.type === 'Point' ? [geom.coordinates] : geom.coordinates.flat(geom.type === 'Polygon' ? 1 : 2);
+  const lons = pts.map((p) => p[0]);
+  const lats = pts.map((p) => p[1]);
+  return [[Math.min(...lons), Math.min(...lats)], [Math.max(...lons), Math.max(...lats)]];
+}
+
+/** Set the ROI as entered (before buffer); `fly` moves the view to it. */
+function setRoiGeom(geom, { warnings = [], fly = false } = {}) {
+  showRoiError(null);
+  state.roiRaw = geom;
+  state.roiWarnings = warnings;
+  applyBuffer();
+  const a = roiAnchor(state.roi);
+  try { state.tz = tzlookup(a.lat, a.lon); } catch { state.tz = 'UTC'; }
   state.result = null;
   state.selectedPass = null;
   renderFootprints();
   $('#run').disabled = false;
   $('#export-csv').disabled = true;
+  $('#copy-link').disabled = true;
+  $('#roi-clear').hidden = false;
   setAnswer(t('answer_ready'), '');
   renderTable();
   renderAbsences();
+  if (fly) {
+    if (geom.type === 'Point') globe.flyTo(a.lat, a.lon, Math.max(globe.map.getZoom(), 3));
+    else globe.fitBounds(lonLatBounds(state.roi));
+  }
+}
+
+function applyBuffer() {
+  if (!state.roiRaw) return;
+  state.buffer = Math.min(200, Math.max(0, Number($('#buffer').value) || 0));
+  state.roi = bufferRoi(state.roiRaw, state.buffer);
+  globe.setRoi(state.roi);
+  renderRoiSummary();
+}
+
+function renderRoiSummary() {
+  const el = $('#roi-summary');
+  if (!state.roi) { el.textContent = ''; return; }
+  const parts = [];
+  if (state.roi.type === 'Point') {
+    const [lon, lat] = state.roi.coordinates;
+    parts.push(t('roi_point_summary', { lat: lat.toFixed(5), lon: lon.toFixed(5) }));
+  } else {
+    const prep = prepareRoi(state.roi);
+    const n = polygonsOf(state.roi).reduce((k, p) => k + p.reduce((m, r) => m + r.length - 1, 0), 0);
+    parts.push(t('roi_poly_summary', { area: Math.round(prep.area / 1e6).toLocaleString(getLang() === 'pt' ? 'pt-PT' : 'en-GB'), n }));
+  }
+  if (state.buffer > 0) parts.push(t('roi_buffer_summary', { km: state.buffer }));
+  for (const w of state.roiWarnings ?? []) parts.push(t(w));
+  if (state.simplifiedNote) parts.push(state.simplifiedNote);
+  el.textContent = parts.join(' ');
+}
+
+function clearRoi() {
+  drawer.stop();
+  state.roi = null;
+  state.roiRaw = null;
+  state.result = null;
+  state.simplifiedNote = '';
+  globe.setRoi(null);
+  renderFootprints();
+  renderRoiSummary();
+  $('#run').disabled = true;
+  $('#export-csv').disabled = true;
+  $('#copy-link').disabled = true;
+  $('#roi-clear').hidden = true;
+  setAnswer(t('answer_idle'), t('answer_idle_sub'));
+  renderTable();
+  renderAbsences();
+  history.replaceState(null, '', location.pathname + location.search);
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  for (const b of document.querySelectorAll('.segmented [data-mode]')) b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
+  if (mode === 'point') drawer.stop(); else drawer.start(mode);
+  renderDrawHint();
+}
+
+function renderDrawHint() {
+  $('#draw-hint').textContent = t(`hint_${state.mode}`);
+  $('#draw-actions').hidden = !drawer?.active;
+  $('#draw-finish').hidden = state.mode !== 'polygon';
+}
+
+function renderCoordsLabel() {
+  const key = $('#crs').value;
+  $('#coords-label').textContent = t(CRS[key]?.latFirst ? 'coords_label_latlon' : 'coords_label_en');
+  $('#custom-wrap').hidden = key !== 'custom';
+  $('#coords').placeholder = CRS[key]?.latFirst ? '37.573, -7.971' : '120000 -150000';
 }
 
 // ---------- computation ----------
@@ -148,6 +238,12 @@ function runPasses() {
   const startVal = $('#start').value;
   const start = startVal ? `${startVal}:00Z` : new Date().toISOString();
   const days = Math.min(30, Math.max(1, Number($('#days').value) || 16));
+  const simp = simplifyRoi(state.roi, 300);
+  state.simplifiedNote = simp.simplified
+    ? t('roi_simplified', { n: polygonsOf(simp.geom).reduce((k, p) => k + p.reduce((m, r) => m + r.length - 1, 0), 0), pct: `${simp.areaChangePct >= 0 ? '+' : ''}${simp.areaChangePct.toFixed(2)}` })
+    : '';
+  renderRoiSummary();
+  updateHash(startVal, days, entries);
   worker?.terminate();
   worker = new Worker(new URL('./engine.worker.js', import.meta.url), { type: 'module' });
   const id = ++jobId;
@@ -168,7 +264,39 @@ function runPasses() {
       onResult(true);
     }
   };
-  worker.postMessage({ id, query: { entries, tles: state.tles, roi: state.roi, start, days } });
+  worker.postMessage({ id, query: { entries, tles: state.tles, roi: simp.geom, start, days } });
+}
+
+function updateHash(startVal, days, entries) {
+  const defaults = filterEntries(state.catalogue.entries, {}).map((e) => e.id);
+  const ids = entries.map((e) => e.id);
+  const sameAsDefault = ids.length === defaults.length && ids.every((id) => defaults.includes(id));
+  const hash = buildHash({
+    roi: state.roiRaw,
+    buffer: state.buffer,
+    start: startVal || undefined,
+    days,
+    ids: sameAsDefault ? undefined : ids,
+    transitional: $('#transitional').checked,
+    lang: getLang(),
+  });
+  history.replaceState(null, '', hash);
+}
+
+/** Apply a query from the URL hash; returns true if it held an ROI. */
+function applyHash() {
+  if (!location.hash) return false;
+  let q;
+  try { q = parseHash(location.hash); } catch (err) { showRoiError(err); return false; }
+  if (q.lang) setLang(q.lang);
+  if (q.transitional) $('#transitional').checked = true;
+  if (q.ids) state.selected = new Set(q.ids);
+  if (q.days) $('#days').value = String(q.days);
+  if (q.start) $('#start').value = q.start;
+  if (q.buffer) $('#buffer').value = String(q.buffer);
+  if (!q.roi) return false;
+  setRoiGeom(q.roi, { fly: true });
+  return true;
 }
 
 function onResult(fresh = false) {
@@ -177,6 +305,7 @@ function onResult(fresh = false) {
   renderTable();
   renderAbsences();
   $('#export-csv').disabled = !state.result.passes.some((p) => p.imaging_expected);
+  $('#copy-link').disabled = false;
   if (fresh && a.best) selectPass(a.best.id, { fly: true });
   else renderFootprints();
 }
@@ -191,7 +320,7 @@ function selectPass(id, { fly = false } = {}) {
   setClock(reducedMotion
     ? { baseSim: p.closest_utc, playing: false }
     : { baseSim: p.closest_utc - 90000, playing: true, speed: 10 });
-  if (fly) globe.flyTo(state.roi.coordinates[1], state.roi.coordinates[0], 3.2);
+  if (fly) { const a = roiAnchor(state.roi); globe.flyTo(a.lat, a.lon, state.roi.type === 'Point' ? 3.2 : Math.max(3.2, globe.map.getZoom())); }
 }
 
 function renderFootprints() {
@@ -341,9 +470,13 @@ function renderStatic() {
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
   $('#lang').textContent = t('lang_toggle');
   $('#panel-about').innerHTML = t('about_html');
+  for (const el of document.querySelectorAll('.segmented')) el.setAttribute('aria-label', t('mode_label'));
   renderPlay();
   renderFreshness();
   renderInstruments();
+  renderDrawHint();
+  renderCoordsLabel();
+  renderRoiSummary();
   if (state.result) onResult();
   else {
     renderTable();
@@ -388,16 +521,53 @@ async function init() {
   for (const e of filterEntries(state.catalogue.entries, {})) state.selected.add(e.id);
 
   globe = createGlobe($('#globe'), {
-    onClick: ({ lat, lon }) => setRoi(lat, lon),
+    onClick: ({ lat, lon }) => {
+      if (drawer.active || state.mode !== 'point') return;
+      setRoiGeom({ type: 'Point', coordinates: [lon, lat] });
+    },
     attribution: 'Natural Earth, CelesTrak',
   });
   globe.setColours(Object.fromEntries(state.catalogue.entries.map((e) => [e.id, entryStyle(e).colour])));
+  drawer = createDrawer(globe, {
+    onDone: (geom) => { setRoiGeom(geom); setMode('point'); },
+    onChange: () => renderDrawHint(),
+  });
+  state.mode = 'point';
+  for (const [key, c] of Object.entries(CRS)) $('#crs').add(new Option(key === 'custom' ? t('custom_crs') : c.label, key));
 
   $('#start').value = new Date().toISOString().slice(0, 16);
   $('#speed').value = String(state.clock.speed);
 
   $('#lang').addEventListener('click', () => { setLang(getLang() === 'pt' ? 'en' : 'pt'); renderStatic(); });
-  $('#apply-coords').addEventListener('click', () => setRoi(Number($('#lat').value), Number($('#lon').value)));
+  for (const b of document.querySelectorAll('.segmented [data-mode]')) b.addEventListener('click', () => setMode(b.dataset.mode));
+  $('#draw-finish').addEventListener('click', () => drawer.finish());
+  $('#draw-cancel').addEventListener('click', () => setMode('point'));
+  $('#crs').addEventListener('change', renderCoordsLabel);
+  $('#apply-coords').addEventListener('click', () => {
+    try {
+      setRoiGeom(parseCoordinates($('#coords').value, $('#crs').value, $('#custom-crs').value), { fly: true });
+    } catch (err) { showRoiError(err); }
+  });
+  $('#roi-file').addEventListener('change', async (ev) => {
+    const file = ev.target.files[0];
+    if (!file) return;
+    try {
+      const { geom, warnings } = await readRoiFile(file);
+      setRoiGeom(geom, { warnings, fly: true });
+    } catch (err) { showRoiError(err); }
+    ev.target.value = '';
+  });
+  $('#buffer').addEventListener('change', () => { if (state.roiRaw) setRoiGeom(state.roiRaw, { warnings: state.roiWarnings }); });
+  $('#roi-clear').addEventListener('click', clearRoi);
+  $('#copy-link').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      $('#link-status').textContent = t('link_copied');
+    } catch {
+      $('#link-status').textContent = location.href;
+    }
+    setTimeout(() => { $('#link-status').textContent = ''; }, 4000);
+  });
   $('#days').addEventListener('input', () => { $('#days-warn').hidden = !(Number($('#days').value) > 16); });
   $('#transitional').addEventListener('change', () => {
     for (const e of state.catalogue.entries) if (e.status !== 'active') state.selected.add(e.id);
@@ -420,6 +590,11 @@ async function init() {
   rebuildTrackers();
   await globe.ready;
   requestAnimationFrame(frame);
+  if (applyHash()) {
+    renderStatic();
+    rebuildTrackers();
+    runPasses();
+  }
 }
 
 init();

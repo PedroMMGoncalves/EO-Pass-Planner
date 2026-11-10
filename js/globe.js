@@ -51,6 +51,7 @@ function style() {
       swaths: { type: 'geojson', data: empty() },
       footprints: { type: 'geojson', data: empty() },
       roi: { type: 'geojson', data: empty() },
+      draft: { type: 'geojson', data: empty() },
     },
     layers: [
       { id: 'ocean', type: 'background', paint: { 'background-color': C.ocean } },
@@ -58,8 +59,8 @@ function style() {
       { id: 'land', type: 'fill', source: 'land', paint: { 'fill-color': C.land } },
       { id: 'borders', type: 'line', source: 'borders', paint: { 'line-color': C.border, 'line-width': 0.6 } },
       { id: 'night', type: 'fill', source: 'night', paint: { 'fill-color': C.ink, 'fill-opacity': 0.13 } },
-      { id: 'footprints-fill', type: 'fill', source: 'footprints', paint: { 'fill-color': ['get', 'colour'], 'fill-opacity': ['case', ['get', 'selected'], 0.3, 0.08] } },
-      { id: 'footprints-line', type: 'line', source: 'footprints', paint: { 'line-color': ['get', 'colour'], 'line-width': ['case', ['get', 'selected'], 2, 0.6], 'line-opacity': ['case', ['get', 'selected'], 1, 0.5] } },
+      { id: 'footprints-fill', type: 'fill', source: 'footprints', paint: { 'fill-color': ['get', 'colour'], 'fill-opacity': ['case', ['get', 'selected'], 0.22, 0] } },
+      { id: 'footprints-line', type: 'line', source: 'footprints', paint: { 'line-color': ['get', 'colour'], 'line-width': ['case', ['get', 'selected'], 2, 0.6], 'line-opacity': ['case', ['get', 'selected'], 1, 0.35] } },
       { id: 'swaths-fill', type: 'fill', source: 'swaths', paint: { 'fill-color': ['get', 'colour'], 'fill-opacity': 0.25 } },
       { id: 'swaths-line', type: 'line', source: 'swaths', paint: { 'line-color': ['get', 'colour'], 'line-width': 1.2 } },
       { id: 'tracks-past', type: 'line', source: 'tracks', filter: ['==', ['get', 'when'], 'past'], paint: { 'line-color': ['get', 'colour'], 'line-width': 1.2, 'line-dasharray': [2, 2], 'line-opacity': 0.7 } },
@@ -68,6 +69,8 @@ function style() {
       { id: 'roi-halo', type: 'line', source: 'roi', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'line-color': '#FFFFFF', 'line-width': 5 } },
       { id: 'roi-line', type: 'line', source: 'roi', filter: ['==', ['geometry-type'], 'Polygon'], paint: { 'line-color': C.ink, 'line-width': 2 } },
       { id: 'roi-point', type: 'circle', source: 'roi', filter: ['==', ['geometry-type'], 'Point'], paint: { 'circle-radius': 6, 'circle-color': C.ink, 'circle-stroke-color': '#FFFFFF', 'circle-stroke-width': 2.5 } },
+      { id: 'draft-line', type: 'line', source: 'draft', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': C.ink, 'line-width': 2, 'line-dasharray': [3, 2] } },
+      { id: 'draft-vertex', type: 'circle', source: 'draft', filter: ['==', ['geometry-type'], 'Point'], paint: { 'circle-radius': 4, 'circle-color': '#FFFFFF', 'circle-stroke-color': C.ink, 'circle-stroke-width': 2 } },
     ],
   };
 }
@@ -106,6 +109,7 @@ export function createGlobe(container, { onClick, attribution }) {
     setTracks: (fc) => set('tracks', colourise(fc, colours)),
     setSwaths: (fc) => set('swaths', colourise(fc, colours)),
     setFootprints: (fc) => set('footprints', colourise(fc, colours)),
+    setDraft: (fc) => set('draft', fc),
     setRoi: (geom) => set('roi', geom ? { type: 'FeatureCollection', features: [{ type: 'Feature', properties: {}, geometry: geom }] } : empty()),
     /** Update satellite markers: [{id, label, lat, lon, colour, imaging, title}] */
     setSatellites(list) {
@@ -129,5 +133,7 @@ export function createGlobe(container, { onClick, attribution }) {
       for (const [id, m] of markers) if (!seen.has(id)) { m.remove(); markers.delete(id); }
     },
     flyTo(lat, lon, zoom = 4) { map.flyTo({ center: [lon, lat], zoom, essential: true }); },
+    /** Fit the view to a lon/lat bounding box [[w, s], [e, n]]. */
+    fitBounds(b) { map.fitBounds(b, { padding: 80, maxZoom: 6.5, essential: true }); },
   };
 }

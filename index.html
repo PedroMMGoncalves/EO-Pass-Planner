@@ -27,13 +27,32 @@
     <aside class="query" aria-label="Pesquisa">
       <section>
         <h2 data-i18n="roi_heading">Local</h2>
-        <p class="hint" data-i18n="roi_hint"></p>
-        <div class="coords">
-          <label><span data-i18n="roi_lat">Latitude</span><input id="lat" type="number" step="any" min="-90" max="90" inputmode="decimal"></label>
-          <label><span data-i18n="roi_lon">Longitude</span><input id="lon" type="number" step="any" min="-180" max="180" inputmode="decimal"></label>
+        <div class="segmented" role="group" aria-label="Forma do local">
+          <button type="button" data-mode="point" aria-pressed="true" data-i18n="mode_point">Ponto</button>
+          <button type="button" data-mode="polygon" aria-pressed="false" data-i18n="mode_polygon">Polígono</button>
+          <button type="button" data-mode="rectangle" aria-pressed="false" data-i18n="mode_rectangle">Rectângulo</button>
         </div>
-        <button id="apply-coords" type="button" class="secondary" data-i18n="roi_apply">Usar coordenadas</button>
+        <p id="draw-hint" class="hint"></p>
+        <div id="draw-actions" class="row" hidden>
+          <button id="draw-finish" type="button" class="secondary" data-i18n="draw_finish">Terminar</button>
+          <button id="draw-cancel" type="button" class="quiet" data-i18n="draw_cancel">Cancelar</button>
+        </div>
+        <details>
+          <summary data-i18n="coords_summary">Escrever coordenadas</summary>
+          <label class="field"><span data-i18n="crs_label">Sistema de coordenadas</span><select id="crs"></select></label>
+          <label class="field" id="custom-wrap" hidden><span data-i18n="custom_crs">Definição proj4</span><input id="custom-crs" type="text" spellcheck="false"></label>
+          <label class="field"><span id="coords-label"></span><textarea id="coords" rows="3" spellcheck="false" placeholder="37.573, -7.971"></textarea></label>
+          <button id="apply-coords" type="button" class="secondary" data-i18n="roi_apply">Usar coordenadas</button>
+        </details>
+        <details>
+          <summary data-i18n="file_summary">Carregar ficheiro</summary>
+          <input id="roi-file" type="file" accept=".geojson,.json,.kml,.kmz,.zip">
+          <p class="hint" data-i18n="file_hint"></p>
+        </details>
+        <label class="field"><span data-i18n="buffer_label">Margem à volta do local (km)</span><input id="buffer" type="number" min="0" max="200" step="0.5" value="0"></label>
+        <p id="roi-summary" class="hint"></p>
         <p id="roi-error" class="error" hidden></p>
+        <button id="roi-clear" type="button" class="quiet" hidden data-i18n="roi_clear">Limpar local</button>
       </section>
       <section>
         <h2 data-i18n="window_heading">Janela</h2>
@@ -75,7 +94,11 @@
       <button role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false" tabindex="-1" data-i18n="tab_about">Sobre e limitações</button>
     </div>
     <div role="tabpanel" id="panel-table" aria-labelledby="tab-table">
-      <div class="panel-tools"><button id="export-csv" type="button" class="secondary" disabled data-i18n="export_csv">Exportar CSV</button></div>
+      <div class="panel-tools">
+        <span id="link-status" class="hint" aria-live="polite"></span>
+        <button id="copy-link" type="button" class="secondary" disabled data-i18n="copy_link">Copiar link</button>
+        <button id="export-csv" type="button" class="secondary" disabled data-i18n="export_csv">Exportar CSV</button>
+      </div>
       <div class="table-wrap"><table id="passes"><thead></thead><tbody></tbody></table></div>
       <p id="table-empty" class="hint" data-i18n="table_empty"></p>
     </div>

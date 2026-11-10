@@ -19,7 +19,10 @@ Work in progress.
   tracks, instantaneous swaths and the night side. Point ROI by click or
   coordinates, pass computation in a Web Worker, answer sentence, pass table,
   absences and CSV export.
-- [ ] Polygon ROI (drawing, coordinates in other CRS, file upload), URL sharing.
+- [x] Polygon and rectangle ROI drawn on the globe; typed coordinates in WGS 84,
+  ETRS89/PT-TM06, UTM 28N/29N/32N/36S/37S or a proj4 definition; GeoJSON,
+  KML, KMZ and zipped Shapefile upload; buffer; a shareable URL that
+  reproduces the query.
 - [ ] Full catalogue, acquisition plans, weather, calendar, exports, documentation.
 
 ## Run locally

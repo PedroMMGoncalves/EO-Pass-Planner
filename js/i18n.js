@@ -21,14 +21,16 @@ const STRINGS = {
     answer_idle_sub: 'Os satélites partem da posição actual, em tempo acelerado; a faixa colorida é o que cada sensor está a observar. “Agora” repõe o tempo real.',
     answer_ready: 'Local escolhido. Carrega em “Calcular passagens”.',
     answer_computing: 'A calcular passagens…',
-    answer_point: '{sat} passa sobre o local {when}, às {time}.',
-    answer_poly: '{sat} cobre {cov} % da área {when}, às {time}.',
-    answer_partial: 'Aquisição parcial: confirma no plano da missão.',
-    answer_more_one: 'Mais 1 passagem nos próximos {days} dias.',
-    answer_more_other: 'Mais {n} passagens nos próximos {days} dias.',
-    answer_none: 'Nenhum instrumento seleccionado observa este local nos próximos {days} dias.',
-    answer_none_hint: 'Alarga a janela ou selecciona mais instrumentos. O separador Ausências explica porquê.',
-    answer_tz: 'Hora local: {tz}.',
+    answer_point: 'O {sat} passa sobre o local {when}, às {time}{cloud}.',
+    answer_poly: 'O {sat} cobre {cov} % da área {when}, às {time}{cloud}.',
+    answer_cloud_forecast: ', com {v} % de nuvens previstas',
+    answer_cloud_past: ', com {v} % de nuvens ({kind})',
+    answer_partial: 'Aquisição parcial: confirma no plano da missão se esta área é adquirida.',
+    answer_more_one: 'Há mais 1 passagem nos próximos {days} dias.',
+    answer_more_other: 'Há mais {n} passagens nos próximos {days} dias.',
+    answer_none: 'Nenhum dos instrumentos seleccionados observa este local nos próximos {days} dias.',
+    answer_none_hint: 'Alarga a janela ou selecciona mais instrumentos; o separador Ausências explica porquê.',
+    answer_tz: 'Horas locais ({tz}, UTC{offset}).',
 
     roi_heading: 'Local',
     mode_label: 'Forma do local',
@@ -101,9 +103,11 @@ const STRINGS = {
     geo_row: 'ângulo zenital de observação {vza}° (limite útil {max}°), {usable}; imagem completa a cada {repeat} min; satélite em {lon}.',
     geo_usable: 'dentro da cobertura útil',
     geo_not_usable: 'fora da cobertura útil',
-    answer_line: '{cat}: {sat}, {when}, às {time}',
-    answer_tasked: '{sat} pode ser programado para observar o local {when}, às {time} (oportunidade geométrica).',
-    answer_profile: '{sat} passa com o feixe mais próximo a {km} km do local {when}, às {time}.',
+    answer_line: '{cat}: {sat}, {when}, {time}',
+    answer_line_cloud: ', nuvens {v} %',
+    answer_line_cov: ', cobertura {v} %',
+    answer_tasked: 'O {sat} pode observar o local {when}, às {time}, se for programado (oportunidade geométrica).',
+    answer_profile: 'O feixe mais próximo do {sat} passa a {km} km do local {when}, às {time}{cloud}.',
     swath_geo: 'geoestacionário',
     swath_profile: 'perfil (feixes)',
     swath_track: 'traço orbital',
@@ -156,7 +160,6 @@ const STRINGS = {
     cloud_spark: 'Nuvens ±3 h',
     cloud_short: 'nuvens {v} %',
     cloud_error: 'Não foi possível obter a previsão de nuvens; as passagens estão correctas e a coluna de nuvens fica vazia.',
-    answer_cloud: 'Nuvens à hora da passagem destacada: {v} % ({kind}).',
     plan_planned: 'planeada',
     plan_not_planned: 'não planeada',
     plan_no_plan: 'sem plano',
@@ -237,6 +240,11 @@ const STRINGS = {
     spectral_sources: 'Fontes das bandas e das feições de absorção',
     countdown_in: 'daqui a {v}',
     countdown_ago: 'há {v}',
+    dur_days_hours: '{d} {dl} e {h} h',
+    dur_hours_mins: '{h} h {m} min',
+    dur_mins: '{m} min',
+    day_one: 'dia',
+    day_other: 'dias',
     past_history: 'Janela no passado: usados os elementos orbitais arquivados de {date}.',
     past_low_confidence: 'Janela no passado sem elementos orbitais arquivados a menos de 7 dias: confiança baixa. Vê o separador Aquisições reais.',
     glossary_title: 'Glossário',
@@ -368,14 +376,16 @@ const STRINGS = {
     answer_idle_sub: 'Satellites start from their current position, in accelerated time; the coloured strip is what each sensor is observing. “Now” returns to real time.',
     answer_ready: 'Place selected. Press “Compute passes”.',
     answer_computing: 'Computing passes…',
-    answer_point: '{sat} passes over the place {when} at {time}.',
-    answer_poly: '{sat} covers {cov} % of the area {when} at {time}.',
-    answer_partial: 'Partial acquisition: check the mission plan.',
-    answer_more_one: '1 more pass in the next {days} days.',
+    answer_point: '{sat} passes over the site {when} at {time}{cloud}.',
+    answer_poly: '{sat} covers {cov} % of the area {when} at {time}{cloud}.',
+    answer_cloud_forecast: ', with {v} % cloud forecast',
+    answer_cloud_past: ', with {v} % cloud ({kind})',
+    answer_partial: 'Partial acquisition: check the mission plan to see whether this area is acquired.',
+    answer_more_one: 'One more pass in the next {days} days.',
     answer_more_other: '{n} more passes in the next {days} days.',
-    answer_none: 'No selected instrument observes this place in the next {days} days.',
-    answer_none_hint: 'Extend the window or select more instruments. The Absences tab explains why.',
-    answer_tz: 'Local time: {tz}.',
+    answer_none: 'None of the selected instruments observes this site in the next {days} days.',
+    answer_none_hint: 'Extend the window or select more instruments; the Absences tab explains why.',
+    answer_tz: 'Times are local ({tz}, UTC{offset}).',
 
     roi_heading: 'Place',
     mode_label: 'Shape of the place',
@@ -448,9 +458,11 @@ const STRINGS = {
     geo_row: 'view zenith angle {vza}° (usable limit {max}°), {usable}; full disc every {repeat} min; satellite at {lon}.',
     geo_usable: 'within usable coverage',
     geo_not_usable: 'outside usable coverage',
-    answer_line: '{cat}: {sat}, {when} at {time}',
-    answer_tasked: '{sat} can be tasked to observe the place {when} at {time} (geometric opportunity).',
-    answer_profile: '{sat} passes with its nearest beam {km} km from the place {when} at {time}.',
+    answer_line: '{cat}: {sat}, {when}, {time}',
+    answer_line_cloud: ', {v} % cloud',
+    answer_line_cov: ', {v} % coverage',
+    answer_tasked: '{sat} can observe the site {when} at {time} if tasked (geometric opportunity).',
+    answer_profile: 'The nearest {sat} beam passes {km} km from the site {when} at {time}{cloud}.',
     swath_geo: 'geostationary',
     swath_profile: 'profile (beams)',
     swath_track: 'ground track',
@@ -505,7 +517,6 @@ const STRINGS = {
     cloud_spark: 'Cloud ±3 h',
     cloud_short: 'cloud {v} %',
     cloud_error: 'Could not get the cloud forecast; the passes are correct and the cloud column stays empty.',
-    answer_cloud: 'Cloud at the highlighted pass: {v} % ({kind}).',
     plan_planned: 'planned',
     plan_not_planned: 'not planned',
     plan_no_plan: 'no plan',
@@ -586,6 +597,11 @@ const STRINGS = {
     spectral_sources: 'Sources of the bands and absorption features',
     countdown_in: 'in {v}',
     countdown_ago: '{v} ago',
+    dur_days_hours: '{d} {dl} {h} h',
+    dur_hours_mins: '{h} h {m} min',
+    dur_mins: '{m} min',
+    day_one: 'day',
+    day_other: 'days',
     past_history: 'Window in the past: archived orbital elements from {date} were used.',
     past_low_confidence: 'Window in the past without archived orbital elements within 7 days: low confidence. See the Real acquisitions tab.',
     glossary_title: 'Glossary',
@@ -749,7 +765,40 @@ export function isoLocal(ms, tz) {
 }
 
 const MONTH_PT = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const MONTH_PT_LONG = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
 const WEEKDAY_PT = ['no domingo', 'na segunda', 'na terça', 'na quarta', 'na quinta', 'na sexta', 'no sábado'];
+const WEEKDAY_PT_LONG = ['no domingo', 'na segunda-feira', 'na terça-feira', 'na quarta-feira', 'na quinta-feira', 'na sexta-feira', 'no sábado'];
+const WEEKDAY_PT_SHORT = ['dom.', 'seg.', 'ter.', 'qua.', 'qui.', 'sex.', 'sáb.'];
+
+function dayParts(ms, tz) {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: tz, weekday: 'short', day: 'numeric', month: 'numeric' })
+    .formatToParts(ms).map((x) => [x.type, x.value]));
+  return { wd: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.weekday), day: parts.day, mon: Number(parts.month) - 1 };
+}
+
+/** Headline day: "na quinta-feira, 12 de novembro" / "on Thursday 12 November". */
+export function formatDayLong(ms, tz) {
+  const { wd, day, mon } = dayParts(ms, tz);
+  if (lang === 'pt') return `${WEEKDAY_PT_LONG[wd]}, ${day} de ${MONTH_PT_LONG[mon]}`;
+  return `on ${fmt({ weekday: 'long', day: 'numeric', month: 'long' }, tz).format(ms)}`;
+}
+
+/** Compact day for lists: "qui. 12 nov." / "Thu 12 Nov". */
+export function formatDayShort(ms, tz) {
+  const { wd, day, mon } = dayParts(ms, tz);
+  if (lang === 'pt') return `${WEEKDAY_PT_SHORT[wd]} ${day} ${MONTH_PT[mon]}.`;
+  return fmt({ weekday: 'short', day: 'numeric', month: 'short' }, tz).format(ms).replace(',', '');
+}
+
+/** Duration in words: "3 dias e 21 h", "5 h 10 min", "40 min". */
+export function formatDuration(msAbs) {
+  const days = Math.floor(msAbs / 86400000);
+  const hours = Math.floor((msAbs % 86400000) / 3600000);
+  const mins = Math.round((msAbs % 3600000) / 60000);
+  if (days) return t('dur_days_hours', { d: days, dl: t(days === 1 ? 'day_one' : 'day_other'), h: hours });
+  if (hours) return t('dur_hours_mins', { h: hours, m: mins });
+  return t('dur_mins', { m: mins });
+}
 
 /** Natural-language day: "na sexta, 14 nov" / "on Friday 14 Nov". */
 export function formatDay(ms, tz) {

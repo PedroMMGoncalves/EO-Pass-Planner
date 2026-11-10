@@ -30,14 +30,15 @@ test('best pass: highest coverage, earliest on ties, expected-imaging only', () 
 test('answer sentence (pt and en)', () => {
   setLang('pt');
   const a = answerSentence(result, { tz: 'Europe/Lisbon', days: 16, isPoint: true });
-  assert.match(a.main, /passa sobre o local (no|na) \S+, \d{1,2} (jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez), às \d\d:\d\d\./);
-  assert.match(a.sub, /Mais \d+ passagens nos próximos 16 dias/);
+  assert.match(a.main, /^O \S+ passa sobre o local (no|na) [a-zçá-]+, \d{1,2} de [a-zç]+, às \d\d:\d\d\.$/);
+  assert.match(a.sub, /^Há mais \d+ passagens nos próximos 16 dias\. Horas locais \(Europe\/Lisbon, UTC\+00:00\)\.$/);
   setLang('en');
   const e = answerSentence(result, { tz: 'Europe/Lisbon', days: 16, isPoint: true });
-  assert.match(e.main, /passes over the place on \w+/);
+  assert.match(e.main, /passes over the site on [A-Z][a-z]+day \d{1,2} [A-Z][a-z]+ at \d\d:\d\d\.$/);
+  assert.match(e.sub, /Times are local \(Europe\/Lisbon, UTC\+0\d:00\)\./);
   setLang('pt');
   const none = answerSentence({ passes: [], per_entry: {} }, { tz: 'UTC', days: 3, isPoint: true });
-  assert.match(none.main, /Nenhum instrumento/);
+  assert.match(none.main, /^Nenhum dos instrumentos seleccionados observa este local nos próximos 3 dias\.$/);
 });
 
 test('per-category highlights: one line per category, earliest headline', async () => {

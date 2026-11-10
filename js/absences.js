@@ -24,7 +24,10 @@
  * point over the whole window, refined to 1 s.
  */
 
-import { t, formatDay, formatTime } from './i18n.js';
+import {
+  t, formatDay, formatDayLong, formatDayShort, formatTime, utcOffset,
+} from './i18n.js';
+import { cloudRelevant } from './weather.js';
 import { CATEGORIES } from './catalogue.js';
 
 const HALF = 50;
@@ -82,10 +85,14 @@ function pickBest(passes) {
   return best;
 }
 
+const cloudOf = (p, entriesById) => (p.cloud && (!entriesById || cloudRelevant(entriesById[p.entry_id])) ? p.cloud : null);
+
 function shortLine(cat, p, tz, isPoint, entriesById) {
-  const cov = isPoint || p.model === 'profile' ? '' : `, ${Math.round(p.coverage_pct)} %`;
-  const opp = p.opportunity ? ` (${t('acq_tasked')})` : '';
-  return t('answer_line', { cat: t(`cat_${cat}`), sat: displayName(p, entriesById), when: formatDay(p.closest_utc, tz), time: formatTime(p.closest_utc, tz) }) + cov + opp;
+  const cov = isPoint || p.model === 'profile' ? '' : t('answer_line_cov', { v: Math.round(p.coverage_pct) });
+  const c = cloudOf(p, entriesById);
+  const cloud = c ? t('answer_line_cloud', { v: Math.round(c.total) }) : '';
+  const opp = p.opportunity ? `, ${t('acq_tasked')}` : '';
+  return t('answer_line', { cat: t(`cat_${cat}`), sat: displayName(p, entriesById), when: formatDayShort(p.closest_utc, tz), time: formatTime(p.closest_utc, tz) }) + cov + cloud + opp;
 }
 
 /**
@@ -97,19 +104,23 @@ export function answerSentence(result, { tz, days, isPoint, entriesById = null }
   const hl = entriesById ? categoryHighlights(result, entriesById) : [];
   const best = hl.length ? hl.map((h) => h.pass).sort((a, b) => a.closest_utc - b.closest_utc)[0] : bestPass(exp);
   if (!best) return { main: t('answer_none', { days }), sub: t('answer_none_hint'), lines: [] };
-  const when = formatDay(best.closest_utc, tz);
+  const when = formatDayLong(best.closest_utc, tz);
   const time = formatTime(best.closest_utc, tz);
   const sat = displayName(best, entriesById);
+  const c = cloudOf(best, entriesById);
+  const cloud = !c ? '' : c.kind === 'forecast'
+    ? t('answer_cloud_forecast', { v: Math.round(c.total) })
+    : t('answer_cloud_past', { v: Math.round(c.total), kind: t(`cloud_${c.kind}`) });
   let main;
   if (best.opportunity) main = t('answer_tasked', { sat, when, time });
-  else if (best.model === 'profile') main = t('answer_profile', { sat, km: Math.max(0, -best.edge_margin_km).toFixed(1), when, time });
-  else if (isPoint) main = t('answer_point', { sat, when, time });
-  else main = t('answer_poly', { sat, cov: Math.round(best.coverage_pct), when, time });
+  else if (best.model === 'profile') main = t('answer_profile', { sat, km: Math.max(0, -best.edge_margin_km).toFixed(1), when, time, cloud });
+  else if (isPoint) main = t('answer_point', { sat, when, time, cloud });
+  else main = t('answer_poly', { sat, cov: Math.round(best.coverage_pct), when, time, cloud });
   const n = exp.length - 1;
   const sub = [
     n > 0 ? t(n === 1 ? 'answer_more_one' : 'answer_more_other', { n, days }) : '',
     best.acquisition === 'partial' ? t('answer_partial') : '',
-    t('answer_tz', { tz }),
+    t('answer_tz', { tz, offset: utcOffset(best.closest_utc, tz) }),
   ].filter(Boolean).join(' ');
   const lines = hl.length > 1 ? hl.map((h) => ({ cat: h.cat, pass: h.pass, text: shortLine(h.cat, h.pass, tz, isPoint, entriesById) })) : [];
   return { main, sub, best, lines };

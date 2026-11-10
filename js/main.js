@@ -21,7 +21,9 @@ import {
   loadCatalogue, filterEntries, entryStyle, shortName, defaultSelected, CATEGORIES,
 } from './catalogue.js';
 import { loadTles, loadMeta, dataFreshness } from './tle.js';
-import { t, setLang, getLang, formatDateTime, formatTimeSec } from './i18n.js';
+import {
+  t, setLang, getLang, formatDateTime, formatTimeSec, formatDuration,
+} from './i18n.js';
 import { createGlobe, BASEMAPS } from './globe.js';
 import { makeTrackers, positions, tracks, liveSwaths, nightPolygon } from './live.js';
 import { answerSentence, absences, displayName } from './absences.js';
@@ -428,8 +430,7 @@ function entriesById() {
 function refreshViews() {
   const a = answerSentence({ ...state.result, passes: answerPasses() }, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point', entriesById: entriesById() });
   const cloudNote = (state.cloudError ? ` ${t('cloud_error')}` : '') + (state.pastNote ? ` ${state.pastNote}` : '');
-  const bestCloud = a.best?.cloud && cloudRelevant(entriesById()[a.best.entry_id]) ? ` ${t('answer_cloud', { v: Math.round(a.best.cloud.total), kind: t(`cloud_${a.best.cloud.kind}`) })}` : '';
-  setAnswer(a.main, a.sub + bestCloud + cloudNote, a.lines);
+  setAnswer(a.main, a.sub + cloudNote, a.lines);
   renderTableCategories();
   renderTable();
   renderCalendarTab();
@@ -570,12 +571,7 @@ function setAnswer(main, sub, lines = []) {
 /** "daqui a 2 d 4 h" / "in 2 d 4 h". */
 function relTime(ms) {
   const d = ms - Date.now();
-  const a = Math.abs(d);
-  const days = Math.floor(a / 86400000);
-  const hours = Math.floor((a % 86400000) / 3600000);
-  const mins = Math.round((a % 3600000) / 60000);
-  const v = days ? `${days} d ${hours} h` : hours ? `${hours} h ${mins} min` : `${mins} min`;
-  return t(d >= 0 ? 'countdown_in' : 'countdown_ago', { v });
+  return t(d >= 0 ? 'countdown_in' : 'countdown_ago', { v: formatDuration(Math.abs(d)) });
 }
 
 // ---------- sweep animation and scrubber ----------

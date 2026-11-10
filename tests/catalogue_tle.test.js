@@ -67,7 +67,7 @@ test('i18n placeholders and fallback', () => {
   setLang('en');
   assert.equal(t('freshness_hours', { h: 3 }), 'Data updated 3 h ago');
   setLang('pt');
-  assert.equal(t('freshness_hours', { h: 3 }), 'Dados actualizados há 3 h');
+  assert.equal(t('freshness_hours', { h: 3 }), 'Dados atualizados há 3 h');
   assert.equal(t('no_such_key'), 'no_such_key');
 });
 

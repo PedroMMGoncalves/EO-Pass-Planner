@@ -213,7 +213,7 @@ export function renderStac(root, state, c) {
   if (!state.groups) { root.append(el('p', { class: 'hint' }, c.t('stac_idle'))); return; }
   const errs = Object.entries(state.errors ?? {});
   if (errs.length) root.append(el('p', { class: 'error' }, c.t('stac_error', { list: errs.map(([k, v]) => `${k}: ${v}`).join('; ') })));
-  root.append(el('p', { class: 'hint' }, c.t('stac_range', { from: c.fmt.date(state.from, c.tz), to: c.fmt.date(state.to, c.tz), n: state.groups.length })));
+  root.append(el('p', { class: 'hint' }, c.t(state.groups.length === 1 ? 'stac_range_one' : 'stac_range', { from: c.fmt.date(state.from, c.tz), to: c.fmt.date(state.to, c.tz), n: state.groups.length })));
   if (!state.groups.length) return;
   const rows = state.groups.map((g) => el('tr', {},
     el('td', {}, prettyPlatform(g.platform)),

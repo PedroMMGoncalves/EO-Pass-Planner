@@ -472,7 +472,8 @@ function startWorkers(id, entries, list, extraTles, start, days, simp) {
         if (parts.every(Boolean)) {
           $('#run').disabled = false;
           state.result = foldConstellations(mergeResults(parts));
-          $('#progress').textContent = t('done_in', { n: state.result.passes.filter((p) => p.imaging_expected).length, s: ((performance.now() - t0) / 1000).toFixed(1) });
+          const nExp = state.result.passes.filter((p) => p.imaging_expected).length;
+          $('#progress').textContent = t(nExp === 1 ? 'done_in_one' : 'done_in', { n: nExp, s: ((performance.now() - t0) / 1000).toFixed(1) });
           state.ranEntries = entries;
           state.days = days;
           onResult(true);
@@ -1227,6 +1228,7 @@ function renderStatic() {
   $('#panel-about').innerHTML = t('about_html');
   $('#panel-about').append(glossary(t, GLOSSARY_KEYS));
   for (const el of document.querySelectorAll('.segmented')) el.setAttribute('aria-label', t('mode_label'));
+  for (const [sel, key] of [['.query', 'aria_query'], ['#globe', 'aria_globe'], ['#results', 'aria_results'], ['#splitter', 'aria_splitter']]) $(sel)?.setAttribute('aria-label', t(key));
   renderPlay();
   renderFreshness();
   renderInstruments();

@@ -70,7 +70,7 @@ export function renderFreshDetails(root, meta, { t, formatDateTime }) {
   if (!meta) { root.append(el('p', {}, t('freshness_unknown'))); return; }
   const rows = [[t('fresh_updated'), `${formatDateTime(Date.parse(meta.updated_utc), 'UTC')} UTC`], [t('fresh_catalogue'), meta.catalogue_version], [t('fresh_count'), String(meta.tle_count)]];
   for (const [k, s] of Object.entries(meta.sources ?? {})) {
-    rows.push([t(`fresh_src_${k}`), s.ok ? t('fresh_ok') : s.ok === false ? t('fresh_fail', { n: s.errors.length }) : t('fresh_na')]);
+    rows.push([t(`fresh_src_${k}`), s.ok ? t('fresh_ok') : s.ok === false ? t(s.errors.length === 1 ? 'fresh_fail_one' : 'fresh_fail', { n: s.errors.length }) : t('fresh_na')]);
   }
   rows.push([t('fresh_stale'), meta.stale_tles?.length ? meta.stale_tles.join(', ') : t('fresh_none')]);
   root.append(el('dl', { class: 'facts' }, rows.flatMap(([k, v]) => [el('dt', {}, k), el('dd', {}, v)])));

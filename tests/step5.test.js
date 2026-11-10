@@ -133,3 +133,25 @@ test('geometry diagram is an SVG drawn to scale', () => {
   assert.match(svg, /786 km/);
   assert.ok((svg.match(/<polyline/g) ?? []).length >= 2);
 });
+
+test('spectral ruler: microwave wavelengths and rows for selected instruments', async () => {
+  const { spectralRuler, wavelengthCm } = await import('../js/spectral.js');
+  assert.ok(Math.abs(wavelengthCm(5.405) - 5.547) < 0.01, 'C-band 5.405 GHz ≈ 5.55 cm');
+  assert.ok(Math.abs(wavelengthCm(1.257) - 23.85) < 0.05, 'L-band ≈ 23.8 cm');
+  const bands = {
+    groups: [
+      { ids: ['S2C_MSI'], label: 'Sentinel-2 MSI', bands: [{ name: 'B12', center_um: 2.19, width_um: 0.18 }] },
+      { ids: ['S1C_CSAR_IW'], label: 'Sentinel-1', microwave: [{ name: 'C', freq_ghz: 5.405 }] },
+      { ids: ['NOT_SELECTED'], label: 'x', bands: [{ name: 'b', center_um: 1, width_um: 0.1 }] },
+    ],
+    absorption_features: [{ label: 'Al-OH', center_um: 2.2, range_um: [2.16, 2.22] }],
+  };
+  const entries = [{ id: 'S2C_MSI', categories: ['optical_multispectral'] }, { id: 'S1C_CSAR_IW', categories: ['sar'] }];
+  const svg = spectralRuler(bands, entries, { colourOf: () => '#000', highlightId: 'S2C_MSI', t: (k) => k });
+  assert.match(svg, /Sentinel-2 MSI/);
+  assert.match(svg, /Sentinel-1/);
+  assert.doesNotMatch(svg, />x</);
+  assert.match(svg, /sr-hl/);
+  assert.match(svg, /Al-OH/);
+  assert.equal(spectralRuler(bands, [], { colourOf: () => '#000', t: (k) => k }), null);
+});

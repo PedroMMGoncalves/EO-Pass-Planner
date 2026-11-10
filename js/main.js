@@ -40,6 +40,10 @@ import { renderCalendar } from './calendar.js';
 import {
   renderDrawer, renderInsar, renderStac, printFieldSheet,
 } from './panels.js';
+import {
+  openCard, renderFreshDetails, glossary, GLOSSARY_KEYS,
+} from './cards.js';
+import { spectralRuler } from './spectral.js';
 
 const $ = (sel) => document.querySelector(sel);
 const stored = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
@@ -64,6 +68,9 @@ const state = {
   droneMinutes: 30,
   pendingPass: null,
   drawerOpen: false,
+  bands: null,
+  sweep: null,
+  pastNote: '',
   theme: stored('eopp-theme') === 'dracula' ? 'dracula' : 'light',
   basemap: stored('eopp-basemap') || 'simple',
   clock: { baseSim: Date.now(), baseReal: performance.now(), speed: reducedMotion ? 1 : 60, playing: true },
@@ -170,8 +177,9 @@ function frame() {
 
 function renderClock(now) {
   const utc = new Date(now).toISOString().slice(0, 19).replace('T', ' ');
-  const local = state.roi ? `, ${formatTimeSec(now, state.tz)} ${state.tz}` : '';
+  const local = state.roi ? `, ${formatTimeSec(now, state.tz).slice(0, 5)} ${t('local_short')}` : '';
   $('#clock').textContent = `${utc} UTC${local}`;
+  $('#clock').title = state.roi ? state.tz : '';
 }
 
 function renderPlay() {
@@ -329,7 +337,50 @@ function runPasses() {
       onResult(true);
     }
   };
-  worker.postMessage({ id, query: { entries, tles: state.tles, roi: simp.geom, start, days } });
+  pastElementSets(Date.parse(start), days).then((pastTles) => {
+    if (id !== jobId) return;
+    worker.postMessage({ id, query: { entries, tles: pastTles ?? state.tles, roi: simp.geom, start, days } });
+  });
+}
+
+const HISTORY_SEARCH_DAYS = 7;
+
+/** Decompress a gzip response body (DecompressionStream). */
+async function gunzipJson(res) {
+  const stream = res.body.pipeThrough(new DecompressionStream('gzip'));
+  return JSON.parse(await new Response(stream).text());
+}
+
+/**
+ * For windows starting more than two days ago, use the archived element sets
+ * (data/tle_history/) closest to the window centre, if one exists within 7
+ * days; otherwise flag low confidence. Returns a tles map or null (current).
+ */
+async function pastElementSets(startMs, days) {
+  state.pastNote = '';
+  const now = Date.now();
+  if (startMs > now - 2 * 86400000) return null;
+  const centre = Math.min(startMs + (days * 86400000) / 2, now);
+  const dayOf = (ms) => new Date(ms).toISOString().slice(0, 10);
+  for (let k = 0; k <= HISTORY_SEARCH_DAYS; k++) {
+    for (const sign of k ? [-1, 1] : [1]) {
+      const d = dayOf(centre + sign * k * 86400000);
+      try {
+        const res = await fetch(`data/tle_history/${d}.json.gz`);
+        if (!res.ok) continue;
+        const hist = await gunzipJson(res);
+        const tles = { ...state.tles };
+        for (const [norad, list] of Object.entries(hist)) {
+          const best = list.reduce((a, r) => (Math.abs(Date.parse(r.epoch) - centre) < Math.abs(Date.parse(a.epoch) - centre) ? r : a));
+          tles[norad] = { ...state.tles[norad], ...best };
+        }
+        state.pastNote = t('past_history', { date: d });
+        return tles;
+      } catch { /* try the next day */ }
+    }
+  }
+  state.pastNote = t('past_low_confidence');
+  return null;
 }
 
 function updateHash(startVal, days, entries) {
@@ -373,7 +424,7 @@ function entriesById() {
 
 function refreshViews() {
   const a = answerSentence({ ...state.result, passes: answerPasses() }, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point', entriesById: entriesById() });
-  const cloudNote = state.cloudError ? ` ${t('cloud_error')}` : '';
+  const cloudNote = (state.cloudError ? ` ${t('cloud_error')}` : '') + (state.pastNote ? ` ${state.pastNote}` : '');
   const bestCloud = a.best?.cloud && cloudRelevant(entriesById()[a.best.entry_id]) ? ` ${t('answer_cloud', { v: Math.round(a.best.cloud.total), kind: t(`cloud_${a.best.cloud.kind}`) })}` : '';
   setAnswer(a.main, a.sub + bestCloud + cloudNote, a.lines);
   renderTableCategories();
@@ -383,6 +434,7 @@ function refreshViews() {
   renderGeo();
   renderInsarTab();
   renderStacTab();
+  renderSpectralTab();
   renderDrawerPanel();
   const any = state.result.passes.some((p) => p.imaging_expected);
   for (const id of ['#export-csv', '#export-ics', '#export-geojson', '#export-geolibre', '#print-sheet-btn']) $(id).disabled = !any;
@@ -395,7 +447,9 @@ function onResult(fresh = false) {
   if (fresh) {
     const pending = state.pendingPass && state.result.passes.find((p) => p.id === state.pendingPass);
     state.pendingPass = null;
+    setupScrubber();
     if (pending) selectPass(pending.id, { fly: true, open: true });
+    else if (a.best && !reducedMotion) startSweep(a.best.id);
     else if (a.best) selectPass(a.best.id, { fly: true });
     else renderFootprints();
     enrich();
@@ -457,6 +511,7 @@ function selectPass(id, { fly = false, open = true } = {}) {
   markAnswerLine();
   if (open) state.drawerOpen = true;
   renderDrawerPanel();
+  if (!$('#panel-spectral').hidden) renderSpectralTab();
   if (!p) return;
   // Show the pass: start 90 s before closest approach at 10x (directly at closest approach with reduced motion).
   setClock(reducedMotion
@@ -466,9 +521,10 @@ function selectPass(id, { fly = false, open = true } = {}) {
 }
 
 function renderFootprints() {
-  const feats = (state.result?.passes ?? []).filter((p) => p.imaging_expected).map((p) => ({
+  const until = state.sweep ? state.sweep.t : Infinity;
+  const feats = (state.result?.passes ?? []).filter((p) => p.imaging_expected && p.closest_utc <= until).map((p) => ({
     type: 'Feature',
-    properties: { id: p.entry_id, selected: p.id === state.selectedPass },
+    properties: { id: p.entry_id, selected: p.id === state.selectedPass || Boolean(state.sweep && state.sweep.t - p.closest_utc < state.sweep.glow) },
     geometry: { type: 'MultiPolygon', coordinates: p.footprints },
   }));
   globe.setFootprints({ type: 'FeatureCollection', features: feats });
@@ -489,12 +545,101 @@ function setAnswer(main, sub, lines = []) {
     const dot = document.createElement('span');
     dot.className = 'dot';
     dot.style.background = colourOf(state.catalogue.entries.find((e) => e.id === l.pass.entry_id));
-    b.append(dot, document.createTextNode(l.text));
+    b.append(dot, document.createTextNode(`${l.text} (${relTime(l.pass.closest_utc)})`));
     b.addEventListener('click', () => selectPass(l.pass.id, { fly: true }));
     li.append(b);
     ul.append(li);
   }
   markAnswerLine();
+}
+
+/** "daqui a 2 d 4 h" / "in 2 d 4 h". */
+function relTime(ms) {
+  const d = ms - Date.now();
+  const a = Math.abs(d);
+  const days = Math.floor(a / 86400000);
+  const hours = Math.floor((a % 86400000) / 3600000);
+  const mins = Math.round((a % 3600000) / 60000);
+  const v = days ? `${days} d ${hours} h` : hours ? `${hours} h ${mins} min` : `${mins} min`;
+  return t(d >= 0 ? 'countdown_in' : 'countdown_ago', { v });
+}
+
+// ---------- sweep animation and scrubber ----------
+
+const SWEEP_MS = 3000;
+
+/** Reveal the footprints in chronological order over ~3 s, then select the best pass. */
+function startSweep(bestId) {
+  const res = state.result;
+  const t0 = performance.now();
+  const span = res.window.end_utc - res.window.start_utc;
+  state.sweep = { t: res.window.start_utc, glow: span / 40 };
+  $('#replay').hidden = false;
+  const step = () => {
+    if (state.result !== res || !state.sweep) return;
+    const f = Math.min(1, (performance.now() - t0) / SWEEP_MS);
+    state.sweep.t = res.window.start_utc + f * span;
+    $('#scrub').value = String(Math.round(f * 1000));
+    setClock({ baseSim: state.sweep.t, playing: false });
+    renderFootprints();
+    if (f < 1) requestAnimationFrame(step);
+    else { state.sweep = null; selectPass(bestId, { fly: true }); }
+  };
+  const a = roiAnchor(state.roi);
+  globe.flyTo(a.lat, a.lon, state.roi.type === 'Point' ? 3.2 : Math.max(3.2, globe.map.getZoom()));
+  requestAnimationFrame(step);
+}
+
+function setupScrubber() {
+  $('#scrub-wrap').hidden = !state.result;
+  $('#replay').hidden = !state.result || reducedMotion;
+}
+
+function onScrub() {
+  if (!state.result) return;
+  state.sweep = null;
+  const { start_utc: a, end_utc: b } = state.result.window;
+  setClock({ baseSim: a + (Number($('#scrub').value) / 1000) * (b - a), playing: false });
+  renderFootprints();
+}
+
+// ---------- spectral ruler ----------
+
+async function renderSpectralTab() {
+  const root = $('#spectral');
+  if (!state.bands) {
+    try {
+      const res = await fetch('data/bands.json', { cache: 'no-cache' });
+      state.bands = res.ok ? await res.json() : { groups: [] };
+    } catch { state.bands = { groups: [] }; }
+  }
+  const entries = state.catalogue.entries.filter((e) => state.selected.has(e.id) && e.status !== 'inactive');
+  const sel = state.result?.passes.find((p) => p.id === state.selectedPass);
+  const svg = spectralRuler(state.bands, entries, { colourOf, highlightId: sel?.entry_id, t });
+  root.replaceChildren();
+  if (!svg) { root.textContent = t('spectral_empty'); return; }
+  root.insertAdjacentHTML('beforeend', svg);
+  const det = document.createElement('details');
+  const sum = document.createElement('summary');
+  sum.textContent = t('spectral_sources');
+  const ul = document.createElement('ul');
+  const urls = new Set();
+  for (const g of state.bands.groups ?? []) if (entries.some((e) => g.ids.includes(e.id))) for (const u of g.sources ?? []) urls.add(u);
+  for (const f of state.bands.absorption_features ?? []) if (f.source) urls.add(f.source);
+  for (const u of urls) {
+    const li = document.createElement('li');
+    const a = Object.assign(document.createElement('a'), { href: u, target: '_blank', rel: 'noopener', textContent: u });
+    li.append(a);
+    ul.append(li);
+  }
+  det.append(sum, ul);
+  root.append(det);
+  if ((state.bands.groups ?? []).some((g) => g.unverified && entries.some((e) => g.ids.includes(e.id)))) {
+    const p = document.createElement('p');
+    p.className = 'hint';
+    p.textContent = `* ${t('spectral_unverified')}`;
+    root.append(p);
+  }
 }
 
 function markAnswerLine() {
@@ -587,6 +732,7 @@ function renderDrawerPanel() {
     onClose: () => { state.drawerOpen = false; renderDrawerPanel(); },
     onIcs: () => download(`passagem_${p.id}.ics`, icsFor([p]), 'text/calendar;charset=utf-8'),
     onCopyLink: () => copyLink(p.id),
+    onCard: () => showCard(e),
   });
 }
 
@@ -855,13 +1001,26 @@ function instrumentItem(e) {
     meta.textContent = [swathSummary(e), t(`acq_${e.acquisition}`), e.status !== 'active' ? t(`status_${e.status}`) : ''].filter(Boolean).join(', ');
     text.append(name, meta);
     label.append(cb, dot, text);
+    const info = document.createElement('button');
+    info.type = 'button';
+    info.className = 'info quiet';
+    info.textContent = 'i';
+    info.title = t('card_open');
+    info.setAttribute('aria-label', `${t('card_open')}: ${e.platform} ${e.instrument}`);
+    info.addEventListener('click', (ev) => { ev.preventDefault(); showCard(e); });
+    label.append(info);
     if (e.status_note) label.title = e.status_note;
     li.append(label);
     return li;
   }
 }
 
+function showCard(e) {
+  openCard($('#card'), e, { t, lang: getLang(), swathSummary });
+}
+
 function renderFreshness() {
+  renderFreshDetails($('#fresh-details'), state.meta, { t, formatDateTime });
   const el = $('#freshness');
   if (!state.meta?.updated_utc) { el.textContent = t('freshness_unknown'); el.classList.add('is-warn'); return; }
   const { hours, stale } = dataFreshness(state.meta);
@@ -875,7 +1034,11 @@ function renderStatic() {
   $('#lang').textContent = t('lang_toggle');
   $('#theme').textContent = t(state.theme === 'dracula' ? 'theme_light' : 'theme_dark');
   for (const o of $('#basemap').options) o.textContent = t(`bm_${o.value}`);
+  $('#basemap').title = t('basemap_label');
+  $('#replay').title = t('replay');
+  $('#replay').setAttribute('aria-label', t('replay'));
   $('#panel-about').innerHTML = t('about_html');
+  $('#panel-about').append(glossary(t, GLOSSARY_KEYS));
   for (const el of document.querySelectorAll('.segmented')) el.setAttribute('aria-label', t('mode_label'));
   renderPlay();
   renderFreshness();
@@ -889,6 +1052,54 @@ function renderStatic() {
     renderAbsences();
     if (state.roi) setAnswer(t('answer_ready'), '');
   }
+}
+
+// ---------- results splitter ----------
+
+const wideQuery = window.matchMedia('(min-width: 1800px)');
+
+/** Drag (or arrow keys) resizes the results panel; double-click toggles a large panel. */
+function initSplitter() {
+  const center = $('#center');
+  const sp = $('#splitter');
+  const varName = () => (wideQuery.matches ? '--results-w' : '--results-h');
+  const key = () => (wideQuery.matches ? 'eopp-results-w' : 'eopp-results-h');
+  const apply = (frac) => {
+    const f = Math.min(0.85, Math.max(0.15, frac));
+    center.style.setProperty(varName(), `${(f * 100).toFixed(1)}%`);
+    store(key(), String(f));
+    return f;
+  };
+  const restore = () => {
+    center.style.removeProperty('--results-h');
+    center.style.removeProperty('--results-w');
+    const v = Number(stored(key()));
+    if (v) apply(v);
+  };
+  restore();
+  wideQuery.addEventListener('change', restore);
+  let dragging = false;
+  sp.addEventListener('pointerdown', (ev) => { dragging = true; sp.setPointerCapture(ev.pointerId); sp.classList.add('is-dragging'); });
+  sp.addEventListener('pointermove', (ev) => {
+    if (!dragging) return;
+    const r = center.getBoundingClientRect();
+    apply(wideQuery.matches ? (r.right - ev.clientX) / r.width : (r.bottom - ev.clientY) / r.height);
+  });
+  const end = () => { dragging = false; sp.classList.remove('is-dragging'); };
+  sp.addEventListener('pointerup', end);
+  sp.addEventListener('pointercancel', end);
+  sp.addEventListener('dblclick', () => apply(Number(stored(key()) || 0.42) > 0.6 ? 0.42 : 0.75));
+  sp.addEventListener('keydown', (ev) => {
+    const cur = Number(stored(key()) || 0.42);
+    const grow = wideQuery.matches ? ['ArrowLeft'] : ['ArrowUp'];
+    const shrink = wideQuery.matches ? ['ArrowRight'] : ['ArrowDown'];
+    if (grow.includes(ev.key)) { ev.preventDefault(); apply(cur + 0.05); }
+    if (shrink.includes(ev.key)) { ev.preventDefault(); apply(cur - 0.05); }
+  });
+  // Keep the map canvas and the sticky tab bar in step with the panel size.
+  new ResizeObserver(() => globe?.map.resize()).observe($('#globe'));
+  const tools = document.querySelector('.results .panel-tools');
+  new ResizeObserver(() => center.style.setProperty('--tools-h', `${tools.offsetHeight}px`)).observe(tools);
 }
 
 // ---------- tabs ----------
@@ -995,6 +1206,17 @@ async function init() {
   $('#export-geojson').addEventListener('click', () => exportAll('geojson'));
   $('#export-geolibre').addEventListener('click', () => exportAll('geolibre'));
   $('#print-sheet-btn').addEventListener('click', printSheet);
+  $('#scrub').addEventListener('input', onScrub);
+  $('#replay').addEventListener('click', () => { const a = answerSentence({ ...state.result, passes: answerPasses() }, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point', entriesById: entriesById() }); if (a.best) startSweep(a.best.id); });
+  $('#freshness').addEventListener('click', () => {
+    const d = $('#fresh-details');
+    d.hidden = !d.hidden;
+    $('#freshness').setAttribute('aria-expanded', String(!d.hidden));
+  });
+  document.addEventListener('click', (ev) => {
+    if (!ev.target.closest('.fresh-wrap')) { $('#fresh-details').hidden = true; $('#freshness').setAttribute('aria-expanded', 'false'); }
+  });
+  $('#tab-spectral').addEventListener('click', renderSpectralTab);
   $('#play').addEventListener('click', () => setClock({ playing: !state.clock.playing }));
   $('#speed').addEventListener('change', () => setClock({ speed: Number($('#speed').value) }));
   $('#now').addEventListener('click', () => setClock({ baseSim: Date.now(), speed: 1, playing: true }));
@@ -1005,6 +1227,7 @@ async function init() {
     download(`passagens_${new Date().toISOString().slice(0, 10)}.csv`, csv);
   });
   initTabs();
+  initSplitter();
   renderStatic();
 
   rebuildTrackers();

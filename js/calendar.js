@@ -52,7 +52,7 @@ export function renderCalendar(el, o) {
 
   const grid = document.createElement('div');
   grid.className = 'cal';
-  grid.style.gridTemplateColumns = `minmax(9rem, max-content) repeat(${days.length}, 2.1rem)`;
+  grid.style.gridTemplateColumns = `minmax(9rem, max-content) repeat(${days.length}, minmax(1.6rem, 1fr))`;
   grid.setAttribute('role', 'grid');
 
   const head = (text, cls = '') => {

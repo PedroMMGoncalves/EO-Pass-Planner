@@ -1,45 +1,55 @@
+<p align="center">
+  <img src="assets/logo-512.png" alt="EO Pass Planner logo" width="200">
+</p>
+
 # EO Pass Planner
 
 A browser-only tool that answers, for a point or polygon region of interest
-and a date window (future or past): which Earth-observation instruments image
-it, when, with what coverage, geometry, illumination and expected cloud, and
-whether the acquisition is systematic or only a geometric opportunity.
+(ROI) and a date window, future or past:
 
-Static site for GitHub Pages: no server, no build step, no framework.
+> Which Earth-observation instruments will image (or have geometrically imaged)
+> this ROI, when (UTC and local time), with what coverage, geometry,
+> illumination and expected cloud, and is the acquisition systematic or only an
+> opportunity that must be tasked?
 
-## Status
+**Live:** <https://pedrommgoncalves.github.io/EO-Pass-Planner/>
 
-Work in progress.
+Static site for GitHub Pages: no server, no build step, no framework. The
+orbital data and ESA acquisition plans are refreshed every 6 h by a GitHub
+Action and committed as static files.
 
-- [x] Repository skeleton, vendored libraries, catalogue with 5
-  instruments (Landsat 8, Landsat 9, Sentinel-2A/B/C), TLE update workflow.
-- [x] Pass prediction engine (`nadir_symmetric` swath) and comparison with the
-  reference implementation (see [Validation](#validation)).
-- [x] Globe (MapLibre GL JS, globe projection) with live satellite positions, ground
-  tracks, instantaneous swaths and the night side. Point ROI by click or
-  coordinates, pass computation in a Web Worker, answer sentence, pass table,
-  absences and CSV export.
-- [x] Polygon and rectangle ROI drawn on the globe; typed coordinates in WGS 84,
-  ETRS89/PT-TM06, UTM 28N/29N/32N/36S/37S or a proj4 definition; GeoJSON,
-  KML, KMZ and zipped Shapefile upload; buffer; a shareable URL that
-  reproduces the query.
-- [x] Dark theme (Dracula palette) and basemaps: offline Natural Earth, Sentinel-2
-  cloudless 2024 (EOX), OpenStreetMap light/dark/detailed (OpenFreeMap).
-- [x] Catalogue of 66 instrument entries (61 not inactive) across optical, VHR,
-  hyperspectral, thermal, SAR, lidar/altimetry, meteorological, atmospheric and
-  geophysics missions, each with sources; swath models nadir_symmetric (with
-  optional nadir gap), side_looking, field_of_regard, profile, continuous_geo and
-  track_only.
-- [x] ESA Sentinel-1/-2 acquisition-plan cross-check (planned / not planned /
-  no plan), converted by the data workflow (`scripts/esa_plans.py`).
-- [x] Per-category answer; revisit calendar; pass drawer with a to-scale
-  geometry diagram, cloud sparkline and drone window; cloud cover per pass
-  (Open-Meteo); Sentinel-2 MGRS tiles and Sentinel-1 relative orbits.
-- [x] Candidate InSAR pairs (Sentinel-1, NISAR) by temporal baseline; real past
-  acquisitions from STAC (Earth Search, Copernicus Data Space).
-- [x] Exports: CSV, iCalendar, GeoJSON footprints, GeoLibre project, printable
-  field sheet; shareable links that can open a given pass.
-- [ ] Spectral ruler, instrument cards, swath sweep animation, documentation.
+## What it does
+
+- **Globe** (MapLibre GL JS, globe projection) with live satellite positions,
+  past and future ground tracks, the instantaneous swath of each sensor while it
+  would acquire, and the night side. Five basemaps (an offline Natural Earth
+  map, Sentinel-2 cloudless 2024 imagery, three OpenStreetMap styles) and a light
+  or dark (Dracula palette) theme.
+- **Region of interest**: a point (globe click or typed coordinates), a polygon
+  or rectangle drawn on the globe, typed coordinates in WGS 84, ETRS89/PT-TM06,
+  UTM 28N/29N/32N/36S/37S or any proj4 definition, or a GeoJSON, KML, KMZ or
+  zipped Shapefile file; optional buffer.
+- **Pass prediction** (SGP4, swath/ROI intersection in an ROI-centred
+  equal-area projection) for 68 catalogue entries: optical, very-high
+  resolution, hyperspectral, thermal, SAR, lidar and altimetry, meteorological,
+  atmospheric, geostationary and geophysics missions. Swath models:
+  nadir-symmetric (with optional nadir gap), side-looking SAR, field of regard
+  for tasked sensors (geometric opportunities only), lidar/altimeter profiles,
+  ground-track proximity and geostationary view geometry.
+- **Answer first**: a sentence with the earliest useful pass and one line per
+  instrument category, with a countdown; when results arrive, the footprints
+  are swept across the globe in time order before the best pass is shown.
+- **Evidence**: revisit calendar (instrument × day), sortable table, pass drawer
+  with a to-scale cross-section, cloud forecast and a drone window, spectral
+  ruler with diagnostic mineral absorption features, absences ("why no pass"),
+  geostationary view angles, candidate InSAR pairs (Sentinel-1, NISAR), and
+  real past acquisitions from STAC catalogues.
+- **Cross-checks**: ESA Sentinel-1/-2 acquisition plans (planned / not planned /
+  no plan), cloud cover at pass time (Open-Meteo), Sentinel-2 MGRS tiles and
+  Sentinel-1 relative orbits.
+- **Exports**: CSV, iCalendar (.ics), GeoJSON footprints, a GeoLibre project,
+  a printable field sheet, and links that reproduce a query or open a given pass.
+- Portuguese (pt-PT) and English interface.
 
 ## Run locally
 
@@ -54,23 +64,27 @@ work, because ES modules and `fetch` need http.
 
 ## Data
 
-- `data/catalogue.json` is maintained by hand. Every value cites a source.
-  `scripts/validate_catalogue.py` enforces the provenance rules.
-- `data/plans/` holds ESA Sentinel-1/-2 acquisition plans (today to +30 days)
-  converted to GeoJSON by the same workflow.
-- `data/tles.json`, `data/tle_history/` and `data/meta.json` are generated by
-  [`update-data`](.github/workflows/update-data.yml) every 6 h from
-  [CelesTrak](https://celestrak.org/) GP data. The Action never overwrites
-  good data with a failed fetch.
+- `data/catalogue.json` is maintained by hand. Every entry cites sources for
+  its status, swath and NORAD id; values not yet confirmed are listed in
+  `unverified_fields`. `scripts/validate_catalogue.py` enforces these rules.
+- `data/bands.json` holds the band tables and absorption features of the
+  spectral ruler, with sources.
+- `data/tles.json`, `data/tle_history/`, `data/plans/` and `data/meta.json`
+  are generated by [`update-data`](.github/workflows/update-data.yml) every 6 h:
+  element sets from [CelesTrak](https://celestrak.org/) (TLE, or OMM for
+  catalogue numbers above 99 999) and ESA acquisition plans from Sentinel Online
+  (`scripts/esa_plans.py`). The workflow never overwrites good data with a
+  failed fetch.
 
 ## Validation
 
-Comparison with the reference Python implementation
-([eo-overpass-predictor](https://github.com/julianManning/eo-overpass-predictor),
-pinned commit `eb6bcce`). Both engines used the same TLEs, over a 16-day window
-from 2026-11-10 and five ROIs: Port Phillip Bay, a point at Neves-Corvo, a
-polygon in the Ossa-Morena zone, a point in Maputo, and mainland Portugal. There
-were 68 expected-imaging passes. Full table: [docs/oracle_residuals.md](docs/oracle_residuals.md).
+**Against the reference implementation.** The Python engine of
+[eo-overpass-predictor](https://github.com/julianManning/eo-overpass-predictor)
+(pinned commit `eb6bcce`) and this JavaScript engine were run with the same
+element sets over 16 days and five ROIs (Port Phillip Bay, Neves-Corvo,
+Ossa-Morena, Maputo, mainland Portugal); 68 expected passes. Both found the same
+passes for every ROI. Full table: [docs/oracle_residuals.md](docs/oracle_residuals.md).
+CI repeats the comparison on every push.
 
 | Quantity (JS − reference) | mean | s.d. | max \|Δ\| |
 |---|---:|---:|---:|
@@ -80,16 +94,31 @@ were 68 expected-imaging passes. Full table: [docs/oracle_residuals.md](docs/ora
 | View angle (°) | −0.003 | 0.006 | 0.031 |
 | Solar elevation (°) | 0.000 | 0.030 | 0.055 |
 
-Both engines found the same set of passes for every ROI.
+**Against real acquisitions.** Predicted pass times were compared with 330
+Sentinel-2 L2A and Landsat C2 L2 scenes over mainland Portugal from the last
+16 days (Earth Search STAC), using the current element sets propagated
+backwards. Full report: [docs/validation.md](docs/validation.md).
 
-Other checks (in `tests/`):
-- SGP4 positions agree with Skyfield to within 5.8 m (TEME) up to 7 days from the TLE epoch.
-- Solar elevation agrees with Skyfield/DE421 to within 0.011°.
+| Platform | scenes | mean Δt (s) | s.d. (s) | max \|Δt\| (s) |
+|---|---:|---:|---:|---:|
+| Landsat 8 | 5 | −0.52 | 0.01 | 0.53 |
+| Landsat 9 | 9 | −0.45 | 0.10 | 0.57 |
+| Sentinel-2A | 114 | +0.00 | 0.86 | 2.22 |
+| Sentinel-2B | 119 | +0.04 | 0.79 | 2.35 |
+| Sentinel-2C | 83 | −2.26 | 2.52 | 7.20 |
 
-Computation time over 16 days, measured in Node 22 on a laptop: the 27 active
-systematic instruments over the mainland Portugal polygon take 3.4 s (the
-target is under 10 s); all 58 non-inactive entries take 6.4 s. In the browser
-(Edge, software rendering) the default selection for a point takes 2.6 s.
+The error grows with the age of the element set: for Sentinel-2C the mean
+|Δt| is about 1 s with element sets up to 8 days old and 4–6 s beyond, which
+suggests an orbit manoeuvre in that period.
+
+**Other checks** (in `tests/`): SGP4 positions agree with Skyfield to within
+5.8 m up to 7 days from the epoch; solar elevation agrees with Skyfield/DE421
+to within 0.011°.
+
+**Performance.** Over 16 days, measured in Node 22 on a laptop: the 27 active
+systematic instruments over the mainland Portugal polygon take 3.4 s (target:
+under 10 s); all non-inactive entries take 6.4 s. In the browser the default
+selection for a point takes about 2.6 s.
 
 ## Tests
 
@@ -98,28 +127,45 @@ npm test                                              # JavaScript (node --test,
 python -m unittest discover -s tests -p "test_*.py"   # Python scripts
 python scripts/validate_catalogue.py                  # catalogue rules
 python scripts/oracle_compare.py --oracle-dir <clone>  # needs the reference environment
+node scripts/ground_truth.mjs --days 16                # validation against real acquisitions
 python scripts/make_sgp4_fixtures.py                   # regenerate SGP4/sun fixtures (needs skyfield)
 ```
 
 ## Limitations
 
-A geometric prediction is not an acquisition. Tasked missions show
-opportunities only, and systematic missions can still skip acquisitions. The
-full list will appear in the application's About panel.
+- A geometric prediction is not an acquisition. Tasked missions show
+  opportunities only; systematic missions can still skip acquisitions
+  (manoeuvres, conflicts, downlink, campaign plans).
+- Nominal swath widths are used; real edges vary by a few km (edge margins
+  under 5 km are flagged as uncertain).
+- SGP4 error grows with element-set age and across manoeuvres.
+- SAR ground ranges are computed on a sphere from nominal incidence angles;
+  terrain is ignored.
+- Cloud cover is a point model value, not the cloud cover of a scene.
+- ISS-hosted instruments depend on ISS attitude and operations that the
+  element sets do not capture.
 
 ## External services used by the page
 
-All are free, need no key and allow requests from the page (checked 2026-11-10):
-Open-Meteo (cloud cover), Earth Search and Copernicus Data Space STAC (past
-acquisitions), EOX and OpenFreeMap (optional basemaps). Without a connection the
-page still computes passes from the bundled data; these columns stay empty.
+All are free, need no key and allow requests from the page (checked
+2026-11-10): Open-Meteo (cloud cover), Earth Search and Copernicus Data Space
+STAC (past acquisitions), EOX and OpenFreeMap (optional basemaps). Without a
+connection the page still computes passes from the bundled data; these parts
+stay empty.
 
 ## Credit
 
 This is a clean-room reimplementation inspired by
 [eo-overpass-predictor](https://github.com/julianManning/eo-overpass-predictor)
-by Julian Manning (MIT). See [NOTICE](NOTICE).
+by Julian Manning (MIT), whose engine is used only as a validation reference.
+See [NOTICE](NOTICE).
 
 Projects can be exported to [GeoLibre](https://geolibre.app) (opengeos,
 Prof. Qiusheng Wu), with thanks for that work
 ([doi:10.5281/zenodo.20785400](https://doi.org/10.5281/zenodo.20785400)).
+
+Third-party libraries, fonts and basemaps: see [vendor/README.md](vendor/README.md).
+
+## Licence
+
+MIT, © 2026 Pedro Gonçalves. See [LICENSE](LICENSE).

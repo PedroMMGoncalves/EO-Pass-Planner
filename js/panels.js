@@ -101,7 +101,7 @@ export function renderDrawer(root, c) {
 
   root.append(
     el('div', { class: 'drawer-head' },
-      el('h3', {}, `${p.platform} ${p.instrument}`),
+      el('h3', {}, el('button', { type: 'button', class: 'link', onclick: c.onCard, title: t('card_open') }, `${p.platform} ${p.instrument}`)),
       el('button', { type: 'button', class: 'quiet', onclick: c.onClose, 'aria-label': t('close') }, '×')),
     el('div', { class: 'drawer-diagram', html: diagram }),
     dl,

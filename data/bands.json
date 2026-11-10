@@ -1,0 +1,1976 @@
+{
+ "version": "2026-11-10.1",
+ "note": "Spectral bands per catalogue instrument for the spectral ruler (log axis 0.3 um - 30 cm). All values transcribed from the sources listed per group, opened on 2026-11-10. Where a source gives only band edges, center_um is the midpoint and width_um the full interval (not a measured FWHM); group notes say so. width_um is null when no opened source gave a width. 'ranges' are continuous spectrometer coverages; 'microwave' entries give centre frequency (wavelength = c / f). Excluded: inactive entries (TERRA_ASTER_TIR, S1A_CSAR_IW, ISS_HISUI, SPOT7_NAOMI, SNPP_VIIRS) and geophysics/track-only entries (SWARMA/B/C, GRACEFO_1/2).",
+ "groups": [
+  {
+   "ids": [
+    "L8_OLI_TIRS",
+    "L9_OLI2_TIRS2"
+   ],
+   "label": "Landsat 8/9 OLI(-2) + TIRS(-2)",
+   "bands": [
+    {
+     "name": "B1 Coastal aerosol",
+     "center_um": 0.44,
+     "width_um": 0.02
+    },
+    {
+     "name": "B2 Blue",
+     "center_um": 0.48,
+     "width_um": 0.06
+    },
+    {
+     "name": "B3 Green",
+     "center_um": 0.56,
+     "width_um": 0.06
+    },
+    {
+     "name": "B4 Red",
+     "center_um": 0.655,
+     "width_um": 0.03
+    },
+    {
+     "name": "B5 NIR",
+     "center_um": 0.865,
+     "width_um": 0.03
+    },
+    {
+     "name": "B6 SWIR1",
+     "center_um": 1.61,
+     "width_um": 0.08
+    },
+    {
+     "name": "B7 SWIR2",
+     "center_um": 2.2,
+     "width_um": 0.18
+    },
+    {
+     "name": "B8 Pan",
+     "center_um": 0.59,
+     "width_um": 0.18
+    },
+    {
+     "name": "B9 Cirrus",
+     "center_um": 1.37,
+     "width_um": 0.02
+    },
+    {
+     "name": "B10 TIRS1",
+     "center_um": 10.895,
+     "width_um": 0.59
+    },
+    {
+     "name": "B11 TIRS2",
+     "center_um": 12.005,
+     "width_um": 1.01
+    }
+   ],
+   "sources": [
+    "https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites"
+   ],
+   "unverified": false,
+   "notes": "USGS gives band edges only; center_um = midpoint and width_um = full published interval (not a measured FWHM). Same table applies to Landsat 8 and 9."
+  },
+  {
+   "ids": [
+    "S2A_MSI"
+   ],
+   "label": "Sentinel-2A MSI",
+   "bands": [
+    {
+     "name": "B1",
+     "center_um": 0.4427,
+     "width_um": 0.021
+    },
+    {
+     "name": "B2",
+     "center_um": 0.4927,
+     "width_um": 0.065
+    },
+    {
+     "name": "B3",
+     "center_um": 0.5599,
+     "width_um": 0.035
+    },
+    {
+     "name": "B4",
+     "center_um": 0.6646,
+     "width_um": 0.031
+    },
+    {
+     "name": "B5",
+     "center_um": 0.7041,
+     "width_um": 0.015
+    },
+    {
+     "name": "B6",
+     "center_um": 0.7405,
+     "width_um": 0.013
+    },
+    {
+     "name": "B7",
+     "center_um": 0.7828,
+     "width_um": 0.019
+    },
+    {
+     "name": "B8",
+     "center_um": 0.8328,
+     "width_um": 0.118
+    },
+    {
+     "name": "B8A",
+     "center_um": 0.8647,
+     "width_um": 0.02
+    },
+    {
+     "name": "B9",
+     "center_um": 0.9451,
+     "width_um": 0.02
+    },
+    {
+     "name": "B10",
+     "center_um": 1.3735,
+     "width_um": 0.029
+    },
+    {
+     "name": "B11",
+     "center_um": 1.6137,
+     "width_um": 0.089
+    },
+    {
+     "name": "B12",
+     "center_um": 2.2024,
+     "width_um": 0.18
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/s2-mission"
+   ],
+   "unverified": false,
+   "notes": "SentiWiki Tables 3/4: equivalent wavelength (barycentre of the spectral response function) and bandwidth, per satellite."
+  },
+  {
+   "ids": [
+    "S2B_MSI"
+   ],
+   "label": "Sentinel-2B MSI",
+   "bands": [
+    {
+     "name": "B1",
+     "center_um": 0.4423,
+     "width_um": 0.02
+    },
+    {
+     "name": "B2",
+     "center_um": 0.4923,
+     "width_um": 0.065
+    },
+    {
+     "name": "B3",
+     "center_um": 0.559,
+     "width_um": 0.035
+    },
+    {
+     "name": "B4",
+     "center_um": 0.6649,
+     "width_um": 0.031
+    },
+    {
+     "name": "B5",
+     "center_um": 0.7038,
+     "width_um": 0.014
+    },
+    {
+     "name": "B6",
+     "center_um": 0.7391,
+     "width_um": 0.014
+    },
+    {
+     "name": "B7",
+     "center_um": 0.7797,
+     "width_um": 0.02
+    },
+    {
+     "name": "B8",
+     "center_um": 0.8329,
+     "width_um": 0.115
+    },
+    {
+     "name": "B8A",
+     "center_um": 0.864,
+     "width_um": 0.021
+    },
+    {
+     "name": "B9",
+     "center_um": 0.9432,
+     "width_um": 0.019
+    },
+    {
+     "name": "B10",
+     "center_um": 1.3769,
+     "width_um": 0.029
+    },
+    {
+     "name": "B11",
+     "center_um": 1.6104,
+     "width_um": 0.093
+    },
+    {
+     "name": "B12",
+     "center_um": 2.1857,
+     "width_um": 0.181
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/s2-mission"
+   ],
+   "unverified": false,
+   "notes": "SentiWiki Tables 3/4: equivalent wavelength (barycentre of the spectral response function) and bandwidth, per satellite."
+  },
+  {
+   "ids": [
+    "S2C_MSI"
+   ],
+   "label": "Sentinel-2C MSI",
+   "bands": [
+    {
+     "name": "B1",
+     "center_um": 0.4442,
+     "width_um": 0.02
+    },
+    {
+     "name": "B2",
+     "center_um": 0.4891,
+     "width_um": 0.065
+    },
+    {
+     "name": "B3",
+     "center_um": 0.5606,
+     "width_um": 0.035
+    },
+    {
+     "name": "B4",
+     "center_um": 0.6665,
+     "width_um": 0.031
+    },
+    {
+     "name": "B5",
+     "center_um": 0.7071,
+     "width_um": 0.016
+    },
+    {
+     "name": "B6",
+     "center_um": 0.7411,
+     "width_um": 0.016
+    },
+    {
+     "name": "B7",
+     "center_um": 0.7847,
+     "width_um": 0.02
+    },
+    {
+     "name": "B8",
+     "center_um": 0.8346,
+     "width_um": 0.114
+    },
+    {
+     "name": "B8A",
+     "center_um": 0.8656,
+     "width_um": 0.02
+    },
+    {
+     "name": "B9",
+     "center_um": 0.9472,
+     "width_um": 0.02
+    },
+    {
+     "name": "B10",
+     "center_um": 1.3722,
+     "width_um": 0.033
+    },
+    {
+     "name": "B11",
+     "center_um": 1.612,
+     "width_um": 0.09
+    },
+    {
+     "name": "B12",
+     "center_um": 2.1913,
+     "width_um": 0.181
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/s2-mission"
+   ],
+   "unverified": false,
+   "notes": "SentiWiki Tables 3/4: equivalent wavelength (barycentre of the spectral response function) and bandwidth, per satellite."
+  },
+  {
+   "ids": [
+    "S3A_OLCI",
+    "S3B_OLCI",
+    "S3C_OLCI"
+   ],
+   "label": "Sentinel-3 OLCI",
+   "bands": [
+    {
+     "name": "Oa01",
+     "center_um": 0.4,
+     "width_um": 0.015
+    },
+    {
+     "name": "Oa02",
+     "center_um": 0.4125,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa03",
+     "center_um": 0.4425,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa04",
+     "center_um": 0.49,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa05",
+     "center_um": 0.51,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa06",
+     "center_um": 0.56,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa07",
+     "center_um": 0.62,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa08",
+     "center_um": 0.665,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa09",
+     "center_um": 0.67325,
+     "width_um": 0.0075
+    },
+    {
+     "name": "Oa10",
+     "center_um": 0.68125,
+     "width_um": 0.0075
+    },
+    {
+     "name": "Oa11",
+     "center_um": 0.70875,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa12",
+     "center_um": 0.75375,
+     "width_um": 0.0075
+    },
+    {
+     "name": "Oa13",
+     "center_um": 0.76125,
+     "width_um": 0.0025
+    },
+    {
+     "name": "Oa14",
+     "center_um": 0.764375,
+     "width_um": 0.00375
+    },
+    {
+     "name": "Oa15",
+     "center_um": 0.7675,
+     "width_um": 0.0025
+    },
+    {
+     "name": "Oa16",
+     "center_um": 0.77885,
+     "width_um": 0.015
+    },
+    {
+     "name": "Oa17",
+     "center_um": 0.865,
+     "width_um": 0.02
+    },
+    {
+     "name": "Oa18",
+     "center_um": 0.885,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa19",
+     "center_um": 0.9,
+     "width_um": 0.01
+    },
+    {
+     "name": "Oa20",
+     "center_um": 0.94,
+     "width_um": 0.02
+    },
+    {
+     "name": "Oa21",
+     "center_um": 1.02,
+     "width_um": 0.04
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/s3-olci-instrument"
+   ],
+   "unverified": false,
+   "notes": "OLCI specification bands (SentiWiki Table 1, after Donlon et al. 2012; SentiWiki labels them Oa1-Oa21). Nominal values, applied to S3A/B/C."
+  },
+  {
+   "ids": [
+    "S3A_SLSTR",
+    "S3B_SLSTR",
+    "S3C_SLSTR"
+   ],
+   "label": "Sentinel-3 SLSTR",
+   "bands": [
+    {
+     "name": "S1",
+     "center_um": 0.55427,
+     "width_um": 0.01926
+    },
+    {
+     "name": "S2",
+     "center_um": 0.65947,
+     "width_um": 0.01925
+    },
+    {
+     "name": "S3",
+     "center_um": 0.868,
+     "width_um": 0.0206
+    },
+    {
+     "name": "S4",
+     "center_um": 1.3748,
+     "width_um": 0.0208
+    },
+    {
+     "name": "S5",
+     "center_um": 1.6134,
+     "width_um": 0.06068
+    },
+    {
+     "name": "S6",
+     "center_um": 2.2557,
+     "width_um": 0.05015
+    },
+    {
+     "name": "S7",
+     "center_um": 3.742,
+     "width_um": 0.398
+    },
+    {
+     "name": "S8",
+     "center_um": 10.854,
+     "width_um": 0.776
+    },
+    {
+     "name": "S9",
+     "center_um": 12.0225,
+     "width_um": 0.905
+    },
+    {
+     "name": "F1",
+     "center_um": 3.742,
+     "width_um": 0.398
+    },
+    {
+     "name": "F2",
+     "center_um": 10.854,
+     "width_um": 0.776
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/slstr-products",
+    "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument"
+   ],
+   "unverified": false,
+   "notes": "Centre and bandwidth from SentiWiki SLSTR Products Table 2. F1/F2 use the same detectors as S7/S8 with extended dynamic range."
+  },
+  {
+   "ids": [
+    "TERRA_MODIS",
+    "AQUA_MODIS"
+   ],
+   "label": "MODIS (Terra/Aqua)",
+   "bands": [
+    {
+     "name": "B1",
+     "center_um": 0.645,
+     "width_um": 0.05
+    },
+    {
+     "name": "B2",
+     "center_um": 0.8585,
+     "width_um": 0.035
+    },
+    {
+     "name": "B3",
+     "center_um": 0.469,
+     "width_um": 0.02
+    },
+    {
+     "name": "B4",
+     "center_um": 0.555,
+     "width_um": 0.02
+    },
+    {
+     "name": "B5",
+     "center_um": 1.24,
+     "width_um": 0.02
+    },
+    {
+     "name": "B6",
+     "center_um": 1.64,
+     "width_um": 0.024
+    },
+    {
+     "name": "B7",
+     "center_um": 2.13,
+     "width_um": 0.05
+    },
+    {
+     "name": "B8",
+     "center_um": 0.4125,
+     "width_um": 0.015
+    },
+    {
+     "name": "B9",
+     "center_um": 0.443,
+     "width_um": 0.01
+    },
+    {
+     "name": "B10",
+     "center_um": 0.488,
+     "width_um": 0.01
+    },
+    {
+     "name": "B11",
+     "center_um": 0.531,
+     "width_um": 0.01
+    },
+    {
+     "name": "B12",
+     "center_um": 0.551,
+     "width_um": 0.01
+    },
+    {
+     "name": "B13",
+     "center_um": 0.667,
+     "width_um": 0.01
+    },
+    {
+     "name": "B14",
+     "center_um": 0.678,
+     "width_um": 0.01
+    },
+    {
+     "name": "B15",
+     "center_um": 0.748,
+     "width_um": 0.01
+    },
+    {
+     "name": "B16",
+     "center_um": 0.8695,
+     "width_um": 0.015
+    },
+    {
+     "name": "B17",
+     "center_um": 0.905,
+     "width_um": 0.03
+    },
+    {
+     "name": "B18",
+     "center_um": 0.936,
+     "width_um": 0.01
+    },
+    {
+     "name": "B19",
+     "center_um": 0.94,
+     "width_um": 0.05
+    },
+    {
+     "name": "B20",
+     "center_um": 3.75,
+     "width_um": 0.18
+    },
+    {
+     "name": "B21",
+     "center_um": 3.959,
+     "width_um": 0.06
+    },
+    {
+     "name": "B22",
+     "center_um": 3.959,
+     "width_um": 0.06
+    },
+    {
+     "name": "B23",
+     "center_um": 4.05,
+     "width_um": 0.06
+    },
+    {
+     "name": "B24",
+     "center_um": 4.4655,
+     "width_um": 0.065
+    },
+    {
+     "name": "B25",
+     "center_um": 4.5155,
+     "width_um": 0.067
+    },
+    {
+     "name": "B26",
+     "center_um": 1.375,
+     "width_um": 0.03
+    },
+    {
+     "name": "B27",
+     "center_um": 6.715,
+     "width_um": 0.36
+    },
+    {
+     "name": "B28",
+     "center_um": 7.325,
+     "width_um": 0.3
+    },
+    {
+     "name": "B29",
+     "center_um": 8.55,
+     "width_um": 0.3
+    },
+    {
+     "name": "B30",
+     "center_um": 9.73,
+     "width_um": 0.3
+    },
+    {
+     "name": "B31",
+     "center_um": 11.03,
+     "width_um": 0.5
+    },
+    {
+     "name": "B32",
+     "center_um": 12.02,
+     "width_um": 0.5
+    },
+    {
+     "name": "B33",
+     "center_um": 13.335,
+     "width_um": 0.3
+    },
+    {
+     "name": "B34",
+     "center_um": 13.635,
+     "width_um": 0.3
+    },
+    {
+     "name": "B35",
+     "center_um": 13.935,
+     "width_um": 0.3
+    },
+    {
+     "name": "B36",
+     "center_um": 14.235,
+     "width_um": 0.3
+    }
+   ],
+   "sources": [
+    "https://mcst.gsfc.nasa.gov/calibration/information",
+    "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/modis/"
+   ],
+   "unverified": false,
+   "notes": "NASA MCST bandwidth table (bands 1-19 in nm, 20-36 in um). center = midpoint, width = published interval. Band 26 (1.36-1.39 um) is a SWIR cirrus band despite its number. (modis.gsfc.nasa.gov reset the connection; MCST/LAADS tables used.)"
+  },
+  {
+   "ids": [
+    "CB4A_WFI"
+   ],
+   "label": "CBERS-4A WFI",
+   "bands": [
+    {
+     "name": "BAND13 Blue",
+     "center_um": 0.485,
+     "width_um": 0.07
+    },
+    {
+     "name": "BAND14 Green",
+     "center_um": 0.555,
+     "width_um": 0.07
+    },
+    {
+     "name": "BAND15 Red",
+     "center_um": 0.66,
+     "width_um": 0.06
+    },
+    {
+     "name": "BAND16 NIR",
+     "center_um": 0.83,
+     "width_um": 0.12
+    }
+   ],
+   "sources": [
+    "https://docs.disasterscharter.org/missions/opt/cbers-4a/"
+   ],
+   "unverified": true,
+   "notes": "INPE primary pages could not be opened (gov.br 404, data.inpe.br 502, inpe.br certificate error, eoPortal not rendered). Values from International Charter mission docs (Table 9: intervals; centres 0.485/0.555/0.660/0.830 um, widths 0.07/0.07/0.06/0.12 um), identical to the USGS-documented Amazonia-1 WFI ranges."
+  },
+  {
+   "ids": [
+    "CB4A_MUX"
+   ],
+   "label": "CBERS-4A MUX",
+   "bands": [
+    {
+     "name": "BAND5 Blue",
+     "center_um": 0.485,
+     "width_um": 0.07
+    },
+    {
+     "name": "BAND6 Green",
+     "center_um": 0.555,
+     "width_um": 0.07
+    },
+    {
+     "name": "BAND7 Red",
+     "center_um": 0.66,
+     "width_um": 0.06
+    },
+    {
+     "name": "BAND8 NIR",
+     "center_um": 0.83,
+     "width_um": 0.12
+    }
+   ],
+   "sources": [
+    "https://docs.disasterscharter.org/missions/opt/cbers-4a/"
+   ],
+   "unverified": true,
+   "notes": "INPE primary pages could not be opened. Values from International Charter mission docs (Table 7)."
+  },
+  {
+   "ids": [
+    "AMZ1_WFI"
+   ],
+   "label": "Amazonia-1 WFI (AWFI)",
+   "bands": [
+    {
+     "name": "B1 Blue",
+     "center_um": 0.485,
+     "width_um": 0.07
+    },
+    {
+     "name": "B2 Green",
+     "center_um": 0.555,
+     "width_um": 0.07
+    },
+    {
+     "name": "B3 Red",
+     "center_um": 0.66,
+     "width_um": 0.06
+    },
+    {
+     "name": "B4 NIR",
+     "center_um": 0.83,
+     "width_um": 0.12
+    }
+   ],
+   "sources": [
+    "https://pubs.usgs.gov/of/2021/1030/n/ofr20211030n.pdf",
+    "https://docs.disasterscharter.org/missions/opt/amazonia-1/"
+   ],
+   "unverified": false,
+   "notes": "USGS OFR 2021-1030-N spectral band table (data from INPE 2020): 0.45-0.52, 0.52-0.59, 0.63-0.69, 0.77-0.89 um; Charter Table 5 gives the same centres/widths."
+  },
+  {
+   "ids": [
+    "PACE_OCI"
+   ],
+   "label": "PACE OCI",
+   "bands": [
+    {
+     "name": "SWIR 940",
+     "center_um": 0.94,
+     "width_um": 0.045
+    },
+    {
+     "name": "SWIR 1038",
+     "center_um": 1.038,
+     "width_um": 0.075
+    },
+    {
+     "name": "SWIR 1250",
+     "center_um": 1.25,
+     "width_um": 0.03
+    },
+    {
+     "name": "SWIR 1378",
+     "center_um": 1.378,
+     "width_um": 0.015
+    },
+    {
+     "name": "SWIR 1615",
+     "center_um": 1.615,
+     "width_um": 0.075
+    },
+    {
+     "name": "SWIR 2130",
+     "center_um": 2.13,
+     "width_um": 0.05
+    },
+    {
+     "name": "SWIR 2260",
+     "center_um": 2.26,
+     "width_um": 0.075
+    }
+   ],
+   "ranges": [
+    {
+     "from_um": 0.315,
+     "to_um": 0.895,
+     "label": "UV-VIS-NIR hyperspectral, 2.5 nm steps (5 nm bandwidth); 315-340 nm degraded accuracy"
+    }
+   ],
+   "sources": [
+    "https://pace.oceansciences.org/oci.htm",
+    "https://pace.oceansciences.org/requirements.htm"
+   ],
+   "unverified": false,
+   "notes": "Hyperspectral range from the OCI page (continuous 315-895 nm; requirement OCI-65 is 342.5-887.5 nm). SWIR band centres (OCI-72) and FWHM (OCI-73) are pre-launch requirements."
+  },
+  {
+   "ids": [
+    "ISS_EMIT"
+   ],
+   "label": "EMIT",
+   "ranges": [
+    {
+     "from_um": 0.381,
+     "to_um": 2.493,
+     "label": "VSWIR, 285 bands, ~7.5 nm resolution"
+    }
+   ],
+   "sources": [
+    "https://www.earthdata.nasa.gov/data/catalog/lpcloud-emitl1brad-001",
+    "https://earth.jpl.nasa.gov/emit/instrument/specifications/"
+   ],
+   "unverified": false,
+   "notes": "L1B radiance: 285 bands, 381-2493 nm, ~7.5 nm (LP DAAC/Earthdata). JPL instrument spec: 380-2500 nm, 7.4 nm sampling."
+  },
+  {
+   "ids": [
+    "ISS_ECOSTRESS"
+   ],
+   "label": "ECOSTRESS (PHyTIR)",
+   "bands": [
+    {
+     "name": "TIR 8.29",
+     "center_um": 8.29,
+     "width_um": 0.354
+    },
+    {
+     "name": "TIR 8.78",
+     "center_um": 8.78,
+     "width_um": 0.31
+    },
+    {
+     "name": "TIR 9.20",
+     "center_um": 9.2,
+     "width_um": 0.396
+    },
+    {
+     "name": "TIR 10.49",
+     "center_um": 10.49,
+     "width_um": 0.41
+    },
+    {
+     "name": "TIR 12.09",
+     "center_um": 12.09,
+     "width_um": 0.611
+    },
+    {
+     "name": "SWIR 1.66",
+     "center_um": 1.66,
+     "width_um": null,
+     "unverified": true,
+     "note": "No width published on the pages opened; geolocation/cloud band."
+    }
+   ],
+   "sources": [
+    "https://ecostress.jpl.nasa.gov/mission",
+    "https://www.earthdata.nasa.gov/data/instruments/ecostress/spectral-bands"
+   ],
+   "unverified": false,
+   "notes": "TIR centres/FWHM are JPL measured values (Mission page Table 2). Earthdata lists slightly different centres (1.660, 8.285, 8.785, 9.060, 10.522, 12.001 um) and notes the 8.285 and 9.060 um bands were unavailable 15 May 2019 - 28 Apr 2023 (3-band mode); 5-band mode resumed 28 Apr 2023, interleaved with 3-band collections."
+  },
+  {
+   "ids": [
+    "ENMAP_HSI"
+   ],
+   "label": "EnMAP HSI",
+   "ranges": [
+    {
+     "from_um": 0.42,
+     "to_um": 1.0,
+     "label": "VNIR, 6.5 nm sampling"
+    },
+    {
+     "from_um": 0.9,
+     "to_um": 2.45,
+     "label": "SWIR, 10 nm sampling"
+    }
+   ],
+   "sources": [
+    "https://www.enmap.org/data/doc/EnMAP_Specs.pdf",
+    "https://www.enmap.org/mission/",
+    "https://www.dlr.de/en/eoc/latest/news/2024/enmap-enters-the-era-of-big-data-for-hyperspectral-foundation-models"
+   ],
+   "unverified": false,
+   "notes": "224 spectral bands in total (DLR). VNIR and SWIR overlap 900-1000 nm."
+  },
+  {
+   "ids": [
+    "PRISMA_HYP_PAN"
+   ],
+   "label": "PRISMA HYP + PAN",
+   "bands": [
+    {
+     "name": "PAN",
+     "center_um": 0.55,
+     "width_um": 0.3
+    }
+   ],
+   "ranges": [
+    {
+     "from_um": 0.4,
+     "to_um": 1.01,
+     "label": "HYP VNIR, 66 bands"
+    },
+    {
+     "from_um": 0.92,
+     "to_um": 2.505,
+     "label": "HYP SWIR, 174 bands"
+    }
+   ],
+   "sources": [
+    "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+    "https://earth.esa.int/eogateway/documents/20142/2982981/9_LopintoE_v1.pdf/f78ba4ef-28c5-7d0e-85c9-642f72d6fdbe"
+   ],
+   "unverified": false,
+   "notes": "ASI (2025): 240 bands (66 VNIR 400-1010 nm, 174 SWIR 920-2505 nm), mean spectral resolution ~10 nm (better than 14 nm). PAN 400-700 nm from the ASI presentation on ESA Earth Online (Lopinto). Other sources quote 239 bands / 173 SWIR."
+  },
+  {
+   "ids": [
+    "ISS_DESIS"
+   ],
+   "label": "DESIS",
+   "ranges": [
+    {
+     "from_um": 0.402,
+     "to_um": 1.0,
+     "label": "VNIR, 235 bands, 2.55 nm sampling, ~3.5 nm FWHM (no binning)"
+    }
+   ],
+   "sources": [
+    "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/instrument"
+   ],
+   "unverified": false,
+   "notes": "Binning modes: 118 (x2), 79 (x3), 60 (x4, ~10.2 nm sampling) bands."
+  },
+  {
+   "ids": [
+    "FLEX_FLORIS"
+   ],
+   "label": "FLEX FLORIS",
+   "ranges": [
+    {
+     "from_um": 0.5,
+     "to_um": 0.78,
+     "label": "VNIR, 0.1-2 nm bandwidths; 0.3 nm resolution in O2 bands"
+    },
+    {
+     "from_um": 0.677,
+     "to_um": 0.697,
+     "label": "O2-B high-resolution window",
+     "unverified": true
+    },
+    {
+     "from_um": 0.755,
+     "to_um": 0.78,
+     "label": "O2-A high-resolution window",
+     "unverified": true
+    }
+   ],
+   "sources": [
+    "https://www.eoportal.org/satellite-missions/flex"
+   ],
+   "unverified": false,
+   "notes": "eoPortal fallback (ESA FLEX page did not list FLORIS specs). eoPortal gives inconsistent O2 window limits (759-769 / 686-697 nm in one section, 755-780 / 677-697 nm in another); windows marked unverified. Overall 500-780 nm range is consistent."
+  },
+  {
+   "ids": [
+    "SPOT6_NAOMI"
+   ],
+   "label": "SPOT 6 NAOMI",
+   "bands": [
+    {
+     "name": "PAN",
+     "center_um": 0.6,
+     "width_um": 0.3
+    },
+    {
+     "name": "Blue",
+     "center_um": 0.485,
+     "width_um": 0.07
+    },
+    {
+     "name": "Green",
+     "center_um": 0.565,
+     "width_um": 0.07
+    },
+    {
+     "name": "Red",
+     "center_um": 0.655,
+     "width_um": 0.07
+    },
+    {
+     "name": "NIR",
+     "center_um": 0.825,
+     "width_um": 0.13
+    }
+   ],
+   "sources": [
+    "https://earth.esa.int/eogateway/missions/spot-6"
+   ],
+   "unverified": false,
+   "notes": "ESA Earth Online band table (green printed as '0.53-060 um', read as 0.53-0.60). Airbus pages not opened. center = midpoint, width = interval."
+  },
+  {
+   "ids": [
+    "PHR1A_OPT",
+    "PHR1B_OPT"
+   ],
+   "label": "Pleiades 1A/1B HiRI",
+   "bands": [
+    {
+     "name": "PAN",
+     "center_um": 0.65,
+     "width_um": 0.34
+    },
+    {
+     "name": "B0 Blue",
+     "center_um": 0.49,
+     "width_um": 0.08
+    },
+    {
+     "name": "B1 Green",
+     "center_um": 0.55,
+     "width_um": 0.08
+    },
+    {
+     "name": "B2 Red",
+     "center_um": 0.66,
+     "width_um": 0.08
+    },
+    {
+     "name": "B3 NIR",
+     "center_um": 0.845,
+     "width_um": 0.14
+    }
+   ],
+   "sources": [
+    "https://earth.esa.int/eogateway/missions/pleiades"
+   ],
+   "unverified": false,
+   "notes": "ESA Earth Online HiRI instrument parameters. center = midpoint, width = interval."
+  },
+  {
+   "ids": [
+    "PNEO3_OPT",
+    "PNEO4_OPT"
+   ],
+   "label": "Pleiades Neo",
+   "bands": [
+    {
+     "name": "PAN",
+     "center_um": 0.625,
+     "width_um": 0.35
+    },
+    {
+     "name": "Deep Blue",
+     "center_um": 0.425,
+     "width_um": 0.05
+    },
+    {
+     "name": "Blue",
+     "center_um": 0.485,
+     "width_um": 0.07
+    },
+    {
+     "name": "Green",
+     "center_um": 0.56,
+     "width_um": 0.06
+    },
+    {
+     "name": "Red",
+     "center_um": 0.655,
+     "width_um": 0.07
+    },
+    {
+     "name": "Red Edge",
+     "center_um": 0.725,
+     "width_um": 0.05
+    },
+    {
+     "name": "NIR",
+     "center_um": 0.825,
+     "width_um": 0.11
+    }
+   ],
+   "sources": [
+    "https://earth.esa.int/eogateway/missions/pleiades-neo"
+   ],
+   "unverified": false,
+   "notes": "ESA Earth Online band list. center = midpoint, width = interval."
+  },
+  {
+   "ids": [
+    "S1C_CSAR_IW",
+    "S1D_CSAR_IW"
+   ],
+   "label": "Sentinel-1 C-SAR",
+   "microwave": [
+    {
+     "name": "C-band",
+     "freq_ghz": 5.405
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/s1-mission"
+   ],
+   "unverified": false,
+   "notes": "5.405 GHz (~5.55 cm)."
+  },
+  {
+   "ids": [
+    "NISAR_LSAR"
+   ],
+   "label": "NISAR L-SAR",
+   "microwave": [
+    {
+     "name": "L-band",
+     "freq_ghz": 1.2575
+    }
+   ],
+   "sources": [
+    "https://nisar-docs.asf.alaska.edu/nisar-intro",
+    "https://science.nasa.gov/mission/nisar/mission-overview/"
+   ],
+   "unverified": false,
+   "notes": "ASF Table 1: 77 MHz mode centred at 1257.5 MHz (other modes use sub-bands between 1221.5 and 1293.5 MHz). NASA: 24 cm wavelength."
+  },
+  {
+   "ids": [
+    "NISAR_SSAR"
+   ],
+   "label": "NISAR S-SAR",
+   "microwave": [
+    {
+     "name": "S-band",
+     "freq_ghz": 3.2
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/instruments/view/sar_s_nisar",
+    "https://science.nasa.gov/mission/nisar/mission-overview/"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR: 3.162-3.237 GHz (midpoint ~3.20 GHz, computed). NASA gives 9.4 cm, ASF 9.3 cm wavelength."
+  },
+  {
+   "ids": [
+    "SAOCOM1A_SAR",
+    "SAOCOM1B_SAR"
+   ],
+   "label": "SAOCOM-1 SAR-L",
+   "microwave": [
+    {
+     "name": "L-band",
+     "freq_ghz": 1.275
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/satellites/view/saocom_1a"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR fallback (CONAE pages not opened). 1A and 1B carry identical payloads."
+  },
+  {
+   "ids": [
+    "ALOS2_PALSAR2",
+    "ALOS4_PALSAR3"
+   ],
+   "label": "ALOS-2 PALSAR-2 / ALOS-4 PALSAR-3",
+   "microwave": [
+    {
+     "name": "L-band",
+     "freq_ghz": 1.2575
+    }
+   ],
+   "sources": [
+    "https://www.eorc.jaxa.jp/AMSR/news/pdf/APPENDIX4_ALOS-2.pdf",
+    "https://www.eorc.jaxa.jp/AMSR/news/pdf/APPENDIX6_ALOS-4.pdf"
+   ],
+   "unverified": false,
+   "notes": "JAXA: centre frequency 1257.5 MHz, selectable 1236.5 or 1278.5 MHz to avoid RNSS interference (PALSAR-3: 1257.5 MHz for spotlight/3 m stripmap; 1236.5/1257.5/1278.5 MHz for other modes)."
+  },
+  {
+   "ids": [
+    "TSX_SARX",
+    "TDX_SARX",
+    "PAZ_SARX"
+   ],
+   "label": "TerraSAR-X / TanDEM-X / PAZ SAR-X",
+   "microwave": [
+    {
+     "name": "X-band",
+     "freq_ghz": 9.65
+    }
+   ],
+   "sources": [
+    "https://www.dlr.de/de/rb/forschung-betrieb/missionen/erdbeobachtung-wissenschaft/terrasar-x",
+    "https://www.dlr.de/en/research-and-transfer/projects-and-missions/tandem-x",
+    "https://earth.esa.int/eogateway/missions/paz/description"
+   ],
+   "unverified": false,
+   "notes": "9.65 GHz for all three (DLR for TSX/TDX; ESA Earth Online for PAZ)."
+  },
+  {
+   "ids": [
+    "SWOT_KARIN"
+   ],
+   "label": "SWOT KaRIn",
+   "microwave": [
+    {
+     "name": "Ka-band",
+     "freq_ghz": 35.75
+    }
+   ],
+   "sources": [
+    "https://www.aviso.altimetry.fr/en/missions/current-missions/swot/instruments/karin-wide-swath-altimeter-in-ka-band.html"
+   ],
+   "unverified": false,
+   "notes": "35.75 GHz (8.4 mm), CNES/AVISO. SWOT's Poseidon-3C nadir altimeter is not part of this catalogue entry."
+  },
+  {
+   "ids": [
+    "S6MF_POSEIDON4"
+   ],
+   "label": "Sentinel-6 Poseidon-4",
+   "microwave": [
+    {
+     "name": "Ku-band",
+     "freq_ghz": 13.575
+    },
+    {
+     "name": "C-band",
+     "freq_ghz": 5.41
+    }
+   ],
+   "sources": [
+    "https://sentinels.copernicus.eu/missions/sentinel-6/instrument-payload"
+   ],
+   "unverified": false,
+   "notes": "Ku 13.575 GHz / C 5.41 GHz, 320 MHz total bandwidth each. C-band for ionospheric correction."
+  },
+  {
+   "ids": [
+    "CS2_SIRAL"
+   ],
+   "label": "CryoSat-2 SIRAL",
+   "microwave": [
+    {
+     "name": "Ku-band",
+     "freq_ghz": 13.575
+    }
+   ],
+   "sources": [
+    "https://www.aviso.altimetry.fr/en/missions/current-missions/cryosat/instruments/siral.html"
+   ],
+   "unverified": false,
+   "notes": "Ku-band only (13.575 GHz); LRM, SAR and SARIn modes. The ESA Earth Online CryoSat page did not state the frequency."
+  },
+  {
+   "ids": [
+    "S3A_SRAL",
+    "S3B_SRAL",
+    "S3C_SRAL"
+   ],
+   "label": "Sentinel-3 SRAL",
+   "microwave": [
+    {
+     "name": "Ku-band",
+     "freq_ghz": 13.575
+    },
+    {
+     "name": "C-band",
+     "freq_ghz": 5.41
+    }
+   ],
+   "sources": [
+    "https://sentiwiki.copernicus.eu/web/s3-altimetry-instruments"
+   ],
+   "unverified": false,
+   "notes": "Ku 13.575 GHz (320 MHz) main ranging; C 5.41 GHz (290 MHz) ionospheric correction."
+  },
+  {
+   "ids": [
+    "ICESAT2_ATLAS"
+   ],
+   "label": "ICESat-2 ATLAS",
+   "laser": [
+    {
+     "name": "532 nm",
+     "center_um": 0.532
+    }
+   ],
+   "sources": [
+    "https://icesat-2.gsfc.nasa.gov/space-lasers"
+   ],
+   "unverified": false,
+   "notes": ""
+  },
+  {
+   "ids": [
+    "ISS_GEDI"
+   ],
+   "label": "GEDI",
+   "laser": [
+    {
+     "name": "1064 nm",
+     "center_um": 1.064
+    }
+   ],
+   "sources": [
+    "https://gedi.umd.edu/instrument/specifications/"
+   ],
+   "unverified": false,
+   "notes": "Three Nd:YAG lasers at 1064 nm."
+  },
+  {
+   "ids": [
+    "METOPB_AVHRR",
+    "METOPC_AVHRR"
+   ],
+   "label": "AVHRR/3 (Metop)",
+   "bands": [
+    {
+     "name": "Ch1",
+     "center_um": 0.63,
+     "width_um": 0.1
+    },
+    {
+     "name": "Ch2",
+     "center_um": 0.862,
+     "width_um": 0.275
+    },
+    {
+     "name": "Ch3A",
+     "center_um": 1.61,
+     "width_um": 0.06
+    },
+    {
+     "name": "Ch3B",
+     "center_um": 3.74,
+     "width_um": 0.38
+    },
+    {
+     "name": "Ch4",
+     "center_um": 10.8,
+     "width_um": 1.0
+    },
+    {
+     "name": "Ch5",
+     "center_um": 12.0,
+     "width_um": 1.0
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/instruments/view/avhrr_3"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR central wavelength; width_um = OSCAR spectral interval (EUMETSAT AVHRR page returned HTTP 403). Channel labels assigned by table order. 3A and 3B are time-shared."
+  },
+  {
+   "ids": [
+    "N20_VIIRS",
+    "N21_VIIRS"
+   ],
+   "label": "VIIRS (NOAA-20/21)",
+   "bands": [
+    {
+     "name": "I1",
+     "center_um": 0.64,
+     "width_um": 0.08
+    },
+    {
+     "name": "I2",
+     "center_um": 0.865,
+     "width_um": 0.03
+    },
+    {
+     "name": "I3",
+     "center_um": 1.61,
+     "width_um": 0.06
+    },
+    {
+     "name": "I4",
+     "center_um": 3.74,
+     "width_um": 0.38
+    },
+    {
+     "name": "I5",
+     "center_um": 11.45,
+     "width_um": 1.9
+    },
+    {
+     "name": "M1",
+     "center_um": 0.412,
+     "width_um": 0.02
+    },
+    {
+     "name": "M2",
+     "center_um": 0.445,
+     "width_um": 0.018
+    },
+    {
+     "name": "M3",
+     "center_um": 0.483,
+     "width_um": 0.01
+    },
+    {
+     "name": "M4",
+     "center_um": 0.555,
+     "width_um": 0.02
+    },
+    {
+     "name": "M5",
+     "center_um": 0.672,
+     "width_um": 0.02
+    },
+    {
+     "name": "M6",
+     "center_um": 0.7465,
+     "width_um": 0.015
+    },
+    {
+     "name": "M7",
+     "center_um": 0.8655,
+     "width_um": 0.039
+    },
+    {
+     "name": "M8",
+     "center_um": 1.24,
+     "width_um": 0.02
+    },
+    {
+     "name": "M9",
+     "center_um": 1.3785,
+     "width_um": 0.015
+    },
+    {
+     "name": "M10",
+     "center_um": 1.61,
+     "width_um": 0.06
+    },
+    {
+     "name": "M11",
+     "center_um": 2.255,
+     "width_um": 0.05
+    },
+    {
+     "name": "M12",
+     "center_um": 3.7,
+     "width_um": 0.18
+    },
+    {
+     "name": "M13",
+     "center_um": 4.05,
+     "width_um": 0.16
+    },
+    {
+     "name": "M14",
+     "center_um": 8.55,
+     "width_um": 0.3
+    },
+    {
+     "name": "M15",
+     "center_um": 10.76,
+     "width_um": 1.0
+    },
+    {
+     "name": "M16",
+     "center_um": 12.015,
+     "width_um": 0.95
+    },
+    {
+     "name": "DNB",
+     "center_um": 0.7,
+     "width_um": 0.4
+    }
+   ],
+   "sources": [
+    "https://www.earthdata.nasa.gov/data/instruments/viirs/spectral-bands"
+   ],
+   "unverified": false,
+   "notes": "NASA Earthdata ranges; center = midpoint, width = interval."
+  },
+  {
+   "ids": [
+    "METOPSGA1_METIMAGE"
+   ],
+   "label": "METimage (Metop-SG A1)",
+   "bands": [
+    {
+     "name": "VII-4",
+     "center_um": 0.443,
+     "width_um": 0.03
+    },
+    {
+     "name": "VII-8",
+     "center_um": 0.555,
+     "width_um": 0.02
+    },
+    {
+     "name": "VII-12",
+     "center_um": 0.668,
+     "width_um": 0.02
+    },
+    {
+     "name": "VII-15",
+     "center_um": 0.7515,
+     "width_um": 0.01
+    },
+    {
+     "name": "VII-16",
+     "center_um": 0.7627,
+     "width_um": 0.0115
+    },
+    {
+     "name": "VII-17",
+     "center_um": 0.865,
+     "width_um": 0.02
+    },
+    {
+     "name": "VII-20",
+     "center_um": 0.914,
+     "width_um": 0.02
+    },
+    {
+     "name": "VII-22",
+     "center_um": 1.24,
+     "width_um": 0.02
+    },
+    {
+     "name": "VII-23",
+     "center_um": 1.375,
+     "width_um": 0.04
+    },
+    {
+     "name": "VII-24",
+     "center_um": 1.63,
+     "width_um": 0.02
+    },
+    {
+     "name": "VII-25",
+     "center_um": 2.25,
+     "width_um": 0.05
+    },
+    {
+     "name": "VII-26",
+     "center_um": 3.74,
+     "width_um": 0.18
+    },
+    {
+     "name": "VII-28",
+     "center_um": 3.959,
+     "width_um": 0.06
+    },
+    {
+     "name": "VII-30",
+     "center_um": 4.05,
+     "width_um": 0.06
+    },
+    {
+     "name": "VII-33",
+     "center_um": 6.725,
+     "width_um": 0.37
+    },
+    {
+     "name": "VII-34",
+     "center_um": 7.325,
+     "width_um": 0.29
+    },
+    {
+     "name": "VII-35",
+     "center_um": 8.54,
+     "width_um": 0.29
+    },
+    {
+     "name": "VII-37",
+     "center_um": 10.69,
+     "width_um": 0.5
+    },
+    {
+     "name": "VII-39",
+     "center_um": 12.02,
+     "width_um": 0.5
+    },
+    {
+     "name": "VII-40",
+     "center_um": 13.345,
+     "width_um": 0.31
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/instruments/view/metimage"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR channel table (EUMETSAT METimage page returned HTTP 403)."
+  },
+  {
+   "ids": [
+    "MET10_SEVIRI",
+    "MET11_SEVIRI"
+   ],
+   "label": "SEVIRI (Meteosat-10/11)",
+   "bands": [
+    {
+     "name": "HRV",
+     "center_um": 0.75,
+     "width_um": 0.3
+    },
+    {
+     "name": "VIS0.6",
+     "center_um": 0.635,
+     "width_um": 0.15
+    },
+    {
+     "name": "VIS0.8",
+     "center_um": 0.81,
+     "width_um": 0.14
+    },
+    {
+     "name": "NIR1.6",
+     "center_um": 1.64,
+     "width_um": 0.28
+    },
+    {
+     "name": "IR3.9",
+     "center_um": 3.92,
+     "width_um": 0.88
+    },
+    {
+     "name": "WV6.2",
+     "center_um": 6.25,
+     "width_um": 1.8
+    },
+    {
+     "name": "WV7.3",
+     "center_um": 7.35,
+     "width_um": 1.0
+    },
+    {
+     "name": "IR8.7",
+     "center_um": 8.7,
+     "width_um": 0.8
+    },
+    {
+     "name": "IR9.7",
+     "center_um": 9.66,
+     "width_um": 0.56
+    },
+    {
+     "name": "IR10.8",
+     "center_um": 10.8,
+     "width_um": 2.0
+    },
+    {
+     "name": "IR12.0",
+     "center_um": 12.0,
+     "width_um": 2.0
+    },
+    {
+     "name": "IR13.4",
+     "center_um": 13.4,
+     "width_um": 2.0
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/instruments/view/seviri"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR central wavelengths; width_um is the '99% encircled energy' spectral interval, wider than FWHM. Channel names are labels derived from the central wavelengths (OSCAR lists no names). HRV: broadband 0.6-0.9 um as listed by OSCAR. EUMETSAT pages returned HTTP 403."
+  },
+  {
+   "ids": [
+    "MET12_FCI"
+   ],
+   "label": "FCI (MTG-I1 / Meteosat-12)",
+   "bands": [
+    {
+     "name": "Ch01",
+     "center_um": 0.444,
+     "width_um": 0.06
+    },
+    {
+     "name": "Ch02",
+     "center_um": 0.51,
+     "width_um": 0.04
+    },
+    {
+     "name": "Ch03",
+     "center_um": 0.64,
+     "width_um": 0.05
+    },
+    {
+     "name": "Ch04",
+     "center_um": 0.865,
+     "width_um": 0.05
+    },
+    {
+     "name": "Ch05",
+     "center_um": 0.914,
+     "width_um": 0.02
+    },
+    {
+     "name": "Ch06",
+     "center_um": 1.38,
+     "width_um": 0.03
+    },
+    {
+     "name": "Ch07",
+     "center_um": 1.61,
+     "width_um": 0.05
+    },
+    {
+     "name": "Ch08",
+     "center_um": 2.25,
+     "width_um": 0.05
+    },
+    {
+     "name": "Ch09",
+     "center_um": 3.8,
+     "width_um": 0.4
+    },
+    {
+     "name": "Ch10",
+     "center_um": 6.3,
+     "width_um": 1.0
+    },
+    {
+     "name": "Ch11",
+     "center_um": 7.35,
+     "width_um": 0.5
+    },
+    {
+     "name": "Ch12",
+     "center_um": 8.7,
+     "width_um": 0.4
+    },
+    {
+     "name": "Ch13",
+     "center_um": 9.66,
+     "width_um": 0.3
+    },
+    {
+     "name": "Ch14",
+     "center_um": 10.5,
+     "width_um": 0.7
+    },
+    {
+     "name": "Ch15",
+     "center_um": 12.3,
+     "width_um": 0.5
+    },
+    {
+     "name": "Ch16",
+     "center_um": 13.3,
+     "width_um": 0.6
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/instruments/view/fci"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR central wavelength and bandwidth, 16 channels in table order (EUMETSAT FCI page returned HTTP 403; OSCAR gives no channel names)."
+  },
+  {
+   "ids": [
+    "S5P_TROPOMI"
+   ],
+   "label": "Sentinel-5P TROPOMI",
+   "ranges": [
+    {
+     "from_um": 0.267,
+     "to_um": 0.3,
+     "label": "Band 1 (UV)"
+    },
+    {
+     "from_um": 0.3,
+     "to_um": 0.332,
+     "label": "Band 2 (UV)"
+    },
+    {
+     "from_um": 0.305,
+     "to_um": 0.4,
+     "label": "Band 3 (UVIS)"
+    },
+    {
+     "from_um": 0.4,
+     "to_um": 0.499,
+     "label": "Band 4 (UVIS)"
+    },
+    {
+     "from_um": 0.661,
+     "to_um": 0.725,
+     "label": "Band 5 (NIR)"
+    },
+    {
+     "from_um": 0.725,
+     "to_um": 0.786,
+     "label": "Band 6 (NIR)"
+    },
+    {
+     "from_um": 2.3,
+     "to_um": 2.343,
+     "label": "Band 7 (SWIR)"
+    },
+    {
+     "from_um": 2.343,
+     "to_um": 2.389,
+     "label": "Band 8 (SWIR)"
+    }
+   ],
+   "sources": [
+    "https://www.tropomi.eu/data-products/l1b-radiance",
+    "https://sentinels.copernicus.eu/data-products/-/asset_publisher/fp37fc19FN8F/content/tropomi-level-1b-radiances",
+    "https://sentiwiki.copernicus.eu/web/s5p-mission"
+   ],
+   "unverified": false,
+   "notes": "Calibrated L1B band ranges (tropomi.eu / ESA). 4 spectrometers each split in two bands (SentiWiki); spectrometer labels follow band order. Per-band resolution 0.23-0.65 nm (table mapping not machine-readable)."
+  },
+  {
+   "ids": [
+    "METOPSGA1_S5"
+   ],
+   "label": "Sentinel-5 UVNS (Metop-SG A1)",
+   "ranges": [
+    {
+     "from_um": 0.27,
+     "to_um": 0.31,
+     "label": "UV-1, 1.0 nm resolution"
+    },
+    {
+     "from_um": 0.3,
+     "to_um": 0.37,
+     "label": "UV-2, 0.5 nm resolution"
+    },
+    {
+     "from_um": 0.37,
+     "to_um": 0.5,
+     "label": "VIS, 0.5 nm resolution"
+    },
+    {
+     "from_um": 0.685,
+     "to_um": 0.71,
+     "label": "NIR-1, 0.4 nm resolution"
+    },
+    {
+     "from_um": 0.755,
+     "to_um": 0.773,
+     "label": "NIR-2, 0.4 nm resolution"
+    },
+    {
+     "from_um": 1.595,
+     "to_um": 1.675,
+     "label": "SWIR-1, 0.25 nm resolution"
+    },
+    {
+     "from_um": 2.305,
+     "to_um": 2.385,
+     "label": "SWIR-2, 0.25 nm resolution"
+    }
+   ],
+   "sources": [
+    "https://space.oscar.wmo.int/instruments/view/sentinel_5",
+    "https://sentinels.copernicus.eu/missions/sentinel-5/instrument-payload"
+   ],
+   "unverified": false,
+   "notes": "WMO OSCAR band table; ESA payload page confirms 5 spectrometers (UV1, UV2VIS, NIR, 2x SWIR) but gives the bands only as a figure."
+  }
+ ],
+ "absorption_features": [
+  {
+   "label": "Fe3+ (ferric iron, e.g. hematite, goethite)",
+   "center_um": 0.9,
+   "range_um": [
+    0.85,
+    0.95
+   ],
+   "source": "https://pubs.usgs.gov/of/1984/0096/report.pdf",
+   "citation": "Lee, K. and Raines, G.L. (1984) Reflectance spectra of some alteration minerals - a chart compiled from published data, 0.4-2.5 um. USGS Open-File Report 84-96 (3-decimal positions from Hunt 1979, Table 1).",
+   "note": "Crystal-field minimum at 0.85 um identifies hematite; a broader minimum beyond 0.9 um is characteristic of goethite. The 0.95 um upper bound is approximate (the source gives no number for it).",
+   "unverified": true
+  },
+  {
+   "label": "Al-OH (e.g. kaolinite, muscovite, alunite)",
+   "center_um": 2.2,
+   "range_um": [
+    2.16,
+    2.21
+   ],
+   "source": "https://pubs.usgs.gov/of/1984/0096/report.pdf",
+   "citation": "Lee, K. and Raines, G.L. (1984) Reflectance spectra of some alteration minerals - a chart compiled from published data, 0.4-2.5 um. USGS Open-File Report 84-96 (3-decimal positions from Hunt 1979, Table 1).",
+   "note": "Al-OH bands near 2.2 um: pyrophyllite 2.166, kaolinite 2.162/2.209 doublet, alunite 2.165/2.208 doublet, montmorillonite 2.205, muscovite 2.208, lepidolite 2.20 um."
+  },
+  {
+   "label": "Mg-OH / CO3 (e.g. chlorite, phlogopite, calcite)",
+   "center_um": 2.33,
+   "range_um": [
+    2.32,
+    2.34
+   ],
+   "source": "https://pubs.usgs.gov/of/1984/0096/report.pdf",
+   "citation": "Lee, K. and Raines, G.L. (1984) Reflectance spectra of some alteration minerals - a chart compiled from published data, 0.4-2.5 um. USGS Open-File Report 84-96 (3-decimal positions from Hunt 1979, Table 1).",
+   "note": "Mg-OH near 2.3 um: chlorite 2.32, phlogopite 2.33 um; CO3 band of calcite at 2.337 um. Talc and dolomite positions are not given in this source, so they are left out of the label."
+  },
+  {
+   "label": "Si-O reststrahlen (silicates, quartz)",
+   "center_um": 10.0,
+   "range_um": [
+    8.5,
+    12.0
+   ],
+   "source": "https://arxiv.org/abs/1502.05008",
+   "citation": "Reddy, V., Dunn, T.L., Thomas, C.A., Moskovitz, N.A., Burbine, T.H. (2015) Mineralogy and surface composition of asteroids. In Asteroids IV, Univ. Arizona Press (arXiv:1502.05008), sec. 6.1. Supporting: Hunt, G.R. (1981) Emission spectra in the thermal infrared region. USGS Open-File Report 81-787.",
+   "note": "Silicate reststrahlen bands at ~8.5-12 um from Si-O asymmetric stretching (Reddy et al. 2015, citing Lyon 1964, Hunt 1982, Salisbury et al. 1991); Hunt (1981) places the fundamental Si-O stretching features in the '10 um region'. center_um is a nominal mid-point for drawing."
+  },
+  {
+   "label": "CO3 fundamental (carbonates, thermal IR)",
+   "center_um": 11.0,
+   "source": "https://pubs.usgs.gov/of/1981/0787/report.pdf",
+   "citation": "Hunt, G.R. (1981) Emission spectra in the thermal infrared region. USGS Open-File Report 81-787.",
+   "note": "Limestone and dolomite sand samples 'all display a well-defined band near 11 um due to the carbonate fundamental mode'."
+  }
+ ]
+}

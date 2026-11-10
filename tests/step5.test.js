@@ -4,7 +4,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { prepare, planStatus, planSatellite } from '../js/plans.js';
-import { interpolate, cloudAt, fetchCloudSeries, cloudRelevant } from '../js/weather.js';
+import {
+  interpolate, valueAt, cloudAt, fetchAtmosphere, cloudRelevant, atmosphereAt, atmosphereKind, sumBefore, hourlyRows,
+} from '../js/weather.js';
 import { s2Tile, s2TilesForRoi, s1RelativeOrbit } from '../js/tiles.js';
 import { normaliseItem, groupByPass } from '../js/stac.js';
 import { insarTracks } from '../js/insar.js';
@@ -35,26 +37,54 @@ test('ESA plan cross-check: planned, not planned, no plan', () => {
 });
 
 test('cloud: interpolation, gaps and source labels', async () => {
-  const s = { time: [0, H, 2 * H, 10 * H], total: [0, 100, 50, 0], low: [0, 0, 0, 0], mid: [0, 0, 0, 0], high: [0, 100, 50, 0], kind: ['analysis', 'forecast', 'forecast', 'forecast'] };
-  assert.equal(interpolate(s, s.total, H / 2), 50);
-  assert.equal(interpolate(s, s.total, -1), null);
-  assert.equal(interpolate(s, s.total, 5 * H), 50, 'across a gap > 3 h the earlier value is kept');
+  const s = { time: [0, H, 2 * H, 10 * H], vars: { cloud: [0, 100, 50, 0], cloud_low: [0, 0, 0, 0], cloud_mid: [0, 0, 0, 0], cloud_high: [0, 100, 50, 0] }, kind: ['analysis', 'forecast', 'forecast', 'forecast'] };
+  assert.equal(valueAt(s, 'cloud', H / 2), 50);
+  assert.equal(valueAt(s, 'cloud', -1), null);
+  assert.equal(valueAt(s, 'cloud', 5 * H), 50, 'across a gap > 3 h the earlier value is kept');
+  assert.equal(interpolate(s, s.vars.cloud, H / 2), 50);
   assert.equal(cloudAt(s, 1.9 * H).kind, 'forecast');
   assert.equal(cloudRelevant({ categories: ['sar'] }), false);
   assert.equal(cloudRelevant({ categories: ['thermal'] }), true);
-  // Requests: forecast API with past_days for a recent window; archive for an old one.
+  assert.equal(cloudRelevant({ categories: ['lidar_altimetry'], instrument: 'ATLAS' }), true, 'laser altimetry is cloud-sensitive');
+  assert.equal(cloudRelevant({ categories: ['lidar_altimetry'], instrument: 'SRAL' }), false);
+  // Requests: forecast API with past_days plus CAMS aerosols for a recent window; archive only for an old one.
   const urls = [];
   const fake = async (url) => {
     urls.push(url);
-    return { ok: true, json: async () => ({ hourly: { time: ['2026-01-01T00:00'], cloud_cover: [10], cloud_cover_low: [1], cloud_cover_mid: [2], cloud_cover_high: [3] } }) };
+    return { ok: true, json: async () => ({ hourly: { time: ['2026-11-09T00:00', '2026-11-09T01:00'], cloud_cover: [10, 20], aerosol_optical_depth: [0.2, 0.3], dust: [5, 6], precipitation: [1, 2] } }) };
   };
   const now = Date.parse('2026-11-10T00:00:00Z');
-  await fetchCloudSeries({ lat: 38, lon: -8 }, now - 2 * DAY, now + 5 * DAY, now, fake);
-  assert.match(urls[0], /api\.open-meteo\.com\/v1\/forecast.*past_days=3.*forecast_days=6/);
+  const series = await fetchAtmosphere({ lat: 38, lon: -8 }, now - 2 * DAY, now + 5 * DAY, now, fake);
+  assert.match(urls[0], /api\.open-meteo\.com\/v1\/forecast.*past_days=5.*forecast_days=6/);
+  assert.ok(urls.some((u) => /air-quality-api\.open-meteo\.com.*aerosol_optical_depth/.test(u)));
+  assert.equal(series.vars.aod[1], 0.3);
+  assert.equal(series.kind[0], 'analysis', 'aerosol rows do not override the weather source label');
   urls.length = 0;
-  await fetchCloudSeries({ lat: 38, lon: -8 }, now - 200 * DAY, now - 190 * DAY, now, fake);
-  assert.match(urls[0], /archive-api\.open-meteo\.com/);
-  assert.equal(urls.length, 1);
+  const old = await fetchAtmosphere({ lat: 38, lon: -8 }, now - 200 * DAY, now - 190 * DAY, now, fake);
+  assert.match(urls[0], /archive-api\.open-meteo\.com.*wind_speed_100m.*soil_moisture_0_to_7cm/);
+  assert.equal(urls.length, 1, 'no aerosol request for windows older than 92 days');
+  assert.equal(old.upperHeight, 100);
+});
+
+test('atmosphere at a pass: accumulations, direct fraction, kinds', () => {
+  const time = Array.from({ length: 60 }, (_, i) => i * H);
+  const s = {
+    time, kind: time.map(() => 'forecast'), upperHeight: 80, soilDepth: '0-1 cm',
+    vars: { precip: time.map(() => 1), direct: time.map(() => 600), diffuse: time.map(() => 200), aod: time.map(() => 0.5), visibility: time.map(() => 20000) },
+  };
+  const a = atmosphereAt(s, 50 * H);
+  assert.equal(a.precip_24h, 24);
+  assert.equal(a.precip_48h, 48);
+  assert.equal(a.direct_fraction, 0.75);
+  assert.equal(a.visibility_km, 20);
+  assert.equal(sumBefore(s, 'precip', 10 * H, 48), null, 'incomplete period gives null');
+  assert.equal(atmosphereKind({ categories: ['sar'] }), 'sar');
+  assert.equal(atmosphereKind({ categories: ['optical_multispectral', 'thermal'] }), 'optical');
+  assert.equal(atmosphereKind({ categories: ['thermal'] }), 'thermal');
+  assert.equal(atmosphereKind({ categories: ['lidar_altimetry'], instrument: 'GEDI' }), 'laser');
+  assert.equal(atmosphereKind({ categories: ['meteo_geo'] }), null);
+  const rows = hourlyRows({ ...s, vars: { ...s.vars, gust: time.map((t) => t / H) } }, 10 * H + 600000, 12 * H);
+  assert.deepEqual(rows.map((r) => r.gust), [10, 11, 12]);
 });
 
 test('Sentinel-2 MGRS tiles', () => {

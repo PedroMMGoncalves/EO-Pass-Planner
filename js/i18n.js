@@ -268,6 +268,36 @@ const STRINGS = {
     gloss_stac: 'Norma aberta de catálogos de dados geoespaciais, usada para procurar produtos realmente adquiridos.',
     gloss_insar_term: 'InSAR',
     gloss_insar: 'Interferometria radar: compara duas aquisições da mesma órbita para medir deformação do terreno.',
+    max_aod: 'AOD máx.',
+    col_aod: 'AOD',
+    gust_limit: 'Rajada máx.',
+    drone_hour: 'Hora',
+    drone_units: 'Vento em km/h; a vermelho as horas com rajadas acima de {lim} km/h.',
+    atm_title: 'Condições atmosféricas',
+    atm_aod: 'Aerossóis (AOD 550 nm)',
+    atm_aod_none: 'sem valor (CAMS só até 5 dias)',
+    atm_dust: 'poeira',
+    atm_tcwv: 'Vapor de água na coluna',
+    atm_direct: 'Radiação directa',
+    atm_direct_wm2: 'directa {d}, difusa {f} W/m²',
+    atm_visibility: 'Visibilidade',
+    atm_rh: 'Humidade relativa',
+    atm_temp: 'Temperatura do ar',
+    atm_wind10: 'Vento 10 m',
+    atm_wind_upper: 'Vento',
+    atm_gust: 'Rajadas',
+    atm_precip_prob: 'Prob. chuva',
+    atm_precip_now: 'Precipitação à hora',
+    atm_precip_24: 'Precipitação nas 24 h anteriores',
+    atm_48h: '48 h',
+    atm_soil: 'Humidade do solo (modelo)',
+    atm_snow: 'Neve',
+    atm_snow_none: 'sem neve',
+    atm_note_optical: 'AOD acima de ~0,4 (poeira, fumo) e muito vapor de água degradam a correcção atmosférica, sobretudo no SWIR e no hiperespectral. Uma fracção alta de radiação directa indica céu limpo para espectroradiometria.',
+    atm_note_laser: 'O laser não atravessa nuvens; aerossóis densos reduzem o sinal.',
+    atm_note_thermal: 'O vapor de água, a humidade e o vento afectam a temperatura de superfície medida e a sua correcção.',
+    atm_note_sar: 'A chuva recente e a neve alteram o retroespalhamento e reduzem a coerência interferométrica; o vento torna rugosas as superfícies de água.',
+    insar_rain: 'chuva 24 h antes: {a} / {b}',
     table_cat: 'Categoria',
     table_all: 'Todas',
     table_opp: 'Incluir oportunidades geométricas (sensores programáveis)',
@@ -321,6 +351,7 @@ const STRINGS = {
 <li>O erro do SGP4 cresce com a idade do TLE e depois de manobras.</li>
 <li>O globo mostra a faixa enquanto o Sol está acima do horizonte no ponto sob o satélite e a direcção é a de aquisição; é uma aproximação do sensor ligado.</li>
 <li>O mapa de base (Natural Earth 1:50 m) é generalizado e serve só de contexto.</li>
+<li>Nuvens e condições atmosféricas são valores pontuais de modelos (Open-Meteo, CAMS), não o estado da cena; os aerossóis só têm previsão a 5 dias.</li>
 </ul>
 <h3>Créditos</h3>
 <p>Método inspirado em <a href="https://github.com/julianManning/eo-overpass-predictor">eo-overpass-predictor</a> (Julian Manning, MIT), usado apenas como referência de validação. Bibliotecas: satellite.js, MapLibre GL JS, proj4js, polygon-clipping, GeographicLib, tz-lookup, togeojson, shpjs. Mapas de base: Natural Earth (domínio público), EOxCloudless 2024 (EOX, CC BY-NC-SA 4.0), OpenFreeMap (dados OpenStreetMap). Elementos orbitais: CelesTrak. Nuvens: Open-Meteo. Aquisições reais: Earth Search (Element 84) e Copernicus Data Space Ecosystem. Planos de aquisição: ESA. Tema escuro: paleta Dracula.</p>
@@ -586,6 +617,36 @@ const STRINGS = {
     gloss_stac: 'Open standard for geospatial data catalogues, used to search for products actually acquired.',
     gloss_insar_term: 'InSAR',
     gloss_insar: 'Radar interferometry: compares two acquisitions from the same orbit to measure ground deformation.',
+    max_aod: 'Max. AOD',
+    col_aod: 'AOD',
+    gust_limit: 'Max. gust',
+    drone_hour: 'Hour',
+    drone_units: 'Wind in km/h; hours with gusts above {lim} km/h in red.',
+    atm_title: 'Atmospheric conditions',
+    atm_aod: 'Aerosols (AOD 550 nm)',
+    atm_aod_none: 'no value (CAMS only up to 5 days)',
+    atm_dust: 'dust',
+    atm_tcwv: 'Total column water vapour',
+    atm_direct: 'Direct radiation',
+    atm_direct_wm2: 'direct {d}, diffuse {f} W/m²',
+    atm_visibility: 'Visibility',
+    atm_rh: 'Relative humidity',
+    atm_temp: 'Air temperature',
+    atm_wind10: 'Wind 10 m',
+    atm_wind_upper: 'Wind',
+    atm_gust: 'Gusts',
+    atm_precip_prob: 'Rain prob.',
+    atm_precip_now: 'Precipitation at pass hour',
+    atm_precip_24: 'Precipitation in the previous 24 h',
+    atm_48h: '48 h',
+    atm_soil: 'Soil moisture (model)',
+    atm_snow: 'Snow',
+    atm_snow_none: 'no snow',
+    atm_note_optical: 'AOD above ~0.4 (dust, smoke) and high water vapour degrade the atmospheric correction, especially in the SWIR and for hyperspectral data. A high direct-radiation fraction indicates clear sky for field spectroradiometry.',
+    atm_note_laser: 'The laser does not penetrate clouds; dense aerosols weaken the signal.',
+    atm_note_thermal: 'Water vapour, humidity and wind affect the measured surface temperature and its correction.',
+    atm_note_sar: 'Recent rain and snow change the backscatter and reduce interferometric coherence; wind roughens water surfaces.',
+    insar_rain: 'rain 24 h before: {a} / {b}',
     table_cat: 'Category',
     table_all: 'All',
     table_opp: 'Include geometric opportunities (tasked sensors)',
@@ -639,6 +700,7 @@ const STRINGS = {
 <li>SGP4 error grows with TLE age and after manoeuvres.</li>
 <li>The globe shows the swath while the sun is above the horizon under the satellite and the direction is the acquiring one; this approximates the sensor being on.</li>
 <li>The basemap (Natural Earth 1:50 m) is generalised and serves as context only.</li>
+<li>Cloud and atmospheric conditions are point model values (Open-Meteo, CAMS), not the state of the scene; aerosols are forecast only 5 days ahead.</li>
 </ul>
 <h3>Credits</h3>
 <p>Method inspired by <a href="https://github.com/julianManning/eo-overpass-predictor">eo-overpass-predictor</a> (Julian Manning, MIT), used only as a validation reference. Libraries: satellite.js, MapLibre GL JS, proj4js, polygon-clipping, GeographicLib, tz-lookup, togeojson, shpjs. Basemaps: Natural Earth (public domain), EOxCloudless 2024 (EOX, CC BY-NC-SA 4.0), OpenFreeMap (OpenStreetMap data). Orbital elements: CelesTrak. Cloud: Open-Meteo. Real acquisitions: Earth Search (Element 84) and Copernicus Data Space Ecosystem. Acquisition plans: ESA. Dark theme: Dracula palette.</p>

@@ -353,3 +353,11 @@ tbody tr.is-selected { background: var(--row-selected); box-shadow: inset 3px 0 
 .spectral-ruler .sr-feature-label { fill: var(--warn); text-anchor: middle; font-size: 9px; }
 .tablist { overflow-x: auto; scrollbar-width: thin; }
 .tablist [role="tab"] { white-space: nowrap; flex: none; }
+
+/* Atmospheric conditions and drone table in the pass drawer */
+.atm { border-top: 1px solid var(--rule); margin-top: 0.4rem; padding-top: 0.4rem; }
+.atm h4 { margin: 0 0 0.2rem; font-size: var(--fs-13); }
+.drone .row { flex-wrap: wrap; gap: 0.6rem 1rem; }
+.drone-table { width: auto; margin: 0.3rem 0; background: transparent; font-size: var(--fs-13); }
+.drone-table th, .drone-table td { padding: 0.15rem 0.45rem; }
+.drone-table tr.is-warn td { color: var(--warn); font-weight: 600; }

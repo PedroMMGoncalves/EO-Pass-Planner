@@ -82,6 +82,7 @@ export function renderDrawer(root, c) {
   if (p.rel_orbit) facts.push([t('col_relorb'), String(p.rel_orbit)]);
 
   const dl = el('dl', { class: 'facts' }, facts.flatMap(([k, v]) => [el('dt', {}, k), el('dd', {}, v)]));
+  const atm = atmosphereBlock(p.atm, c.atmKind, t);
   const spark = c.cloudRelevant && c.cloudSeries ? sparkline(cloudWindow(c.cloudSeries, p.closest_utc, 3), c.ink) : null;
 
   // Drone window
@@ -90,12 +91,27 @@ export function renderDrawer(root, c) {
   const s1 = solarElevation(p.closest_utc + n * 60000, p.anchor_lat, c.anchorLon);
   const droneInput = el('input', { type: 'number', min: '5', max: '180', step: '5', value: String(n), class: 'drone-min', 'aria-label': t('drone_minutes') });
   droneInput.addEventListener('change', () => c.onDroneMinutes(Math.min(180, Math.max(5, Number(droneInput.value) || 30))));
+  const gustInput = el('input', { type: 'number', min: '5', max: '150', step: '1', value: String(c.gustLimit), class: 'drone-min', 'aria-label': t('gust_limit') });
+  gustInput.addEventListener('change', () => c.onGustLimit(Math.min(150, Math.max(5, Number(gustInput.value) || 36))));
+  const droneTable = c.droneRows?.length ? el('table', { class: 'drone-table' },
+    el('thead', {}, el('tr', {}, [t('drone_hour'), t('atm_wind10'), `${t('atm_wind_upper')} ${p.atm?.upper_height ?? 80} m`, t('atm_gust'), t('atm_precip_prob'), t('atm_visibility')].map((h) => el('th', {}, h)))),
+    el('tbody', {}, c.droneRows.map((r) => el('tr', { class: r.gust != null && r.gust > c.gustLimit ? 'is-warn' : '' },
+      el('td', {}, c.fmt.time(r.t, c.tz)),
+      el('td', { class: 'num' }, fmtNum(r.wind10, 0)),
+      el('td', { class: 'num' }, fmtNum(r.wind_upper, 0)),
+      el('td', { class: 'num' }, fmtNum(r.gust, 0)),
+      el('td', { class: 'num' }, r.precip_prob == null ? '–' : `${Math.round(r.precip_prob)} %`),
+      el('td', { class: 'num' }, r.visibility_km == null ? '–' : `${r.visibility_km.toFixed(0)} km`))))) : null;
   const drone = el('div', { class: 'drone' },
-    el('label', { class: 'speed' }, el('span', {}, t('drone_label')), droneInput, el('span', {}, 'min')),
+    el('div', { class: 'row' },
+      el('label', { class: 'speed' }, el('span', {}, t('drone_label')), droneInput, el('span', {}, 'min')),
+      el('label', { class: 'speed' }, el('span', {}, t('gust_limit')), gustInput, el('span', {}, 'km/h'))),
     el('p', { class: 'hint' }, t('drone_window', {
       from: c.fmt.time(p.closest_utc - n * 60000, c.tz), to: c.fmt.time(p.closest_utc + n * 60000, c.tz),
       s0: s0.toFixed(0), s1: s1.toFixed(0),
-    })));
+    })),
+    droneTable,
+    droneTable ? el('p', { class: 'hint' }, t('drone_units', { lim: c.gustLimit })) : null);
 
   const access = e.data_access ? el('a', { href: e.data_access, target: '_blank', rel: 'noopener' }, t('data_access')) : null;
 
@@ -106,6 +122,7 @@ export function renderDrawer(root, c) {
     el('div', { class: 'drawer-diagram', html: diagram }),
     dl,
     spark ? el('div', { class: 'spark-wrap' }, el('span', { class: 'hint' }, t('cloud_spark')), spark) : null,
+    atm,
     drone,
     el('div', { class: 'drawer-actions' },
       el('button', { type: 'button', class: 'secondary', onclick: c.onIcs }, t('add_calendar')),
@@ -115,6 +132,49 @@ export function renderDrawer(root, c) {
 }
 
 const fmtPct = (v) => (v == null ? '–' : `${Math.round(v)} %`);
+const fmtNum = (v, d = 1) => (v == null ? '–' : v.toFixed(d));
+
+/** Atmospheric conditions relevant to the sensor type. */
+function atmosphereBlock(a, kind, t) {
+  if (!a || !kind) return null;
+  const rows = [];
+  const add = (k, v, warn = false) => { if (v !== null) rows.push([t(k), v, warn]); };
+  const num = (v, d, unit) => (v == null ? null : `${v.toFixed(d)} ${unit}`);
+  if (kind === 'optical' || kind === 'laser') {
+    add('atm_aod', a.aod == null ? t('atm_aod_none') : `${a.aod.toFixed(2)}${a.dust != null ? `; ${t('atm_dust')} ${a.dust.toFixed(0)} µg/m³` : ''}`, (a.aod ?? 0) > 0.4);
+    add('atm_tcwv', num(a.tcwv, 1, 'kg/m²'));
+    add('atm_direct', a.direct_fraction == null ? null : `${Math.round(a.direct_fraction * 100)} % (${t('atm_direct_wm2', { d: Math.round(a.direct ?? 0), f: Math.round(a.diffuse ?? 0) })})`);
+    add('atm_visibility', num(a.visibility_km, 0, 'km'));
+  }
+  if (kind === 'thermal') {
+    add('atm_tcwv', num(a.tcwv, 1, 'kg/m²'));
+    add('atm_rh', num(a.rh, 0, '%'));
+    add('atm_temp', num(a.temp, 1, '°C'));
+    add('atm_wind10', num(a.wind10, 0, 'km/h'));
+  }
+  if (kind === 'sar') {
+    add('atm_precip_now', num(a.precip, 1, 'mm/h'), (a.precip ?? 0) > 0.5);
+    add('atm_precip_24', a.precip_24h == null ? null : `${a.precip_24h.toFixed(1)} mm${a.precip_48h != null ? ` (${t('atm_48h')} ${a.precip_48h.toFixed(1)} mm)` : ''}`, (a.precip_24h ?? 0) > 5);
+    add('atm_soil', a.soil == null ? null : `${a.soil.toFixed(2)} m³/m³ (${a.soil_depth})`);
+    add('atm_snow', a.snow == null ? null : a.snow > 0 ? `${(a.snow * 100).toFixed(0)} cm` : t('atm_snow_none'), (a.snow ?? 0) > 0);
+    add('atm_wind10', num(a.wind10, 0, 'km/h'));
+  }
+  if (!rows.length) return null;
+  return el('div', { class: 'atm' },
+    el('h4', {}, `${t('atm_title')} (${t(`cloud_${a.kind ?? 'forecast'}`)})`),
+    el('dl', { class: 'facts' }, rows.flatMap(([k, v, w]) => [el('dt', {}, k), el('dd', { class: w ? 'is-warn' : '' }, v)])),
+    el('p', { class: 'hint' }, t(`atm_note_${kind}`)));
+}
+
+/** Rain in the 24 h before each acquisition of a pair (affects coherence). */
+function rainNote(pr, c) {
+  const a = pr.a.atm?.precip_24h;
+  const b = pr.b.atm?.precip_24h;
+  if (a == null && b == null) return null;
+  const f = (v) => (v == null ? '–' : `${v.toFixed(1)} mm`);
+  const wet = (a ?? 0) > 5 || (b ?? 0) > 5;
+  return el('span', { class: wet ? 'is-warn' : 'hint' }, ` ${c.t('insar_rain', { a: f(a), b: f(b) })}`);
+}
 
 /** InSAR pairs tab. */
 export function renderInsar(root, tracks, c) {
@@ -126,7 +186,8 @@ export function renderInsar(root, tracks, c) {
       el('button', { type: 'button', class: 'link', onclick: () => c.onSelect(pr.a.id) }, c.fmt.date(pr.a.closest_utc, c.tz)),
       ' → ',
       el('button', { type: 'button', class: 'link', onclick: () => c.onSelect(pr.b.id) }, c.fmt.date(pr.b.closest_utc, c.tz)),
-      ` (${c.t('insar_days', { n: pr.days })}${pr.a.platform !== pr.b.platform ? `, ${pr.a.platform} + ${pr.b.platform}` : ''})`));
+      ` (${c.t('insar_days', { n: pr.days })}${pr.a.platform !== pr.b.platform ? `, ${pr.a.platform} + ${pr.b.platform}` : ''})`,
+      rainNote(pr, c)));
     root.append(el('section', { class: 'insar-track' }, el('h4', {}, head), el('ul', {}, pairs)));
   }
   root.append(el('p', { class: 'hint' }, c.t('insar_note')));

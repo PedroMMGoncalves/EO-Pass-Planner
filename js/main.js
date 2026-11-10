@@ -31,7 +31,9 @@ import {
 import {
   ENGINE_VERSION, swathIntervals, meanAltitudeKm, satrecFrom,
 } from './engine.js';
-import { fetchCloudSeries, cloudAt, cloudRelevant } from './weather.js';
+import {
+  fetchAtmosphere, cloudAt, cloudRelevant, atmosphereAt, atmosphereKind, hourlyRows,
+} from './weather.js';
 import { s2TilesForRoi, s1RelativeOrbit } from './tiles.js';
 import { searchAcquisitions, groupByPass } from './stac.js';
 import { insarTracks } from './insar.js';
@@ -66,6 +68,7 @@ const state = {
   cloudError: null,
   stac: { loading: false, groups: null, items: [], errors: {} },
   droneMinutes: 30,
+  gustLimit: Number(stored('eopp-gust-limit')) || 36,
   pendingPass: null,
   drawerOpen: false,
   bands: null,
@@ -471,11 +474,14 @@ async function enrich() {
   // Cloud cover at the anchor.
   state.cloudSeries = null;
   state.cloudError = null;
-  fetchCloudSeries(anchor, res.window.start_utc - 3 * 3600000, res.window.end_utc + 3 * 3600000)
+  fetchAtmosphere(anchor, res.window.start_utc - 3 * 3600000, res.window.end_utc + 3 * 3600000)
     .then((series) => {
       if (state.result !== res) return;
       state.cloudSeries = series;
-      for (const p of res.passes) if (cloudRelevant(byId[p.entry_id])) p.cloud = cloudAt(series, p.closest_utc);
+      for (const p of res.passes) {
+        if (cloudRelevant(byId[p.entry_id])) p.cloud = cloudAt(series, p.closest_utc);
+        p.atm = atmosphereAt(series, p.closest_utc);
+      }
       refreshViews();
     })
     .catch(() => { if (state.result === res) { state.cloudError = true; refreshViews(); } });
@@ -499,7 +505,15 @@ function answerPasses() {
   const maxCloud = $('#max-cloud').value === '' ? null : Number($('#max-cloud').value);
   return (state.result?.passes ?? []).filter((p) => p.imaging_expected
     && (opp || !p.opportunity)
-    && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud));
+    && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud)
+    && aodOk(p));
+}
+
+/** Max-AOD filter: applies to optical passes with an aerosol value. */
+function aodOk(p) {
+  const max = $('#max-aod').value === '' ? null : Number($('#max-aod').value);
+  if (max == null || p.atm?.aod == null) return true;
+  return atmosphereKind(entriesById()[p.entry_id]) !== 'optical' || p.atm.aod <= max;
 }
 
 function selectPass(id, { fly = false, open = true } = {}) {
@@ -658,6 +672,7 @@ const COLS = [
   { key: 'sun_elevation_deg', label: 'col_sun', cell: (p) => p.sun_elevation_deg.toFixed(0), num: true },
   { key: 'tle_age_days', label: 'col_tle', cell: (p) => p.tle_age_days.toFixed(1), num: true, warn: (p) => p.tle_age_days > 7 },
   { key: 'cloud', label: 'col_cloud', cell: (p) => cloudCell(p), num: true, sortVal: (p) => p.cloud?.total ?? 999 },
+  { key: 'aod', label: 'col_aod', cell: (p) => (atmosphereKind(entriesById()[p.entry_id]) === 'optical' && p.atm?.aod != null ? p.atm.aod.toFixed(2) : ''), num: true, sortVal: (p) => p.atm?.aod ?? 9, warn: (p) => (p.atm?.aod ?? 0) > 0.4 && atmosphereKind(entriesById()[p.entry_id]) === 'optical' },
   { key: 'plan', label: 'col_plan', cell: (p) => (p.plan ? t(`plan_${p.plan.status}`) : ''), warn: (p) => p.plan?.status === 'not_planned' },
   { key: 'tiles', label: 'col_tile_orbit', cell: (p) => p.tiles?.join(' ') ?? (p.rel_orbit ? `${t('orbit_abbr')} ${p.rel_orbit}` : '') },
   { key: 'acquisition', label: 'col_acq', cell: (p) => t(`acq_${p.acquisition}`) },
@@ -678,6 +693,7 @@ function visiblePasses() {
   return (state.result?.passes ?? []).filter((p) => p.imaging_expected
     && (opp || !p.opportunity)
     && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud)
+    && aodOk(p)
     && (!cat || byId[p.entry_id]?.categories[0] === cat));
 }
 
@@ -726,6 +742,10 @@ function renderDrawerPanel() {
     fmt: { dateTime: formatDateTime, time: (ms, tz) => formatTimeSec(ms, tz).slice(0, 5) },
     colour: colourOf(e), ink: css.getPropertyValue('--ink').trim(), soft: css.getPropertyValue('--ink-soft').trim(),
     cloudSeries: state.cloudSeries, cloudRelevant: cloudRelevant(e),
+    atmKind: atmosphereKind(e),
+    droneRows: hourlyRows(state.cloudSeries, p.closest_utc - state.droneMinutes * 60000, p.closest_utc + state.droneMinutes * 60000),
+    gustLimit: state.gustLimit,
+    onGustLimit: (v) => { state.gustLimit = v; store('eopp-gust-limit', String(v)); renderDrawerPanel(); },
     anchorLon: roiAnchor(state.roi).lon,
     droneMinutes: state.droneMinutes,
     onDroneMinutes: (n) => { state.droneMinutes = n; renderDrawerPanel(); },
@@ -1202,6 +1222,7 @@ async function init() {
   $('#table-cat').addEventListener('change', () => { renderTable(); renderCalendarTab(); renderInsarTab(); });
   $('#table-opp').addEventListener('change', () => { if (state.result) refreshViews(); });
   $('#max-cloud').addEventListener('change', () => { if (state.result) refreshViews(); });
+  $('#max-aod').addEventListener('change', () => { if (state.result) refreshViews(); });
   $('#export-ics').addEventListener('click', () => exportAll('ics'));
   $('#export-geojson').addEventListener('click', () => exportAll('geojson'));
   $('#export-geolibre').addEventListener('click', () => exportAll('geolibre'));

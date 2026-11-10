@@ -13,7 +13,8 @@ Work in progress.
 
 - [x] Repository skeleton, vendored libraries, catalogue with 5
   instruments (Landsat 8, Landsat 9, Sentinel-2A/B/C), TLE update workflow.
-- [ ] Pass prediction engine (`nadir_symmetric` swath) and oracle comparison.
+- [x] Pass prediction engine (`nadir_symmetric` swath) and comparison with the
+  reference implementation (see [Validation](#validation)).
 - [ ] User interface, full catalogue, acquisition plans, weather, exports, documentation.
 
 ## Run locally
@@ -36,12 +37,41 @@ work, because ES modules and `fetch` need http.
   [CelesTrak](https://celestrak.org/) GP data. The Action never overwrites
   good data with a failed fetch.
 
+## Validation
+
+Comparison with the reference Python implementation
+([eo-overpass-predictor](https://github.com/julianManning/eo-overpass-predictor),
+pinned commit `eb6bcce`). Both engines used the same TLEs, over a 16-day window
+from 2026-11-10 and five ROIs: Port Phillip Bay, a point at Neves-Corvo, a
+polygon in the Ossa-Morena zone, a point in Maputo, and mainland Portugal. There
+were 68 expected-imaging passes. Full table: [docs/oracle_residuals.md](docs/oracle_residuals.md).
+
+| Quantity (JS − reference) | mean | s.d. | max \|Δ\| |
+|---|---:|---:|---:|
+| Closest-approach time (s) | +0.005 | 0.027 | 0.051 |
+| ROI coverage (percentage points) | −0.011 | 0.030 | 0.095 |
+| Nadir offset (km) | −0.040 | 0.081 | 0.487 |
+| View angle (°) | −0.003 | 0.006 | 0.031 |
+| Solar elevation (°) | 0.000 | 0.030 | 0.055 |
+
+Both engines found the same set of passes for every ROI.
+
+Other checks (in `tests/`):
+- SGP4 positions agree with Skyfield to within 5.8 m (TEME) up to 7 days from the TLE epoch.
+- Solar elevation agrees with Skyfield/DE421 to within 0.011°.
+
+Computation time for the 5 instruments over 16 days is 0.35–0.6 s per ROI
+(the Portugal polygon takes 0.6 s). This was measured in Node 22 on a laptop;
+the browser measurement will follow with the user interface.
+
 ## Tests
 
 ```sh
 npm test                                              # JavaScript (node --test, no dependencies)
 python -m unittest discover -s tests -p "test_*.py"   # Python scripts
 python scripts/validate_catalogue.py                  # catalogue rules
+python scripts/oracle_compare.py --oracle-dir <clone>  # needs the reference environment
+python scripts/make_sgp4_fixtures.py                   # regenerate SGP4/sun fixtures (needs skyfield)
 ```
 
 ## Limitations

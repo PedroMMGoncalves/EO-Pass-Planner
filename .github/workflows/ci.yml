@@ -30,3 +30,37 @@ jobs:
 
       - name: Catalogue validation
         run: python scripts/validate_catalogue.py
+
+  oracle:
+    # Compare the JavaScript engine with the reference Python implementation
+    # (julianManning/eo-overpass-predictor, MIT) at a pinned commit.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ORACLE_COMMIT: eb6bccea08501dda8b232c24d979f158181f50be
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Fetch the reference implementation at the pinned commit
+        run: |
+          git init -q "$RUNNER_TEMP/oracle"
+          cd "$RUNNER_TEMP/oracle"
+          git remote add origin https://github.com/julianManning/eo-overpass-predictor.git
+          git fetch -q --depth 1 origin "$ORACLE_COMMIT"
+          git checkout -q FETCH_HEAD
+
+      - name: Install the reference environment
+        run: pip install numpy pandas geopandas shapely pyproj skyfield timezonefinder folium requests tzdata
+
+      - name: Compare engines
+        run: |
+          python scripts/oracle_compare.py --oracle-dir "$RUNNER_TEMP/oracle" --days 16 --report "$RUNNER_TEMP/oracle_residuals.md"
+          cat "$RUNNER_TEMP/oracle_residuals.md" >> "$GITHUB_STEP_SUMMARY"

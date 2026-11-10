@@ -156,7 +156,7 @@ def fetch_tles(catalogue: dict, old: dict, now: dt.datetime) -> tuple[dict, list
 
     wanted: dict[int, str] = {}
     for e in catalogue["entries"]:
-        if e.get("status") == "inactive" or e.get("swath", {}).get("model") == "continuous_geo":
+        if e.get("status") == "inactive":
             continue
         norad = e.get("norad_id")
         if not isinstance(norad, int):

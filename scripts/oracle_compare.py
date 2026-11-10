@@ -70,7 +70,7 @@ def rois(ohu, oracle_dir: Path) -> dict:
 
 
 def run_js(geom: dict, start: str, days: float, tles: dict) -> dict:
-    q = {"roi": geom, "start": start, "days": days, "tles": tles}
+    q = {"roi": geom, "start": start, "days": days, "tles": tles, "entry_ids": list(NAME_TO_ID.values())}
     r = subprocess.run(["node", str(ROOT / "scripts/run_engine.mjs")], input=json.dumps(q),
                        capture_output=True, text=True, check=True)
     return json.loads(r.stdout)

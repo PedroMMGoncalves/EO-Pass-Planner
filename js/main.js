@@ -17,16 +17,20 @@ import {
   CRS, RoiError, parseCoordinates, readRoiFile, simplifyRoi, bufferRoi, createDrawer, parseHash, buildHash,
 } from './roi.js';
 import { roiAnchor, prepareRoi, polygonsOf } from './geometry.js';
-import { loadCatalogue, filterEntries, entryStyle, shortName } from './catalogue.js';
+import {
+  loadCatalogue, filterEntries, entryStyle, shortName, defaultSelected, CATEGORIES,
+} from './catalogue.js';
 import { loadTles, loadMeta, dataFreshness } from './tle.js';
 import { t, setLang, getLang, formatDateTime, formatTimeSec } from './i18n.js';
-import { createGlobe } from './globe.js';
+import { createGlobe, BASEMAPS } from './globe.js';
 import { makeTrackers, positions, tracks, liveSwaths, nightPolygon } from './live.js';
 import { answerSentence, absences } from './absences.js';
 import { passesToCsv, download } from './export.js';
 import { ENGINE_VERSION } from './engine.js';
 
 const $ = (sel) => document.querySelector(sel);
+const stored = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+const store = (k, v) => { try { localStorage.setItem(k, v); } catch { /* private browsing */ } };
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const state = {
@@ -41,6 +45,8 @@ const state = {
   days: 16,
   selectedPass: null,
   sort: { key: 'closest_utc', dir: 1, col: 2 },
+  theme: stored('eopp-theme') === 'dracula' ? 'dracula' : 'light',
+  basemap: stored('eopp-basemap') || 'simple',
   clock: { baseSim: Date.now(), baseReal: performance.now(), speed: reducedMotion ? 1 : 60, playing: true },
 };
 
@@ -64,7 +70,35 @@ function setClock(patch) {
   lastTrackSim = NaN;
 }
 
+// ---------- theme ----------
+
+const colourOf = (e) => entryStyle(e, state.theme).colour;
+const colourMap = () => Object.fromEntries(state.catalogue.entries.map((e) => [e.id, colourOf(e)]));
+
+function setTheme(theme) {
+  state.theme = theme;
+  store('eopp-theme', theme);
+  document.documentElement.dataset.theme = theme;
+  $('#theme').textContent = t(theme === 'dracula' ? 'theme_light' : 'theme_dark');
+  $('#theme').setAttribute('aria-pressed', String(theme === 'dracula'));
+  if (globe) {
+    globe.setTheme(theme);
+    globe.setColours(colourMap());
+    lastTrackSim = NaN;
+    lastDataUpdate = -Infinity;
+    renderFootprints();
+    renderInstruments();
+    renderTable();
+  }
+}
+
 // ---------- globe ----------
+
+/** Label for a platform carrying several selected instruments ("ISS", "NISAR"). */
+function platformLabel(e) {
+  if (e.platform.length <= 6) return e.platform;
+  return e.object_name.split(/[\s(]/)[0].slice(0, 6);
+}
 
 let globe;
 let trackers = [];
@@ -84,14 +118,22 @@ function rebuildTrackers() {
 
 function frame() {
   const now = simNow();
-  globe.setSatellites(positions(trackers, now).map((p) => ({
-    id: p.tr.entry.id,
-    label: shortName(p.tr.entry),
-    title: `${p.tr.entry.platform} ${p.tr.entry.instrument}, ${p.height.toFixed(0)} km`,
+  // One marker per platform (several instruments can share a satellite, e.g. the ISS).
+  const byNorad = new Map();
+  for (const p of positions(trackers, now)) {
+    const k = p.tr.entry.norad_id;
+    const m = byNorad.get(k);
+    if (!m) byNorad.set(k, { p, instruments: [p.tr.entry.instrument], labels: new Set([shortName(p.tr.entry)]), imaging: p.imaging });
+    else { m.instruments.push(p.tr.entry.instrument); m.labels.add(shortName(p.tr.entry)); m.imaging ||= p.imaging; }
+  }
+  globe.setSatellites([...byNorad.values()].map(({ p, instruments, labels, imaging }) => ({
+    id: String(p.tr.entry.norad_id),
+    label: labels.size === 1 ? [...labels][0] : platformLabel(p.tr.entry),
+    title: `${p.tr.entry.platform} (${instruments.join(', ')}), ${p.height.toFixed(0)} km`,
     lat: p.lat,
     lon: p.lon,
-    colour: entryStyle(p.tr.entry).colour,
-    imaging: p.imaging,
+    colour: colourOf(p.tr.entry),
+    imaging,
   })));
   const real = performance.now();
   if (real - lastDataUpdate > 120) {
@@ -304,6 +346,7 @@ function onResult(fresh = false) {
   setAnswer(a.main, a.sub);
   renderTable();
   renderAbsences();
+  renderGeo();
   $('#export-csv').disabled = !state.result.passes.some((p) => p.imaging_expected);
   $('#copy-link').disabled = false;
   if (fresh && a.best) selectPass(a.best.id, { fly: true });
@@ -327,7 +370,7 @@ function renderFootprints() {
   const feats = (state.result?.passes ?? []).filter((p) => p.imaging_expected).map((p) => ({
     type: 'Feature',
     properties: { id: p.entry_id, selected: p.id === state.selectedPass },
-    geometry: { type: 'Polygon', coordinates: p.footprint },
+    geometry: { type: 'MultiPolygon', coordinates: p.footprints },
   }));
   globe.setFootprints({ type: 'FeatureCollection', features: feats });
 }
@@ -392,7 +435,7 @@ function renderTable() {
       if (c.key === 'platform') {
         const dot = document.createElement('span');
         dot.className = 'dot';
-        dot.style.background = entryStyle(state.catalogue.entries.find((e) => e.id === p.entry_id)).colour;
+        dot.style.background = colourOf(state.catalogue.entries.find((e) => e.id === p.entry_id));
         td.prepend(dot);
       }
       tr.append(td);
@@ -404,6 +447,30 @@ function renderTable() {
     body.append(tr);
   }
   $('#table-empty').hidden = rows.length > 0;
+}
+
+function renderGeo() {
+  const ul = $('#geo-list');
+  ul.replaceChildren();
+  const rows = state.result ? state.ranEntries.filter((e) => state.result.per_entry[e.id]?.status === 'geo') : [];
+  if (!rows.length) {
+    const li = document.createElement('li');
+    li.textContent = t('geo_empty');
+    ul.append(li);
+    return;
+  }
+  for (const e of rows) {
+    const r = state.result.per_entry[e.id];
+    const li = document.createElement('li');
+    const name = document.createElement('strong');
+    name.textContent = `${e.platform} ${e.instrument}`;
+    const lon = `${Math.abs(r.sub_lon).toFixed(1)}° ${r.sub_lon >= 0 ? 'E' : 'W'}`;
+    li.append(name, document.createTextNode(` ${t('geo_row', {
+      vza: r.view_zenith_deg.toFixed(1), max: r.max_view_zenith_deg, usable: t(r.usable ? 'geo_usable' : 'geo_not_usable'), repeat: r.repeat_min, lon,
+    })}`));
+    if (!r.usable) li.classList.add('is-warn');
+    ul.append(li);
+  }
 }
 
 function renderAbsences() {
@@ -425,11 +492,60 @@ function renderAbsences() {
   }
 }
 
+function swathSummary(e) {
+  const s = e.swath;
+  if (s.model === 'continuous_geo') return t('swath_geo');
+  if (s.model === 'profile') return t('swath_profile');
+  if (s.model === 'track_only') return t('swath_track');
+  if (s.model === 'side_looking') return t('swath_sar', { inc: `${s.incidence_deg[0]}–${s.incidence_deg[1]}`, side: t(`look_${s.look_side}`) });
+  return s.width_km ? `${s.width_km} km` : '';
+}
+
+const openGroups = new Set();
+
 function renderInstruments() {
   const ul = $('#instruments');
   ul.replaceChildren();
   const entries = filterEntries(state.catalogue.entries, { includeTransitional: $('#transitional').checked });
-  for (const e of entries) {
+  for (const cat of CATEGORIES) {
+    const members = entries.filter((e) => e.categories[0] === cat);
+    if (!members.length) continue;
+    const li = document.createElement('li');
+    li.className = 'group';
+    const det = document.createElement('details');
+    const nSel = members.filter((e) => state.selected.has(e.id)).length;
+    det.open = openGroups.has(cat);
+    det.addEventListener('toggle', () => { if (det.open) openGroups.add(cat); else openGroups.delete(cat); });
+    const sum = document.createElement('summary');
+    const gcb = document.createElement('input');
+    gcb.type = 'checkbox';
+    gcb.checked = nSel === members.length;
+    gcb.indeterminate = nSel > 0 && nSel < members.length;
+    gcb.setAttribute('aria-label', t(`cat_${cat}`));
+    gcb.addEventListener('click', (ev) => ev.stopPropagation());
+    gcb.addEventListener('change', () => {
+      for (const e of members) { if (gcb.checked) state.selected.add(e.id); else state.selected.delete(e.id); }
+      renderInstruments();
+      rebuildTrackers();
+    });
+    const gdot = document.createElement('span');
+    gdot.className = 'dot';
+    gdot.style.background = colourOf(members[0]);
+    const gname = document.createElement('span');
+    gname.textContent = `${t(`cat_${cat}`)} (${nSel}/${members.length})`;
+    sum.append(gcb, gdot, gname);
+    det.append(sum);
+    const inner = document.createElement('ul');
+    inner.className = 'instruments';
+    for (const e of members) inner.append(instrumentItem(e));
+    det.append(inner);
+    li.append(det);
+    ul.append(li);
+  }
+}
+
+function instrumentItem(e) {
+  {
     const li = document.createElement('li');
     const label = document.createElement('label');
     label.className = 'check';
@@ -438,22 +554,24 @@ function renderInstruments() {
     cb.checked = state.selected.has(e.id);
     cb.addEventListener('change', () => {
       if (cb.checked) state.selected.add(e.id); else state.selected.delete(e.id);
+      renderInstruments();
       rebuildTrackers();
     });
     const dot = document.createElement('span');
     dot.className = 'dot';
-    dot.style.background = entryStyle(e).colour;
+    dot.style.background = colourOf(e);
     const text = document.createElement('span');
     text.className = 'inst-text';
     const name = document.createElement('span');
     name.textContent = `${e.platform} ${e.instrument}`;
     const meta = document.createElement('span');
     meta.className = 'meta';
-    meta.textContent = `${e.swath.width_km ?? ''} km, ${t(`acq_${e.acquisition}`)}`;
+    meta.textContent = [swathSummary(e), t(`acq_${e.acquisition}`), e.status !== 'active' ? t(`status_${e.status}`) : ''].filter(Boolean).join(', ');
     text.append(name, meta);
     label.append(cb, dot, text);
+    if (e.status_note) label.title = e.status_note;
     li.append(label);
-    ul.append(li);
+    return li;
   }
 }
 
@@ -469,6 +587,8 @@ function renderStatic() {
   document.documentElement.lang = getLang() === 'pt' ? 'pt-PT' : 'en';
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
   $('#lang').textContent = t('lang_toggle');
+  $('#theme').textContent = t(state.theme === 'dracula' ? 'theme_light' : 'theme_dark');
+  for (const o of $('#basemap').options) o.textContent = t(`bm_${o.value}`);
   $('#panel-about').innerHTML = t('about_html');
   for (const el of document.querySelectorAll('.segmented')) el.setAttribute('aria-label', t('mode_label'));
   renderPlay();
@@ -510,6 +630,7 @@ function initTabs() {
 // ---------- init ----------
 
 async function init() {
+  document.documentElement.dataset.theme = state.theme;
   try {
     [state.catalogue, state.tles, state.meta] = await Promise.all([
       loadCatalogue(), loadTles(), loadMeta().catch(() => null),
@@ -518,16 +639,30 @@ async function init() {
     setAnswer(t('load_error', { what: err.message }), '');
     return;
   }
-  for (const e of filterEntries(state.catalogue.entries, {})) state.selected.add(e.id);
+  for (const e of filterEntries(state.catalogue.entries, {})) if (defaultSelected(e)) state.selected.add(e.id);
+  for (const e of state.catalogue.entries) if (state.selected.has(e.id)) openGroups.add(e.categories[0]);
 
   globe = createGlobe($('#globe'), {
+    theme: state.theme,
+    basemap: state.basemap,
+    onBasemapError: (id) => {
+      $('#basemap').value = 'simple';
+      $('#progress').textContent = t('basemap_error', { name: t(`bm_${id}`) });
+    },
     onClick: ({ lat, lon }) => {
       if (drawer.active || state.mode !== 'point') return;
       setRoiGeom({ type: 'Point', coordinates: [lon, lat] });
     },
-    attribution: 'Natural Earth, CelesTrak',
   });
-  globe.setColours(Object.fromEntries(state.catalogue.entries.map((e) => [e.id, entryStyle(e).colour])));
+  globe.setColours(colourMap());
+  for (const id of Object.keys(BASEMAPS)) $('#basemap').add(new Option(t(`bm_${id}`), id));
+  $('#basemap').value = state.basemap;
+  $('#basemap').addEventListener('change', () => {
+    state.basemap = $('#basemap').value;
+    store('eopp-basemap', state.basemap);
+    globe.setBasemap(state.basemap);
+  });
+  $('#theme').addEventListener('click', () => setTheme(state.theme === 'dracula' ? 'light' : 'dracula'));
   drawer = createDrawer(globe, {
     onDone: (geom) => { setRoiGeom(geom); setMode('point'); },
     onChange: () => renderDrawHint(),

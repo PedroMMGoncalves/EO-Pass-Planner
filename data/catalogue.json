@@ -1,166 +1,5748 @@
 {
-  "version": "2026-11-10.1",
-  "schema_note": "One entry per instrument on a platform. Rules in scripts/validate_catalogue.py. 'unverified_fields' lists fields whose values have not yet been checked against a cited source.",
-  "entries": [
+ "version": "2026-11-10.2",
+ "schema_note": "One entry per instrument on a platform. Rules in scripts/validate_catalogue.py. 'unverified_fields' lists fields whose values have not yet been checked against a cited source.",
+ "entries": [
+  {
+   "id": "L8_OLI_TIRS",
+   "platform": "Landsat 8",
+   "object_name": "LANDSAT 8",
+   "norad_id": 39084,
+   "cospar_id": "2013-008A",
+   "instrument": "OLI/TIRS",
+   "categories": [
+    "optical_multispectral",
+    "thermal"
+   ],
+   "tags": [
+    "swir",
+    "thermal",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Daytime descending acquisitions over land. Some ascending and night acquisitions are made only for special requests.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 185
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 705,
+    "inclination_deg": 98.2,
+    "repeat_days": 16
+   },
+   "resolution_m": {
+    "min": 15,
+    "max": 100
+   },
+   "spectral": "OLI: 9 bands VNIR–SWIR (15 m pan, 30 m); TIRS: 2 TIR bands (100 m)",
+   "data_access": "https://earthexplorer.usgs.gov/",
+   "plan_source": null,
+   "sources": [
     {
-      "id": "L8_OLI_TIRS",
-      "platform": "Landsat 8",
-      "object_name": "LANDSAT 8",
-      "norad_id": 39084,
-      "cospar_id": "2013-008A",
-      "instrument": "OLI/TIRS",
-      "categories": ["optical_multispectral", "thermal"],
-      "tags": ["swir", "thermal", "open_data"],
-      "status": "active",
-      "status_note": "",
-      "note_expires": null,
-      "acquisition": "systematic",
-      "acquisition_note": "Daytime descending acquisitions over land. Some ascending and night acquisitions are made only for special requests.",
-      "pass_filter": "day_descending",
-      "lat_limits": null,
-      "swath": { "model": "nadir_symmetric", "width_km": 185 },
-      "orbit": { "type": "sso", "altitude_km": 705, "inclination_deg": 98.2, "repeat_days": 16 },
-      "resolution_m": { "min": 15, "max": 100 },
-      "spectral": "OLI: 9 bands VNIR–SWIR (15 m pan, 30 m); TIRS: 2 TIR bands (100 m)",
-      "data_access": "https://earthexplorer.usgs.gov/",
-      "plan_source": null,
-      "sources": [
-        { "field": "swath", "url": "https://www.usgs.gov/landsat-missions/landsat-8", "accessed": "2026-11-10" },
-        { "field": "orbit", "url": "https://www.usgs.gov/landsat-missions/landsat-8", "accessed": "2026-11-10" },
-        { "field": "status", "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026", "accessed": "2026-11-10" },
-        { "field": "acquisition_note", "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026", "accessed": "2026-11-10" },
-        { "field": "norad_id", "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39084&FORMAT=JSON", "accessed": "2026-11-10" }
-      ],
-      "unverified_fields": ["resolution_m", "spectral"],
-      "verified": true
+     "field": "swath",
+     "url": "https://www.usgs.gov/landsat-missions/landsat-8",
+     "accessed": "2026-11-10"
     },
     {
-      "id": "L9_OLI2_TIRS2",
-      "platform": "Landsat 9",
-      "object_name": "LANDSAT 9",
-      "norad_id": 49260,
-      "cospar_id": "2021-088A",
-      "instrument": "OLI-2/TIRS-2",
-      "categories": ["optical_multispectral", "thermal"],
-      "tags": ["swir", "thermal", "open_data"],
-      "status": "active",
-      "status_note": "",
-      "note_expires": null,
-      "acquisition": "systematic",
-      "acquisition_note": "Daytime descending acquisitions over land. Some ascending and night acquisitions are made only for special requests.",
-      "pass_filter": "day_descending",
-      "lat_limits": null,
-      "swath": { "model": "nadir_symmetric", "width_km": 185 },
-      "orbit": { "type": "sso", "altitude_km": 705, "inclination_deg": 98.2, "repeat_days": 16, "equator_crossing_local": "10:12 ± 5 min" },
-      "resolution_m": { "min": 15, "max": 100 },
-      "spectral": "OLI-2: 9 bands VNIR–SWIR (15 m pan, 30 m); TIRS-2: 2 TIR bands (100 m)",
-      "data_access": "https://earthexplorer.usgs.gov/",
-      "plan_source": null,
-      "sources": [
-        { "field": "swath", "url": "https://science.nasa.gov/mission/landsat-9", "accessed": "2026-11-10" },
-        { "field": "orbit", "url": "https://www.usgs.gov/landsat-missions/landsat-9", "accessed": "2026-11-10" },
-        { "field": "status", "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026", "accessed": "2026-11-10" },
-        { "field": "acquisition_note", "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026", "accessed": "2026-11-10" },
-        { "field": "norad_id", "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=49260&FORMAT=JSON", "accessed": "2026-11-10" }
-      ],
-      "unverified_fields": ["resolution_m", "spectral"],
-      "verified": true
+     "field": "orbit",
+     "url": "https://www.usgs.gov/landsat-missions/landsat-8",
+     "accessed": "2026-11-10"
     },
     {
-      "id": "S2A_MSI",
-      "platform": "Sentinel-2A",
-      "object_name": "SENTINEL-2A",
-      "norad_id": 40697,
-      "cospar_id": "2015-028A",
-      "instrument": "MSI",
-      "categories": ["optical_multispectral"],
-      "tags": ["swir", "red_edge", "open_data"],
-      "status": "ending",
-      "status_note": "Replaced by Sentinel-2C on 21 Jan 2025. Extension campaign (tailored operational scenario) until 31 Dec 2026.",
-      "note_expires": "2026-12-31",
-      "acquisition": "partial",
-      "acquisition_note": "Extension campaign outside the nominal two-satellite constellation: acquisitions are not systematic everywhere. Land and coastal waters only.",
-      "pass_filter": "day_descending",
-      "lat_limits": [-56.0, 82.8],
-      "swath": { "model": "nadir_symmetric", "width_km": 290 },
-      "orbit": { "type": "sso", "altitude_km": 786, "ltdn": "10:30" },
-      "resolution_m": { "min": 10, "max": 60 },
-      "spectral": "13 bands VNIR–SWIR",
-      "data_access": "https://dataspace.copernicus.eu/",
-      "plan_source": "esa_s2_kml",
-      "sources": [
-        { "field": "swath", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "orbit", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "lat_limits", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "status", "url": "https://sentinels.copernicus.eu/-/sentinel-2a-extension-campaign-prolonged-until-the-end-of-2026", "accessed": "2026-11-10" },
-        { "field": "norad_id", "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=40697&FORMAT=JSON", "accessed": "2026-11-10" }
-      ],
-      "unverified_fields": ["resolution_m", "spectral"],
-      "verified": true
+     "field": "status",
+     "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026",
+     "accessed": "2026-11-10"
     },
     {
-      "id": "S2B_MSI",
-      "platform": "Sentinel-2B",
-      "object_name": "SENTINEL-2B",
-      "norad_id": 42063,
-      "cospar_id": "2017-013A",
-      "instrument": "MSI",
-      "categories": ["optical_multispectral"],
-      "tags": ["swir", "red_edge", "open_data"],
-      "status": "active",
-      "status_note": "",
-      "note_expires": null,
-      "acquisition": "systematic",
-      "acquisition_note": "Land and coastal waters only (up to 20 km from shore); open ocean not acquired.",
-      "pass_filter": "day_descending",
-      "lat_limits": [-56.0, 82.8],
-      "swath": { "model": "nadir_symmetric", "width_km": 290 },
-      "orbit": { "type": "sso", "altitude_km": 786, "ltdn": "10:30" },
-      "resolution_m": { "min": 10, "max": 60 },
-      "spectral": "13 bands VNIR–SWIR",
-      "data_access": "https://dataspace.copernicus.eu/",
-      "plan_source": "esa_s2_kml",
-      "sources": [
-        { "field": "swath", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "orbit", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "lat_limits", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "status", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "norad_id", "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=42063&FORMAT=JSON", "accessed": "2026-11-10" }
-      ],
-      "unverified_fields": ["resolution_m", "spectral"],
-      "verified": true
+     "field": "acquisition_note",
+     "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026",
+     "accessed": "2026-11-10"
     },
     {
-      "id": "S2C_MSI",
-      "platform": "Sentinel-2C",
-      "object_name": "SENTINEL-2C",
-      "norad_id": 60989,
-      "cospar_id": "2024-157A",
-      "instrument": "MSI",
-      "categories": ["optical_multispectral"],
-      "tags": ["swir", "red_edge", "open_data"],
-      "status": "active",
-      "status_note": "",
-      "note_expires": null,
-      "acquisition": "systematic",
-      "acquisition_note": "Land and coastal waters only (up to 20 km from shore); open ocean not acquired.",
-      "pass_filter": "day_descending",
-      "lat_limits": [-56.0, 82.8],
-      "swath": { "model": "nadir_symmetric", "width_km": 290 },
-      "orbit": { "type": "sso", "altitude_km": 786, "ltdn": "10:30" },
-      "resolution_m": { "min": 10, "max": 60 },
-      "spectral": "13 bands VNIR–SWIR",
-      "data_access": "https://dataspace.copernicus.eu/",
-      "plan_source": "esa_s2_kml",
-      "sources": [
-        { "field": "swath", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "orbit", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "lat_limits", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "status", "url": "https://sentiwiki.copernicus.eu/web/s2-mission", "accessed": "2026-11-10" },
-        { "field": "norad_id", "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=60989&FORMAT=JSON", "accessed": "2026-11-10" }
-      ],
-      "unverified_fields": ["resolution_m", "spectral"],
-      "verified": true
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39084&FORMAT=JSON",
+     "accessed": "2026-11-10"
     }
-  ]
+   ],
+   "unverified_fields": [
+    "resolution_m",
+    "spectral"
+   ],
+   "verified": true,
+   "short": "L8",
+   "agency": "NASA / USGS"
+  },
+  {
+   "id": "L9_OLI2_TIRS2",
+   "platform": "Landsat 9",
+   "object_name": "LANDSAT 9",
+   "norad_id": 49260,
+   "cospar_id": "2021-088A",
+   "instrument": "OLI-2/TIRS-2",
+   "categories": [
+    "optical_multispectral",
+    "thermal"
+   ],
+   "tags": [
+    "swir",
+    "thermal",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Daytime descending acquisitions over land. Some ascending and night acquisitions are made only for special requests.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 185
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 705,
+    "inclination_deg": 98.2,
+    "repeat_days": 16,
+    "equator_crossing_local": "10:12 ± 5 min"
+   },
+   "resolution_m": {
+    "min": 15,
+    "max": 100
+   },
+   "spectral": "OLI-2: 9 bands VNIR–SWIR (15 m pan, 30 m); TIRS-2: 2 TIR bands (100 m)",
+   "data_access": "https://earthexplorer.usgs.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://science.nasa.gov/mission/landsat-9",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.usgs.gov/landsat-missions/landsat-9",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.usgs.gov/latest-landsat-newsletter/latest-landsat-may-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=49260&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m",
+    "spectral"
+   ],
+   "verified": true,
+   "short": "L9",
+   "agency": "NASA / USGS"
+  },
+  {
+   "id": "S2A_MSI",
+   "platform": "Sentinel-2A",
+   "object_name": "SENTINEL-2A",
+   "norad_id": 40697,
+   "cospar_id": "2015-028A",
+   "instrument": "MSI",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "swir",
+    "red_edge",
+    "open_data"
+   ],
+   "status": "ending",
+   "status_note": "Replaced by Sentinel-2C on 21 Jan 2025. Extension campaign (tailored operational scenario) until 31 Dec 2026.",
+   "note_expires": "2026-12-31",
+   "acquisition": "partial",
+   "acquisition_note": "Extension campaign outside the nominal two-satellite constellation: acquisitions are not systematic everywhere. Land and coastal waters only.",
+   "pass_filter": "day_descending",
+   "lat_limits": [
+    -56.0,
+    82.8
+   ],
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 290
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 786,
+    "ltdn": "10:30"
+   },
+   "resolution_m": {
+    "min": 10,
+    "max": 60
+   },
+   "spectral": "13 bands VNIR–SWIR",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": "esa_s2_kml",
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "lat_limits",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentinels.copernicus.eu/-/sentinel-2a-extension-campaign-prolonged-until-the-end-of-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=40697&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m",
+    "spectral"
+   ],
+   "verified": true,
+   "short": "S2A",
+   "agency": "ESA / European Commission"
+  },
+  {
+   "id": "S2B_MSI",
+   "platform": "Sentinel-2B",
+   "object_name": "SENTINEL-2B",
+   "norad_id": 42063,
+   "cospar_id": "2017-013A",
+   "instrument": "MSI",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "swir",
+    "red_edge",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Land and coastal waters only (up to 20 km from shore); open ocean not acquired.",
+   "pass_filter": "day_descending",
+   "lat_limits": [
+    -56.0,
+    82.8
+   ],
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 290
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 786,
+    "ltdn": "10:30"
+   },
+   "resolution_m": {
+    "min": 10,
+    "max": 60
+   },
+   "spectral": "13 bands VNIR–SWIR",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": "esa_s2_kml",
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "lat_limits",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=42063&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m",
+    "spectral"
+   ],
+   "verified": true,
+   "short": "S2B",
+   "agency": "ESA / European Commission"
+  },
+  {
+   "id": "S2C_MSI",
+   "platform": "Sentinel-2C",
+   "object_name": "SENTINEL-2C",
+   "norad_id": 60989,
+   "cospar_id": "2024-157A",
+   "instrument": "MSI",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "swir",
+    "red_edge",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Land and coastal waters only (up to 20 km from shore); open ocean not acquired.",
+   "pass_filter": "day_descending",
+   "lat_limits": [
+    -56.0,
+    82.8
+   ],
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 290
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 786,
+    "ltdn": "10:30"
+   },
+   "resolution_m": {
+    "min": 10,
+    "max": 60
+   },
+   "spectral": "13 bands VNIR–SWIR",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": "esa_s2_kml",
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "lat_limits",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s2-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=60989&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m",
+    "spectral"
+   ],
+   "verified": true,
+   "short": "S2C",
+   "agency": "ESA / European Commission"
+  },
+  {
+   "id": "S3A_OLCI",
+   "platform": "Sentinel-3A",
+   "short": "S3A",
+   "object_name": "SENTINEL-3A",
+   "norad_id": 41335,
+   "cospar_id": "2016-011A",
+   "instrument": "OLCI",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2016-02-16",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "open_data",
+    "water",
+    "ocean"
+   ],
+   "status": "active",
+   "status_note": "Sentinel-3C (launched 15 Sep 2026) is in commissioning and is planned to take over from Sentinel-3A; 3A continues routine operations meanwhile.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Acquires whenever illumination is suitable (daytime). The field of view is shifted 12.6 deg across track (westward, away from the sun) to limit sun glint, so the real swath is not centred on nadir.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 1270
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814.5,
+    "inclination_deg": 98.65,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "resolution_m": {
+    "min": 300,
+    "max": 1200
+   },
+   "spectral": "21 bands, 390-1040 nm (FR ~300 m, RR ~1.2 km)",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://catalogue.dataspace.copernicus.eu/odata/v1/Products?$filter=startswith(Name,'S3A_OL_1_EFR')&$orderby=ContentDate/Start%20desc&$top=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://www.esa.int/Newsroom/Press_Releases/FLEX_and_Sentinel-3C_launched",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=41335&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S3B_OLCI",
+   "platform": "Sentinel-3B",
+   "short": "S3B",
+   "object_name": "SENTINEL-3B",
+   "norad_id": 43437,
+   "cospar_id": "2018-039A",
+   "instrument": "OLCI",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2018-04-25",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "open_data",
+    "water",
+    "ocean"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Acquires whenever illumination is suitable (daytime). The field of view is shifted 12.6 deg across track (westward, away from the sun) to limit sun glint, so the real swath is not centred on nadir.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 1270
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814.5,
+    "inclination_deg": 98.65,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "resolution_m": {
+    "min": 300,
+    "max": 1200
+   },
+   "spectral": "21 bands, 390-1040 nm (FR ~300 m, RR ~1.2 km)",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://catalogue.dataspace.copernicus.eu/odata/v1/Products?$filter=startswith(Name,'S3B_OL_1_EFR')&$orderby=ContentDate/Start%20desc&$top=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-olci-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43437&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S3A_SLSTR",
+   "platform": "Sentinel-3A",
+   "short": "S3A",
+   "object_name": "SENTINEL-3A",
+   "norad_id": 41335,
+   "cospar_id": "2016-011A",
+   "instrument": "SLSTR",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2016-02-16",
+   "categories": [
+    "thermal",
+    "optical_multispectral"
+   ],
+   "tags": [
+    "swir",
+    "thermal",
+    "day_night",
+    "open_data",
+    "ocean"
+   ],
+   "status": "active",
+   "status_note": "Sentinel-3C (launched 15 Sep 2026) is in commissioning and is planned to take over from Sentinel-3A; 3A continues routine operations meanwhile.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Dual-view conical scanner: nadir view ~1400 km, oblique (along-track) view ~740 km. Thermal channels are used day and night (split window by day, triple window at night).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 1400
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814.5,
+    "inclination_deg": 98.65,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "resolution_m": {
+    "min": 500,
+    "max": 1000
+   },
+   "spectral": "9 channels S1-S9 (0.555-12 um) plus fire channels F1 (3.7 um) and F2 (10.8 um); VIS/SWIR 500 m, TIR 1 km",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://catalogue.dataspace.copernicus.eu/odata/v1/Products?$filter=startswith(Name,'S3A_SL_1_RBT')&$orderby=ContentDate/Start%20desc&$top=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://www.esa.int/Newsroom/Press_Releases/FLEX_and_Sentinel-3C_launched",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=41335&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S3B_SLSTR",
+   "platform": "Sentinel-3B",
+   "short": "S3B",
+   "object_name": "SENTINEL-3B",
+   "norad_id": 43437,
+   "cospar_id": "2018-039A",
+   "instrument": "SLSTR",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2018-04-25",
+   "categories": [
+    "thermal",
+    "optical_multispectral"
+   ],
+   "tags": [
+    "swir",
+    "thermal",
+    "day_night",
+    "open_data",
+    "ocean"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Dual-view conical scanner: nadir view ~1400 km, oblique (along-track) view ~740 km. Thermal channels are used day and night (split window by day, triple window at night).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 1400
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814.5,
+    "inclination_deg": 98.65,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "resolution_m": {
+    "min": 500,
+    "max": 1000
+   },
+   "spectral": "9 channels S1-S9 (0.555-12 um) plus fire channels F1 (3.7 um) and F2 (10.8 um); VIS/SWIR 500 m, TIR 1 km",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://catalogue.dataspace.copernicus.eu/odata/v1/Products?$filter=startswith(Name,'S3B_SL_1_RBT')&$orderby=ContentDate/Start%20desc&$top=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-slstr-instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43437&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "TERRA_MODIS",
+   "platform": "Terra",
+   "short": "TERRA",
+   "object_name": "TERRA",
+   "norad_id": 25994,
+   "cospar_id": "1999-068A",
+   "instrument": "MODIS",
+   "agency": "NASA",
+   "launch": "1999-12-18",
+   "categories": [
+    "optical_multispectral",
+    "thermal"
+   ],
+   "tags": [
+    "swir",
+    "thermal",
+    "open_data",
+    "ocean",
+    "atmosphere"
+   ],
+   "status": "ending",
+   "status_note": "Fuel-limited free drift since leaving the 10:30 morning constellation: no maneuvers planned, equator crossing moving earlier (NASA: 9:06 MLT and 693 km as of Dec 2025). NASA plans Terra/Aqua shutdown in late 2026/early 2027. MODIS in nominal science mode as of 6 Nov 2026.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global systematic acquisition; thermal bands also acquire on the night (ascending) node. Equator crossing time is no longer nominal (drifting earlier than the historical 10:30), so local illumination differs from the original design.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2330
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 693
+   },
+   "resolution_m": {
+    "min": 250,
+    "max": 1000
+   },
+   "spectral": "36 bands, ~0.41-14.2 um (2 bands 250 m, 5 bands 500 m, 29 bands 1 km)",
+   "data_access": "https://ladsweb.modaps.eosdis.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://terra.nasa.gov/about/terra-instruments/modis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://terra.nasa.gov/?p=190707",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://science.nasa.gov/mission/terra/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://mcst.gsfc.nasa.gov/iot/am1weekly20263042026310",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://terra.nasa.gov/?p=190707",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=MOD021KM&sort_key=-start_date&page_size=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/transition-from-modis-viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://terra.nasa.gov/?p=190707",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/modis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/modis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25994&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "orbit"
+   ],
+   "verified": true
+  },
+  {
+   "id": "AQUA_MODIS",
+   "platform": "Aqua",
+   "short": "AQUA",
+   "object_name": "AQUA",
+   "norad_id": 27424,
+   "cospar_id": "2002-022A",
+   "instrument": "MODIS",
+   "agency": "NASA",
+   "launch": "2002-05-04",
+   "categories": [
+    "optical_multispectral",
+    "thermal"
+   ],
+   "tags": [
+    "swir",
+    "thermal",
+    "open_data",
+    "ocean",
+    "atmosphere"
+   ],
+   "status": "ending",
+   "status_note": "Free drift since the last drag-makeup maneuver in Dec 2021: descending below the A-Train, crossing time drifting later (WMO OSCAR: 15:05 ascending, record updated 2026-11-09). Earlier NASA plans ended Aqua MODIS science around Aug 2026, but MODIS is still in nominal science mode as of 6 Nov 2026; NASA states Terra/Aqua shutdown late 2026/early 2027.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global systematic acquisition; thermal bands also acquire on the night (descending) node. Equator crossing time is no longer the nominal 13:30 and keeps drifting later.",
+   "pass_filter": "day_ascending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2330
+   },
+   "orbit": {
+    "type": "sso",
+    "ltan": "15:05"
+   },
+   "resolution_m": {
+    "min": 250,
+    "max": 1000
+   },
+   "spectral": "36 bands, ~0.41-14.2 um (2 bands 250 m, 5 bands 500 m, 29 bands 1 km)",
+   "data_access": "https://ladsweb.modaps.eosdis.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://terra.nasa.gov/about/terra-instruments/modis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/aqua",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://science.nasa.gov/mission/aqua/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://mcst.gsfc.nasa.gov/iot/pm1weekly20263042026310",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://science.nasa.gov/mission/aqua/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=MYD021KM&sort_key=-start_date&page_size=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/transition-from-modis-viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://modis-land.gsfc.nasa.gov/news.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://space.oscar.wmo.int/satellites/view/aqua",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/modis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/modis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=27424&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "orbit"
+   ],
+   "verified": true
+  },
+  {
+   "id": "TERRA_ASTER_TIR",
+   "platform": "Terra",
+   "short": "TERRA",
+   "object_name": "TERRA",
+   "norad_id": 25994,
+   "cospar_id": "1999-068A",
+   "instrument": "ASTER (TIR)",
+   "agency": "NASA / METI (Japan)",
+   "launch": "1999-12-18",
+   "categories": [
+    "thermal"
+   ],
+   "tags": [
+    "thermal",
+    "day_night",
+    "open_data"
+   ],
+   "status": "inactive",
+   "status_note": "ASTER TIR subsystem permanently turned off on 16 Jan 2026 due to Terra power limitations; its thermal control was powered off on 6 Feb 2026, so it cannot be recovered. ASTER VNIR resumed on 9 Feb 2026 (SWIR non-functional since 2008).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Historical only: TIR archive ends 16 Jan 2026. When operating, ASTER acquired on a scheduled (tasked) basis with +/-8.55 deg cross-track pointing for TIR.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 60,
+    "max_offnadir_deg": 8.55
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 693
+   },
+   "resolution_m": {
+    "min": 90,
+    "max": 90
+   },
+   "spectral": "TIR: 5 bands (B10-B14), 8.125-11.65 um, 90 m",
+   "data_access": "https://www.earthdata.nasa.gov/centers/lp-daac",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://asterweb.jpl.nasa.gov/characteristics.asp",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/terra-asters-tir-instrument-permanently-turned-off-vnir-data-collection-resumes",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://science.nasa.gov/blogs/science-news/2026/02/12/terra-adjusts-instrument-operations-to-extend-mission-life",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://terra.nasa.gov/?p=190707",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://asterweb.jpl.nasa.gov/characteristics.asp",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://asterweb.jpl.nasa.gov/characteristics.asp",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25994&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "orbit"
+   ],
+   "verified": true
+  },
+  {
+   "id": "CB4A_WFI",
+   "platform": "CBERS-4A",
+   "short": "CB4A",
+   "object_name": "CBERS 4A",
+   "norad_id": 44883,
+   "cospar_id": "2019-093E",
+   "instrument": "WFI",
+   "agency": "INPE (Brazil) / CAST-CRESDA (China)",
+   "launch": "2019-12-20",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operating beyond its 5-year design life; INPE catalogue has new scenes up to 9 Nov 2026.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Acquisition/reception is regional, not global: the INPE catalogue extent for this product spans roughly 44S-40N, 85W-54E (South America and parts of Africa).",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 684
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 628.6,
+    "inclination_deg": 97.89,
+    "ltdn": "10:30",
+    "repeat_days": 31
+   },
+   "resolution_m": {
+    "min": 55,
+    "max": 55
+   },
+   "spectral": "4 bands B13-B16: blue, green, red, NIR (0.45-0.89 um), 55 m",
+   "data_access": "https://data.inpe.br/bdc/stac/v1/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/cameras-imageadoras",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/orbita",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/cbers-4a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/CB4A-WFI-L2-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/CB4A-WFI-L4-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/cameras-imageadoras",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/cameras-imageadoras",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=44883&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "CB4A_MUX",
+   "platform": "CBERS-4A",
+   "short": "CB4A",
+   "object_name": "CBERS 4A",
+   "norad_id": 44883,
+   "cospar_id": "2019-093E",
+   "instrument": "MUX",
+   "agency": "INPE (Brazil) / CAST-CRESDA (China)",
+   "launch": "2019-12-20",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operating beyond its 5-year design life; INPE catalogue has new scenes up to 9 Nov 2026.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Acquisition/reception is regional, not global: the INPE catalogue extent for this product spans roughly 44S-40N, 85W-54E (South America and parts of Africa).",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 95
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 628.6,
+    "inclination_deg": 97.89,
+    "ltdn": "10:30",
+    "repeat_days": 31
+   },
+   "resolution_m": {
+    "min": 16.5,
+    "max": 16.5
+   },
+   "spectral": "4 bands B5-B8: blue, green, red, NIR (0.45-0.89 um), 16.5 m",
+   "data_access": "https://data.inpe.br/bdc/stac/v1/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/cameras-imageadoras",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/orbita",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/cbers-4a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/CB4A-MUX-L2-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/CB4A-MUX-L4-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/cameras-imageadoras",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.gov.br/inpe/pt-br/programas/cbers/sobre-o-cbers-1/cbers-04a/cameras-imageadoras",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=44883&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "AMZ1_WFI",
+   "platform": "Amazonia-1",
+   "short": "AMZ1",
+   "object_name": "AMAZONIA 1",
+   "norad_id": 47699,
+   "cospar_id": "2021-015A",
+   "instrument": "WFI (AWFI)",
+   "agency": "INPE (Brazil)",
+   "launch": "2021-02-28",
+   "categories": [
+    "optical_multispectral"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "INPE catalogue has new scenes up to 9 Nov 2026.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Acquisition/reception is regional, not global: the INPE catalogue extent spans roughly 46S-40N, 83W-40E. Swath width differs between sources (850 km in INPE launch release; 740, 780, 830 and 866 km elsewhere).",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 850
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 752,
+    "inclination_deg": 98.4,
+    "ltdn": "10:30"
+   },
+   "resolution_m": {
+    "min": 64,
+    "max": 64
+   },
+   "spectral": "4 bands: blue, green, red, NIR (0.45-0.89 um), 64 m",
+   "data_access": "https://data.inpe.br/bdc/stac/v1/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://goias.gov.br/imb/?p=10742",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/amazonia_1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://eoportal.org/satellite-missions/amazonia-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://goias.gov.br/imb/?p=10742",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/AMZ1-WFI-L2-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/AMZ1-WFI-L4-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/AMZ1-WFI-L4-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://data.inpe.br/bdc/stac/v1/collections/AMZ1-WFI-L4-DN-1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=47699&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath"
+   ],
+   "verified": false
+  },
+  {
+   "id": "PACE_OCI",
+   "platform": "PACE",
+   "short": "PACE",
+   "object_name": "PACE",
+   "norad_id": 58928,
+   "cospar_id": "2024-025A",
+   "instrument": "OCI",
+   "agency": "NASA",
+   "launch": "2024-02-08",
+   "categories": [
+    "hyperspectral",
+    "optical_multispectral"
+   ],
+   "tags": [
+    "swir",
+    "open_data",
+    "water",
+    "ocean",
+    "atmosphere"
+   ],
+   "status": "active",
+   "status_note": "In Phase E operations; OCI Level-1B granules available up to 10 Nov 2026.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global daytime coverage in 1-2 days. OCI tilts about 20 deg fore/aft (switching near the sub-solar point each orbit) to avoid sun glint, so the ground swath is displaced along track from the sub-satellite point.",
+   "pass_filter": "day_ascending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2663
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 676.5,
+    "inclination_deg": 98,
+    "ltan": "13:00"
+   },
+   "resolution_m": {
+    "min": 1000,
+    "max": 1200
+   },
+   "spectral": "Hyperspectral 340-895 nm (5 nm bandwidth, 2.5 nm steps) plus 7 discrete SWIR bands (940, 1038, 1250, 1378, 1615, 2130, 2260 nm)",
+   "data_access": "https://search.earthdata.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://pace.oceansciences.org/information_for_the_media.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://pace.oceansciences.org/information_for_the_media.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/pace-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/pace-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://pace.oceansciences.org/mission.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cmr.earthdata.nasa.gov/search/granules.json?short_name=PACE_OCI_L1B_SCI&sort_key=-start_date&page_size=1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://pace.oceansciences.org/oci.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://pace.oceansciences.org/information_for_the_media.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://pace.oceansciences.org/oci.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://pace.oceansciences.org/oci.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "categories",
+     "url": "https://pace.oceansciences.org/oci.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=58928&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "S1A_CSAR_IW",
+   "platform": "Sentinel-1A",
+   "short": "S1A",
+   "object_name": "SENTINEL-1A",
+   "norad_id": 39634,
+   "cospar_id": "2014-016A",
+   "instrument": "C-SAR (IW)",
+   "agency": "ESA / European Commission",
+   "launch": "2014-04-03",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_c",
+    "open_data"
+   ],
+   "status": "inactive",
+   "status_note": "Operational duties ended 29 June 2026 (ESA); Copernicus announcement dates the official end of operations 30 June 2026. Replaced by Sentinel-1D; disposal phase followed. Still has current CelesTrak GP data.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "No acquisitions after end of operations (29/30 June 2026).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "right",
+    "incidence_deg": [
+     29.1,
+     46.0
+    ],
+    "mode": "IW",
+    "width_km": 250
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 693,
+    "inclination_deg": 98.18,
+    "ltan": "18:00",
+    "repeat_days": 12
+   },
+   "resolution_m": {
+    "min": 5,
+    "max": 20
+   },
+   "spectral": "C-band (5.405 GHz); IW dual pol HH+HV or VV+VH, or single HH / VV",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": "esa_s1_kml",
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-products",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Time_to_say_goodbye_to_Sentinel-1A",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentinels.copernicus.eu/-/copernicus-sentinel%E2%80%911a-satellite-end-of-operations-after-12-years-of-service",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Time_to_say_goodbye_to_Sentinel-1A",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39634&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S1C_CSAR_IW",
+   "platform": "Sentinel-1C",
+   "short": "S1C",
+   "object_name": "SENTINEL-1C",
+   "norad_id": 62261,
+   "cospar_id": "2024-235A",
+   "instrument": "C-SAR (IW)",
+   "agency": "ESA / European Commission",
+   "launch": "2024-12-05",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_c",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "right",
+    "incidence_deg": [
+     29.1,
+     46.0
+    ],
+    "mode": "IW",
+    "width_km": 250
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 693,
+    "inclination_deg": 98.18,
+    "ltan": "18:00",
+    "repeat_days": 12
+   },
+   "resolution_m": {
+    "min": 5,
+    "max": 20
+   },
+   "spectral": "C-band (5.405 GHz); IW dual pol HH+HV or VV+VH, or single HH / VV",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": "esa_s1_kml",
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-products",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentinels.copernicus.eu/-/copernicus-sentinel%E2%80%911a-satellite-end-of-operations-after-12-years-of-service",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=62261&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S1D_CSAR_IW",
+   "platform": "Sentinel-1D",
+   "short": "S1D",
+   "object_name": "SENTINEL-1D",
+   "norad_id": 66315,
+   "cospar_id": "2025-251A",
+   "instrument": "C-SAR (IW)",
+   "agency": "ESA / European Commission",
+   "launch": "2025-11-04",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_c",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Fully operational with Sentinel-1C since the end of Sentinel-1A operations (June 2026).",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "right",
+    "incidence_deg": [
+     29.1,
+     46.0
+    ],
+    "mode": "IW",
+    "width_km": 250
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 693,
+    "inclination_deg": 98.18,
+    "ltan": "18:00",
+    "repeat_days": 12
+   },
+   "resolution_m": {
+    "min": 5,
+    "max": 20
+   },
+   "spectral": "C-band (5.405 GHz); IW dual pol HH+HV or VV+VH, or single HH / VV",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": "esa_s1_kml",
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-products",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://sentiwiki.copernicus.eu/web/s1-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentinels.copernicus.eu/-/copernicus-sentinel%E2%80%911a-satellite-end-of-operations-after-12-years-of-service",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Time_to_say_goodbye_to_Sentinel-1A",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=66315&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "NISAR_LSAR",
+   "platform": "NISAR",
+   "short": "NIS-L",
+   "object_name": "NISAR",
+   "norad_id": 65053,
+   "cospar_id": "2025-163A",
+   "instrument": "L-SAR",
+   "agency": "NASA / ISRO",
+   "launch": "2025-07-30",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_l",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "L-band collected globally over most land masses and sea ice on the 12-day repeat (reference observation plan). Left-looking for the whole mission: no coverage north of ~77.5 deg N.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "left",
+    "incidence_deg": [
+     34,
+     47
+    ],
+    "mode": "SweepSAR (~242 km)",
+    "width_km": 242
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 747,
+    "inclination_deg": 98.4,
+    "ltan": "18:00",
+    "repeat_days": 12
+   },
+   "resolution_m": {
+    "min": 2,
+    "max": 8
+   },
+   "spectral": "L-band (1.257 GHz, 24 cm), bandwidths 5-80 MHz; single, dual, compact and quad pol",
+   "data_access": "https://search.asf.alaska.edu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://nisar-docs.asf.alaska.edu/nisar-intro",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.incidence_deg",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit.ltan",
+     "url": "https://www.eoportal.org/satellite-missions/nisar",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://nisar-docs.asf.alaska.edu/nisar-intro",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://nisar-docs.asf.alaska.edu/nisar-intro",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/platforms/space-based-platforms/nisar",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/nisar-validated-l-band-data-products-now-available",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=65053&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "NISAR_SSAR",
+   "platform": "NISAR",
+   "short": "NIS-S",
+   "object_name": "NISAR",
+   "norad_id": 65053,
+   "cospar_id": "2025-163A",
+   "instrument": "S-SAR",
+   "agency": "ISRO / NASA",
+   "launch": "2025-07-30",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_s",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "S-band collected only over selected areas, primarily India plus global science sites; products distributed by ISRO (Bhoonidhi), operational production since cycle 25 (8 July 2026).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "left",
+    "incidence_deg": [
+     34,
+     47
+    ],
+    "mode": "SweepSAR (~240 km)",
+    "width_km": 240
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 747,
+    "inclination_deg": 98.4,
+    "ltan": "18:00",
+    "repeat_days": 12
+   },
+   "resolution_m": {
+    "min": 3,
+    "max": 24
+   },
+   "spectral": "S-band (3.2 GHz, 9.3-9.4 cm), bandwidths 10-75 MHz; single, dual, compact, experimental quad pol",
+   "data_access": "https://bhoonidhi.nrsc.gov.in/NISAR/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://nisar-docs.asf.alaska.edu/nisar-intro",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.incidence_deg",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit.ltan",
+     "url": "https://www.eoportal.org/satellite-missions/nisar",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.isro.gov.in/ISRO_EN/NISARS_Band_SAR_Data_Products_Release.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://nisar-docs.asf.alaska.edu/nisar-intro",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.isro.gov.in/ISRO_EN/NISARS_Band_SAR_Data_Products_Release.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://dataverse.jpl.nasa.gov/api/access/datafile/97405?gbrecs=true",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.isro.gov.in/ISRO_EN/NISARS_Band_SAR_Data_Products_Release.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=65053&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "SAOCOM1A_SAR",
+   "platform": "SAOCOM-1A",
+   "short": "SAO1A",
+   "object_name": "SAOCOM 1A",
+   "norad_id": 43641,
+   "cospar_id": "2018-076A",
+   "instrument": "SAR-L",
+   "agency": "CONAE / ASI",
+   "launch": "2018-10-08",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_l"
+   ],
+   "status": "active",
+   "status_note": "Beyond design life; WMO OSCAR (updated 2026-02-02) lists status Operational, EOL >=2026.",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Programmed by CONAE acquisition plans and user requests. Nominal right-looking; left-looking capability. Modes: StripMap (20-40 km), TOPSAR Narrow (~100-150 km), TOPSAR Wide (220-350 km); width_km is StripMap.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 40,
+    "look_side": "right",
+    "access_incidence_deg": [
+     20,
+     50
+    ]
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 620,
+    "inclination_deg": 97.86,
+    "ltan": "06:12",
+    "repeat_days": 16
+   },
+   "resolution_m": {
+    "min": 10,
+    "max": 100
+   },
+   "spectral": "L-band (1.275 GHz); single, dual, quad and compact pol",
+   "data_access": "https://catalog.saocom.conae.gov.ar/catalog/#/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://docs.disasterscharter.org/missions/sar/saocom-1/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.access_incidence_deg",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit.inclination_deg",
+     "url": "https://www.eoportal.org/satellite-missions/saocom",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://space.oscar.wmo.int/satellites/view/saocom_1a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/saocom_1a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "data_access",
+     "url": "https://www.argentina.gob.ar/ciencia/conae/productos-saocom",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43641&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "SAOCOM1B_SAR",
+   "platform": "SAOCOM-1B",
+   "short": "SAO1B",
+   "object_name": "SAOCOM 1B",
+   "norad_id": 46265,
+   "cospar_id": "2020-059A",
+   "instrument": "SAR-L",
+   "agency": "CONAE / ASI",
+   "launch": "2020-08-30",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_l"
+   ],
+   "status": "active",
+   "status_note": "Beyond design life; WMO OSCAR (updated 2026-02-02) lists status Operational, EOL >=2026.",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Programmed by CONAE acquisition plans and user requests. Nominal right-looking; left-looking capability. Modes: StripMap (20-40 km), TOPSAR Narrow (~100-150 km), TOPSAR Wide (220-350 km); width_km is StripMap.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 40,
+    "look_side": "right",
+    "access_incidence_deg": [
+     20,
+     50
+    ]
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 620,
+    "inclination_deg": 97.86,
+    "ltan": "06:12",
+    "repeat_days": 16
+   },
+   "resolution_m": {
+    "min": 10,
+    "max": 100
+   },
+   "spectral": "L-band (1.275 GHz); single, dual, quad and compact pol",
+   "data_access": "https://catalog.saocom.conae.gov.ar/catalog/#/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://docs.disasterscharter.org/missions/sar/saocom-1/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.access_incidence_deg",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit.inclination_deg",
+     "url": "https://www.eoportal.org/satellite-missions/saocom",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.argentina.gob.ar/node/60513",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://space.oscar.wmo.int/satellites/view/saocom_1b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/saocom_1b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "data_access",
+     "url": "https://www.argentina.gob.ar/ciencia/conae/productos-saocom",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=46265&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "ALOS2_PALSAR2",
+   "platform": "ALOS-2",
+   "short": "ALOS2",
+   "object_name": "ALOS-2",
+   "norad_id": 39766,
+   "cospar_id": "2014-029A",
+   "instrument": "PALSAR-2",
+   "agency": "JAXA",
+   "launch": "2014-05-24",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_l"
+   ],
+   "status": "active",
+   "status_note": "Maintenance operation 18 Oct - 15 Nov 2026 (JST): nominal observations suspended, no new tasking, data non-calibrated. Late-phase operation: duty cycle reduced to 30%; observations restricted in some regions outside Japan (radio-interference countermeasures).",
+   "note_expires": "2026-11-16",
+   "acquisition": "partial",
+   "acquisition_note": "Basic Observation Scenario 4th ed.: global Stripmap 10 m given lower priority since ALOS-4 took over global mapping; ScanSAR 350 km continues for wetlands/deforestation, polar and crustal deformation; Japan mostly left-looking. Default mode = Fine F2 group (beams 5-7, 70 km each); one beam per pass, so the incidence range is an envelope of 3 beams.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "right",
+    "incidence_deg": [
+     30,
+     44
+    ],
+    "mode": "Stripmap Fine 10 m dual-pol (F2)",
+    "width_km": 70
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 628,
+    "inclination_deg": 97.9,
+    "ltdn": "12:00",
+    "repeat_days": 14
+   },
+   "resolution_m": {
+    "min": 1,
+    "max": 100
+   },
+   "spectral": "L-band; SP, DP (HH+HV / VV+VH), FP, experimental compact pol",
+   "data_access": "https://auig4.jaxa.jp/app/en/home/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eorc.jaxa.jp/ALOS-2/en/obs/scenario/ALOS-2_Basic_Observation_Scenario(3rd%20Edition_verC)_20190909.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/ALOS-2_Basic_Observation_Scenario(4th+Edition)_20251003.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.width_km",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/a2_sensor_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/a2_about_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/a2_sensor_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/a2_sensor_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/a2_about_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/Notice_Regarding_ALOS-2_Observation_Images_During_Maintenance_Operations_en.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/a2_observation_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/alos_2",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/ALOS-2_Basic_Observation_Scenario(4th+Edition)_20251003.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39766&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "ALOS4_PALSAR3",
+   "platform": "ALOS-4",
+   "short": "ALOS4",
+   "object_name": "ALOS-4 (DAICHI-4)",
+   "norad_id": 60182,
+   "cospar_id": "2024-123A",
+   "instrument": "PALSAR-3",
+   "agency": "JAXA",
+   "launch": "2024-07-01",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_l"
+   ],
+   "status": "active",
+   "status_note": "Regular operations since April 2025.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Basic Observation Scenario: global basemap in Stripmap 10 m (200 km, right, ascending, 1/yr) and Stripmap 6 m full-pol (100 km, descending); Japan in Stripmap 3 m (200 km). Check per-cycle PALSAR-3 observation plans (KML).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "side_looking",
+    "look_side": "right",
+    "incidence_deg": [
+     30,
+     44
+    ],
+    "mode": "Stripmap 200 km (global basemap 10 m)",
+    "width_km": 200
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 628,
+    "inclination_deg": 97.9,
+    "ltdn": "12:00",
+    "repeat_days": 14
+   },
+   "resolution_m": {
+    "min": 3,
+    "max": 25
+   },
+   "spectral": "L-band, digital beamforming",
+   "data_access": "https://auig4.jaxa.jp/app/en/home/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/a4_sensor_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/pdf/FTR-210002B_ALOS4PALSAR3_BasicObservationScenario.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/a4_about_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/a4_about_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/a4_observation_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/a4_sensor_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-2/pdf/ALOS-2_Basic_Observation_Scenario(4th+Edition)_20251003.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/index_e.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.eorc.jaxa.jp/ALOS/en/alos-4/pdf/FTR-210002B_ALOS4PALSAR3_BasicObservationScenario.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=60182&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "TSX_SARX",
+   "platform": "TerraSAR-X",
+   "short": "TSX",
+   "object_name": "TERRASAR-X",
+   "norad_id": 31698,
+   "cospar_id": "2007-026A",
+   "instrument": "SAR-X",
+   "agency": "DLR / Airbus Defence and Space",
+   "launch": "2007-06-15",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_x",
+    "commercial"
+   ],
+   "status": "active",
+   "status_note": "Far beyond 5-year design life; WMO OSCAR (updated 2026-10-19) lists Operational, EOL >=2028 (estimated).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking. StripMap 30 km (single pol; 15 km dual pol), ScanSAR 100 km, Wide ScanSAR up to 270 km, SpotLight 5-10 km. Full-performance incidence 20-45 deg (StripMap); orderable 15-60 deg outside spec. Nominal right-looking.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 30,
+    "look_side": "right",
+    "access_incidence_deg": [
+     20,
+     45
+    ]
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 514.8,
+    "inclination_deg": 97.44,
+    "ltan": "18:00",
+    "repeat_days": 11
+   },
+   "resolution_m": {
+    "min": 0.25,
+    "max": 40
+   },
+   "spectral": "X-band; single, dual (HH/VV, HH/HV, VV/VH) pol",
+   "data_access": "https://space-solutions.airbus.com/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/terrasar-x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://space.oscar.wmo.int/satellites/view/terrasar_x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/terrasar_x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=31698&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "data_access"
+   ],
+   "verified": true
+  },
+  {
+   "id": "TDX_SARX",
+   "platform": "TanDEM-X",
+   "short": "TDX",
+   "object_name": "TANDEM-X",
+   "norad_id": 36605,
+   "cospar_id": "2010-030A",
+   "instrument": "SAR-X",
+   "agency": "DLR / Airbus Defence and Space",
+   "launch": "2010-06-21",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_x",
+    "commercial"
+   ],
+   "status": "active",
+   "status_note": "Flies in close formation with TerraSAR-X. DLR lists active (as of 2026); WMO OSCAR (updated 2026-10-19) EOL >=2028 (estimated).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking. StripMap 30 km (single pol; 15 km dual pol), ScanSAR 100 km, Wide ScanSAR up to 270 km, SpotLight 5-10 km. Full-performance incidence 20-45 deg (StripMap); orderable 15-60 deg outside spec. Nominal right-looking.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 30,
+    "look_side": "right",
+    "access_incidence_deg": [
+     20,
+     45
+    ]
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 514,
+    "ltdn": "06:00",
+    "repeat_days": 11
+   },
+   "resolution_m": {
+    "min": 0.25,
+    "max": 40
+   },
+   "spectral": "X-band; single, dual (HH/VV, HH/HV, VV/VH) pol",
+   "data_access": "https://space-solutions.airbus.com/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.dlr.de/en/research-and-transfer/projects-and-missions/tandem-x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit.ltdn",
+     "url": "https://space.oscar.wmo.int/satellites/view/tandem_x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit.repeat_days",
+     "url": "https://www.eoportal.org/satellite-missions/terrasar-x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.dlr.de/en/research-and-transfer/projects-and-missions/tandem-x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.dlr.de/en/research-and-transfer/projects-and-missions/tandem-x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/tandem_x",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=36605&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "data_access"
+   ],
+   "verified": true
+  },
+  {
+   "id": "PAZ_SARX",
+   "platform": "PAZ",
+   "short": "PAZ",
+   "object_name": "PAZ",
+   "norad_id": 43215,
+   "cospar_id": "2018-020A",
+   "instrument": "SAR-X",
+   "agency": "Hisdesat",
+   "launch": "2018-02-22",
+   "categories": [
+    "sar"
+   ],
+   "tags": [
+    "sar_x",
+    "commercial"
+   ],
+   "status": "active",
+   "status_note": "In service since 2018; operated in constellation with TerraSAR-X/TanDEM-X. Successor PAZ-2 expected ~2031.",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking (Hisdesat; marketed with TerraSAR-X/TanDEM-X by Airbus). StripMap 30 km single pol (15 km dual), ScanSAR 100 km, SpotLight 10 km. Access incidence 15-60 deg; full-performance 20-45 deg (StripMap, TerraSAR-X heritage). Nominal right-looking; left-looking attitude possible.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 30,
+    "look_side": "right",
+    "access_incidence_deg": [
+     20,
+     45
+    ]
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 514,
+    "inclination_deg": 97.44,
+    "ltan": "18:00",
+    "repeat_days": 11
+   },
+   "resolution_m": {
+    "min": 1,
+    "max": 16
+   },
+   "spectral": "X-band; single and dual pol",
+   "data_access": "https://space-solutions.airbus.com/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/paz",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.look_side",
+     "url": "https://www.eoportal.org/satellite-missions/paz",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/paz",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eoportal.org/satellite-missions/paz",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/paz",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.airbus.com/en/newsroom/press-releases/2026-01-airbus-and-hisdesat-sign-a-commercialisation-agreement-for-paz-2-satellite-imagery",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/paz",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43215&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath.access_incidence_deg",
+     "url": "https://l3harris.com/sites/default/files/2023-06/Airbus%20TerraSAR-X%20Product%20Guide.pdf",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "data_access",
+    "swath.access_incidence_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "ISS_EMIT",
+   "platform": "ISS",
+   "object_name": "ISS (ZARYA)",
+   "norad_id": 25544,
+   "cospar_id": "1998-067A",
+   "short": "EMIT",
+   "instrument": "EMIT",
+   "agency": "NASA / JPL",
+   "launch": "2022-07-14",
+   "categories": [
+    "hyperspectral"
+   ],
+   "tags": [
+    "swir",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Extended mission since 2024, 'through at least 2026'. New acquisitions still being delivered (LP DAAC alert, 17 Sep 2026). Invited to the 2026 NASA Earth Science Senior Review (FY2027-FY2029); outcome not found.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Prime mission targeted arid dust-source regions (Africa, Asia, Americas, Australia). The extended mission adds other targets (greenhouse-gas sources, vegetation, snow, inland waters). Planned acquisitions are published as ~2-week forecasts on the EMIT data portal; the on-board cloud screener may drop scenes.",
+   "pass_filter": "day_any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 75
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 407,
+    "inclination_deg": 51.6
+   },
+   "resolution_m": {
+    "min": 60,
+    "max": 60
+   },
+   "spectral": "Imaging spectrometer 380-2500 nm, 285 bands, ~7.4 nm sampling",
+   "data_access": "https://earth.jpl.nasa.gov/emit/data/data-portal/coverage-and-forecasts/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.earthdata.nasa.gov/news/feature-articles/meet-emit-newest-imaging-spectrometer",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.earthdata.nasa.gov/data/instruments/emit-imaging-spectrometer",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://earth.jpl.nasa.gov/emit/instrument/specifications/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.earthdata.nasa.gov/news/feature-articles/meet-emit-newest-imaging-spectrometer",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/iss_emit",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/instruments/emit-imaging-spectrometer",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/emit-version-2-level-1b-level-2a-version-3-level-2a-data-products-released",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://assets.science.nasa.gov/content/dam/science/esd/earth-science-division/senior-reviews/2026/2026%20ESD%20Senior%20Review%20Call%20for%20Proposals_DRAFT20251219.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.jpl.nasa.gov/news/nasas-emit-will-explore-diverse-science-questions-on-extended-mission/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://earth.jpl.nasa.gov/emit/data/data-portal/coverage-and-forecasts/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "ISS_ECOSTRESS",
+   "platform": "ISS",
+   "object_name": "ISS (ZARYA)",
+   "norad_id": 25544,
+   "cospar_id": "1998-067A",
+   "short": "ECOST",
+   "instrument": "ECOSTRESS (PHyTIR)",
+   "agency": "NASA / JPL",
+   "categories": [
+    "thermal"
+   ],
+   "tags": [
+    "thermal",
+    "day_night",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "NASA Earthdata (22 Sep 2026): 'Both ECOSTRESS and OCO-3 are currently operating on the ISS'. Five-band-only mode since 18 May 2023. 2026 Senior Review (FY2027-FY2029) proposal presented Apr 2026; outcome not found.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Targeted acquisitions (originally CONUS, twelve 1000x1000 km climate zones and 25 Fluxnet sites; ~230 scenes/day in 2026). Day and night.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 384
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 407,
+    "inclination_deg": 51.6
+   },
+   "resolution_m": {
+    "min": 38,
+    "max": 69
+   },
+   "spectral": "TIR radiometer, 5 bands 8.29-12.09 um (five-band mode since May 2023)",
+   "data_access": "https://ecostress.jpl.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://ecostress.jpl.nasa.gov/mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://ecostress.jpl.nasa.gov/mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://ecostress.jpl.nasa.gov/mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://ecostress.jpl.nasa.gov/mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://ecostress.jpl.nasa.gov/news/ecostress-april-may-community-updates-digest",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/iss_emit",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/collocated-oco-3-ecostress-version-2.0-data-released",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://ecostress.jpl.nasa.gov/news/ecostress-april-may-community-updates-digest",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "ISS_DESIS",
+   "platform": "ISS",
+   "object_name": "ISS (ZARYA)",
+   "norad_id": 25544,
+   "cospar_id": "1998-067A",
+   "short": "DESIS",
+   "instrument": "DESIS",
+   "agency": "DLR / Teledyne Brown Engineering",
+   "categories": [
+    "hyperspectral"
+   ],
+   "tags": [],
+   "status": "active",
+   "status_note": "Status in 2026 unclear: latest DLR statement (Apr 2025) says seven years of operations completed; WMO OSCAR (updated 2 Feb 2026) lists it operational, EOL >=2026. No 2026 operations report or end-of-mission notice found.",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Tasked via DLR science proposals (>=2000 min/year) or TBE commercially; not intended for large-area mapping. MUSES pointing across-track -45 to +5 deg (asymmetric, modelled here as +/-45 deg), along-track +/-40 deg.",
+   "pass_filter": "day_any",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 30,
+    "max_offnadir_deg": 45
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 400,
+    "inclination_deg": 51.6
+   },
+   "resolution_m": {
+    "min": 30,
+    "max": 30
+   },
+   "spectral": "VNIR imaging spectrometer 402-1000 nm, 235 bands (2.55 nm) unbinned",
+   "data_access": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/data-access",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/instrument",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://elib.dlr.de/219597",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/iss_desis",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.dlr.de/en/eoc/research-transfer/projects-missions/desis/data-access",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "status",
+    "swath.max_offnadir_deg"
+   ],
+   "verified": false
+  },
+  {
+   "id": "ISS_HISUI",
+   "platform": "ISS",
+   "object_name": "ISS (ZARYA)",
+   "norad_id": 25544,
+   "cospar_id": "1998-067A",
+   "short": "HISUI",
+   "instrument": "HISUI",
+   "agency": "METI / Japan Space Systems",
+   "launch": "2019-12-05",
+   "categories": [
+    "hyperspectral"
+   ],
+   "tags": [
+    "swir"
+   ],
+   "status": "inactive",
+   "status_note": "Inferred end of operations ~March 2026: JAXA Kibo weekly schedule of 22 Dec 2025 lists HISUI among ongoing exposed-facility payloads; the schedule of 3 Mar 2026 no longer does and shows 'HISUI in-cabin cleanup' on 5 Mar 2026. eoPortal gives EOL 31 Mar 2026 ('Mission complete'). WMO OSCAR (2 Feb 2026) still listed it operational. No formal end-of-mission announcement found.",
+   "note_expires": null,
+   "acquisition": "partial",
+   "acquisition_note": "Request-based targeting with limited downlink; most data returned on recorder media.",
+   "pass_filter": "day_any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 20
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 407,
+    "inclination_deg": 51.6
+   },
+   "resolution_m": {
+    "min": 20,
+    "max": 30
+   },
+   "spectral": "Imaging spectrometer 0.4-2.5 um, 185 bands (10 nm VNIR, 12.5 nm SWIR)",
+   "data_access": "https://jspacesystems.or.jp/jss/?page_id=77",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://jspacesystems.or.jp/jss/?page_id=77",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://eoportal.org/satellite-missions/iss-hisui",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://jspacesystems.or.jp/jss/?page_id=77",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://jspacesystems.or.jp/jss/?page_id=77",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://eoportal.org/satellite-missions/iss-hisui",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/iss_hisui",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://humans-in-space.jaxa.jp/kibouser/library/item/program/74372_schedule.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://humans-in-space.jaxa.jp/kibouser/library/item/program/74427_schedule.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://eoportal.org/satellite-missions/iss-hisui",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "status"
+   ],
+   "verified": false
+  },
+  {
+   "id": "ENMAP_HSI",
+   "platform": "EnMAP",
+   "short": "EnMAP",
+   "object_name": "ENMAP",
+   "norad_id": 52159,
+   "cospar_id": "2022-033C",
+   "instrument": "HSI",
+   "agency": "DLR",
+   "launch": "2022-04-01",
+   "categories": [
+    "hyperspectral"
+   ],
+   "tags": [
+    "swir"
+   ],
+   "status": "active",
+   "status_note": "Routine phase since 2 Nov 2022; nominal mission to 2027, DLR intends to continue. enmap.org news active up to 10 Nov 2026.",
+   "note_expires": "2027-02-28",
+   "acquisition": "tasked",
+   "acquisition_note": "User-ordered observations plus a Foreground Mission over Europe. Winter mode Nov 2026-Feb 2027: Europe imaged only south of the Alps, focus shifts to the Southern Hemisphere. Cloud-forecast filtering in planning.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 30,
+    "max_offnadir_deg": 30
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 643,
+    "ltdn": "11:00",
+    "repeat_days": 27
+   },
+   "resolution_m": {
+    "min": 30,
+    "max": 30
+   },
+   "spectral": "VNIR 420-1000 nm + SWIR 900-2450 nm, >240 bands",
+   "data_access": "https://www.enmap.org/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.enmap.org/mission/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.enmap.org/mission/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.enmap.org/mission/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.enmap.org/data/doc/EN-GS-RPT-1114_Mission_Quarterly_Report_14.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.dlr.de/de/aktuelles/nachrichten/2026/vierjaehriges-bestehen-der-deutschen-satellitenmission-enmap",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.enmap.org/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.enmap.org/data/doc/EN-GS-RPT-1114_Mission_Quarterly_Report_14.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.dlr.de/de/aktuelles/nachrichten/2026/vierjaehriges-bestehen-der-deutschen-satellitenmission-enmap",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.enmap.org/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=52159&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.max_offnadir_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "PRISMA_HYP_PAN",
+   "platform": "PRISMA",
+   "short": "PRISMA",
+   "object_name": "PRISMA",
+   "norad_id": 44072,
+   "cospar_id": "2019-015A",
+   "instrument": "HYP + PAN",
+   "agency": "ASI",
+   "launch": "2019-03-22",
+   "categories": [
+    "hyperspectral"
+   ],
+   "tags": [
+    "swir"
+   ],
+   "status": "active",
+   "status_note": "Beyond 5-year design life; eoPortal 'Operational (extended)'. Latest ASI status found is May 2025 (workshop presentation); no 2026 status statement found. Successor PRISMA Second Generation planned ~2031.",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "User-driven on-demand acquisitions (registration, free of charge, quota/priority) plus a monthly Foreground Mission of 668 sites and background fill. Mission access limited to 70S-70N.",
+   "pass_filter": "day_descending",
+   "lat_limits": [
+    -70.0,
+    70.0
+   ],
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 30,
+    "max_offnadir_deg": 15
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 615,
+    "ltdn": "10:30",
+    "repeat_days": 29
+   },
+   "resolution_m": {
+    "min": 5,
+    "max": 30
+   },
+   "spectral": "240 bands: VNIR 66 (400-1010 nm) + SWIR 174 (920-2505 nm), ~10 nm; PAN 5 m",
+   "data_access": "https://prisma.asi.it",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/prisma-hyperspectral",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.asi.it/en/earth-science/prisma/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.asi.it/en/earth-science/prisma/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/prisma-hyperspectral",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "lat_limits",
+     "url": "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.asi.it/en/earth-science/prisma/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/prisma-hyperspectral",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.asi.it/wp-content/uploads/2025/06/Sacco_ASI_PRISMA.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=44072&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "status",
+    "swath.max_offnadir_deg"
+   ],
+   "verified": false
+  },
+  {
+   "id": "SPOT6_NAOMI",
+   "platform": "SPOT 6",
+   "short": "SPOT6",
+   "object_name": "SPOT 6",
+   "norad_id": 38755,
+   "cospar_id": "2012-047A",
+   "instrument": "NAOMI",
+   "agency": "Airbus Defence and Space",
+   "launch": "2012-09-09",
+   "categories": [
+    "optical_vhr"
+   ],
+   "tags": [
+    "commercial"
+   ],
+   "status": "active",
+   "status_note": "Beyond 10-year design life; eoPortal 'Operational (extended)'; WMO OSCAR (2 Feb 2026) operational, EOL >=2026. Only SPOT satellite still operating (SPOT 7 lost Mar 2023).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking via Airbus.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 60,
+    "max_offnadir_deg": 30
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 694,
+    "inclination_deg": 98.2
+   },
+   "resolution_m": {
+    "min": 2,
+    "max": 8
+   },
+   "spectral": "PAN + 4 MS (blue, green, red, NIR); 2 m PAN / 8 m MS native, 1.5 m products",
+   "data_access": "https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://earth.esa.int/eogateway/missions/spot-6/description",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/spot_6",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=38755&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "SPOT7_NAOMI",
+   "platform": "SPOT 7 (Azersky)",
+   "short": "SPOT7",
+   "object_name": "SPOT 7",
+   "norad_id": 40053,
+   "cospar_id": "2014-034A",
+   "instrument": "NAOMI",
+   "agency": "Azercosmos (ex-Airbus Defence and Space)",
+   "launch": "2014-06-30",
+   "categories": [
+    "optical_vhr"
+   ],
+   "tags": [
+    "commercial"
+   ],
+   "status": "inactive",
+   "status_note": "Failed 17 Mar 2023 (loss of communication); Azercosmos acknowledged the loss. Object still in orbit (current CelesTrak GP data).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 60,
+    "max_offnadir_deg": 30
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 694,
+    "inclination_deg": 98.2,
+    "ltdn": "10:00",
+    "repeat_days": 26
+   },
+   "resolution_m": {
+    "min": 2,
+    "max": 8
+   },
+   "spectral": "PAN + 4 MS (blue, green, red, NIR)",
+   "data_access": "https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://earth.esa.int/eogateway/missions/spot-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.spaceintelreport.com/azerbaijan-acknowledges-azersky-spot-7-loss-appears-to-have-selected-israels-iai-for-2-satellite-120m-successor/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://earth.esa.int/eogateway/missions/spot-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/spot-6-7",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=40053&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "launch"
+   ],
+   "verified": true
+  },
+  {
+   "id": "PHR1A_OPT",
+   "platform": "Pléiades 1A",
+   "short": "PHR1A",
+   "object_name": "PLEIADES 1A",
+   "norad_id": 38012,
+   "cospar_id": "2011-076F",
+   "instrument": "Optical imager (PAN + 4 MS)",
+   "agency": "CNES / Airbus Defence and Space",
+   "launch": "2011-12-17",
+   "categories": [
+    "optical_vhr"
+   ],
+   "tags": [
+    "commercial"
+   ],
+   "status": "active",
+   "status_note": "Operations extended by CNES/Airbus to 31 Dec 2028 (decision Sep 2025); 'still fully operational'.",
+   "note_expires": "2028-12-31",
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking via Airbus.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 20,
+    "max_offnadir_deg": 47
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 694,
+    "inclination_deg": 98.2,
+    "ltdn": "10:30",
+    "repeat_days": 26
+   },
+   "resolution_m": {
+    "min": 0.7,
+    "max": 2.8
+   },
+   "spectral": "PAN 480-820 nm + MS blue, green, red, NIR (450-915 nm); 0.7 m PAN / 2.8 m MS native, 0.5 m resampled",
+   "data_access": "https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cnes.fr/en/press-releases/airbus-cnes-continue-pleiades-mission-end-2028",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/pleiades_1a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=38012&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.max_offnadir_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "PHR1B_OPT",
+   "platform": "Pléiades 1B",
+   "short": "PHR1B",
+   "object_name": "PLEIADES 1B",
+   "norad_id": 39019,
+   "cospar_id": "2012-068A",
+   "instrument": "Optical imager (PAN + 4 MS)",
+   "agency": "CNES / Airbus Defence and Space",
+   "launch": "2012-12-02",
+   "categories": [
+    "optical_vhr"
+   ],
+   "tags": [
+    "commercial"
+   ],
+   "status": "active",
+   "status_note": "Operations extended by CNES/Airbus to 31 Dec 2028 (decision Sep 2025); 'still fully operational'.",
+   "note_expires": "2028-12-31",
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking via Airbus.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 20,
+    "max_offnadir_deg": 47
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 694,
+    "inclination_deg": 98.2,
+    "ltdn": "10:30",
+    "repeat_days": 26
+   },
+   "resolution_m": {
+    "min": 0.7,
+    "max": 2.8
+   },
+   "spectral": "PAN 480-820 nm + MS blue, green, red, NIR (450-915 nm); 0.7 m PAN / 2.8 m MS native, 0.5 m resampled",
+   "data_access": "https://www.airbus.com/en/products-services/space/earth-observation/satellite-imagery",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cnes.fr/en/press-releases/airbus-cnes-continue-pleiades-mission-end-2028",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cnes.fr/en/projects/pleiades",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/pleiades_1b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39019&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.max_offnadir_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "PNEO3_OPT",
+   "platform": "Pléiades Neo 3",
+   "short": "PNEO3",
+   "object_name": "PLEIADES NEO 3",
+   "norad_id": 48268,
+   "cospar_id": "2021-034A",
+   "instrument": "Optical imager (PAN + 6 MS)",
+   "agency": "Airbus Defence and Space",
+   "launch": "2021-04-29",
+   "categories": [
+    "optical_vhr"
+   ],
+   "tags": [
+    "commercial",
+    "red_edge"
+   ],
+   "status": "active",
+   "status_note": "Constellation of two satellites (Neo 5/6 lost at launch on Vega C, Dec 2022).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking via Airbus.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 14,
+    "max_offnadir_deg": 52
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 620,
+    "inclination_deg": 97.9,
+    "ltdn": "10:30"
+   },
+   "resolution_m": {
+    "min": 0.3,
+    "max": 1.2
+   },
+   "spectral": "PAN 450-800 nm + MS deep blue, blue, green, red, red edge, NIR (400-880 nm)",
+   "data_access": "https://space-solutions.airbus.com/imagery/our-optical-and-radar-satellite-imagery/pleiades-neo/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space-solutions.airbus.com/imagery/our-optical-and-radar-satellite-imagery/pleiades-neo/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=48268&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "PNEO4_OPT",
+   "platform": "Pléiades Neo 4",
+   "short": "PNEO4",
+   "object_name": "PLEIADES NEO 4",
+   "norad_id": 49070,
+   "cospar_id": "2021-073E",
+   "instrument": "Optical imager (PAN + 6 MS)",
+   "agency": "Airbus Defence and Space",
+   "launch": "2021-08-17",
+   "categories": [
+    "optical_vhr"
+   ],
+   "tags": [
+    "commercial",
+    "red_edge"
+   ],
+   "status": "active",
+   "status_note": "Constellation of two satellites (Neo 5/6 lost at launch on Vega C, Dec 2022).",
+   "note_expires": null,
+   "acquisition": "tasked",
+   "acquisition_note": "Commercial tasking via Airbus.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "field_of_regard",
+    "width_km": 14,
+    "max_offnadir_deg": 52
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 620,
+    "inclination_deg": 97.9,
+    "ltdn": "10:30"
+   },
+   "resolution_m": {
+    "min": 0.3,
+    "max": 1.2
+   },
+   "spectral": "PAN 450-800 nm + MS deep blue, blue, green, red, red edge, NIR (400-880 nm)",
+   "data_access": "https://space-solutions.airbus.com/imagery/our-optical-and-radar-satellite-imagery/pleiades-neo/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space-solutions.airbus.com/imagery/our-optical-and-radar-satellite-imagery/pleiades-neo/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/pleiades-neo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=49070&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "ICESAT2_ATLAS",
+   "platform": "ICESat-2",
+   "short": "IS2",
+   "object_name": "ICESAT-2",
+   "norad_id": 43613,
+   "cospar_id": "2018-070A",
+   "instrument": "ATLAS",
+   "agency": "NASA",
+   "launch": "2018-09-15",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "profile",
+   "acquisition_note": "Six beams in three strong/weak pairs; pair tracks ~3.3 km apart, beams within a pair ~90 m apart. Pointing follows per-91-day-cycle pointing plans (reference ground tracks over the ice sheets, plus off-pointing campaigns, e.g. Cycle 33, 12 Sep - 12 Dec 2026: land-ice off-pointing for RGTs 1-598 until 21 Oct 2026), so actual beam tracks can be offset from the TLE-predicted nadir. Laser profiling works day and night.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "profile",
+    "beams_cross_track_km": [
+     -3.3,
+     0.0,
+     3.3
+    ],
+    "footprint_m": 11
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 500,
+    "inclination_deg": 92,
+    "repeat_days": 91
+   },
+   "resolution_m": {
+    "min": 11,
+    "max": 11
+   },
+   "spectral": "Photon-counting laser altimeter (532 nm)",
+   "data_access": "https://nsidc.org/data/icesat-2",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://tos.org/oceanography/article/the-icesat-2-mission-and-polar-sea-ice",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://nsidc.org/sites/default/files/atl06-v005-userguide_1_0.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://icesat-2.gsfc.nasa.gov/science/specs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://icesat-2.gsfc.nasa.gov/science/specs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://icesat-2.gsfc.nasa.gov/science/specs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/icesat_2",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://icesat-2.gsfc.nasa.gov/science/specs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43613&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "spectral"
+   ],
+   "verified": true
+  },
+  {
+   "id": "ISS_GEDI",
+   "platform": "ISS",
+   "short": "GEDI",
+   "object_name": "ISS (ZARYA)",
+   "norad_id": 25544,
+   "cospar_id": "1998-067A",
+   "instrument": "GEDI",
+   "agency": "NASA / University of Maryland",
+   "launch": "2018-12-05",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Status unclear for Nov 2026. Re-installed at its original ISS location in Apr 2024 after storage (17 Mar 2023 - Apr 2024); NASA Earthdata instrument page says 'Operational' and CEOS lists 'Operational (extended)', EOL Sep 2029. But the latest released acquisitions end on 10 Jul 2025 (V3 release notice, updated 22 Oct 2026) and no source says whether collection continued after that date. Outcome of NASA's 2026 Earth Science Senior Review for GEDI not found.",
+   "note_expires": null,
+   "acquisition": "profile",
+   "acquisition_note": "Three lasers produce 8 ground tracks spaced ~600 m across-track (~4.2 km total), footprints every 60 m along-track; the track offsets here are derived from that spacing. The instrument can be pointed up to ~40 km either side of the ISS ground track, so actual tracks may be offset. Coverage limited to 51.6N-51.6S.",
+   "pass_filter": "any",
+   "lat_limits": [
+    -51.6,
+    51.6
+   ],
+   "swath": {
+    "model": "profile",
+    "beams_cross_track_km": [
+     -2.1,
+     -1.5,
+     -0.9,
+     -0.3,
+     0.3,
+     0.9,
+     1.5,
+     2.1
+    ],
+    "footprint_m": 25
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 407,
+    "inclination_deg": 51.6
+   },
+   "resolution_m": {
+    "min": 25,
+    "max": 25
+   },
+   "spectral": "Full-waveform laser altimeter (1064 nm)",
+   "data_access": "https://www.earthdata.nasa.gov/data/projects/gedi",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://gedi.umd.edu/instrument/specifications/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.earthdata.nasa.gov/data/instruments/gedi-lidar",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "lat_limits",
+     "url": "https://gedi.umd.edu/instrument/specifications/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://gedi.umd.edu/instrument/specifications/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/iss_gedi",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/instruments/gedi-lidar",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/gedi-version-3-data-products-released",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://database.eohandbook.com/database/missionsummary.aspx?missionID=766",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "status",
+    "spectral"
+   ],
+   "verified": false
+  },
+  {
+   "id": "SWOT_KARIN",
+   "platform": "SWOT",
+   "short": "SWOT",
+   "object_name": "SWOT",
+   "norad_id": 54754,
+   "cospar_id": "2022-173A",
+   "instrument": "KaRIn",
+   "agency": "NASA / CNES",
+   "launch": "2022-12-16",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "water",
+    "ocean",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operational in the 21-day repeat science orbit (OSCAR, updated Apr 2026).",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Ka-band radar interferometer: two parallel swaths (~50 km each) either side of a ~20 km nadir gap; the gap is covered only by the separate nadir altimeter. Day and night, all weather.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 120,
+    "gap_km": 20
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 891,
+    "inclination_deg": 78,
+    "repeat_days": 21
+   },
+   "resolution_m": {
+    "min": 50,
+    "max": 1000
+   },
+   "spectral": "Ka-band SAR interferometer",
+   "data_access": "https://podaac.jpl.nasa.gov/SWOT",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://swot.jpl.nasa.gov/flight_systems.htm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/swot",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/swot",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/karin",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=54754&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S6MF_POSEIDON4",
+   "platform": "Sentinel-6 Michael Freilich",
+   "short": "S6MF",
+   "object_name": "SENTINEL-6A",
+   "norad_id": 46984,
+   "cospar_id": "2020-086A",
+   "instrument": "Poseidon-4",
+   "agency": "EUMETSAT / ESA / NASA / NOAA / European Commission (CNES support)",
+   "launch": "2020-11-21",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "ocean",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Current reference altimetry mission. Sentinel-6B (launched 17 Nov 2025) flies in tandem ~30 s behind for cross-calibration and will take over the reference role; Sentinel-6 MF is then planned to move its ground track to interleave with Sentinel-6B. Date of that move not confirmed as of Nov 2026 (TLE-based prediction stays valid, but the repeat ground track will change).",
+   "note_expires": null,
+   "acquisition": "profile",
+   "acquisition_note": "Nadir-only radar altimeter, no imaging swath. footprint_m is the SAR-mode along-track resolution (~300 m); the cross-track pulse-limited footprint is much larger (km scale). Day and night, all weather.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "profile",
+    "beams_cross_track_km": [
+     0
+    ],
+    "footprint_m": 300
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 1336,
+    "inclination_deg": 66
+   },
+   "spectral": "Ku/C-band SAR radar altimeter",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/poseidon_4",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/sentinel_6a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/sentinel-6",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/eumetsat-takes-control-copernicus-sentinel-6b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/sentinel_6a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=46984&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.footprint_m",
+    "spectral"
+   ],
+   "verified": true
+  },
+  {
+   "id": "CS2_SIRAL",
+   "platform": "CryoSat-2",
+   "short": "CS2",
+   "object_name": "CRYOSAT 2",
+   "norad_id": 36508,
+   "cospar_id": "2010-013A",
+   "instrument": "SIRAL",
+   "agency": "ESA",
+   "launch": "2010-04-08",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "ocean",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operating in extended mission (ESA operational news May 2026). ESA mission page still says 'extended to 2025'; OSCAR (Jan 2026): extension to 2028 proposed; CPOM: extended until 2028.",
+   "note_expires": null,
+   "acquisition": "profile",
+   "acquisition_note": "Nadir-only radar altimeter; LRM, SAR and SARIn modes selected by target area (geographical mode mask). footprint_m is the SAR-mode along-track resolution (~250 m); the cross-track footprint is km scale. Orbit drifts through all local times. Day and night.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "profile",
+    "beams_cross_track_km": [
+     0
+    ],
+    "footprint_m": 250
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 717,
+    "inclination_deg": 92,
+    "repeat_days": 369
+   },
+   "spectral": "Ku-band SAR/interferometric radar altimeter",
+   "data_access": "https://earth.esa.int/eogateway/missions/cryosat",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/siral",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://earth.esa.int/eogateway/missions/cryosat",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://earth.esa.int/eogateway/missions/cryosat",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/cryosat_2",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://cpom.org.uk/cryosat/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://space.oscar.wmo.int/satellites/view/cryosat_2",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=36508&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.footprint_m",
+    "spectral"
+   ],
+   "verified": true
+  },
+  {
+   "id": "S3A_SRAL",
+   "platform": "Sentinel-3A",
+   "short": "S3A",
+   "object_name": "SENTINEL-3A",
+   "norad_id": 41335,
+   "cospar_id": "2016-011A",
+   "instrument": "SRAL",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2016-02-16",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "ocean",
+    "water",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Sentinel-3C was launched on 15 Sep 2026; it will initially operate alongside Sentinel-3A/3B and eventually take over from Sentinel-3A (date not stated).",
+   "note_expires": null,
+   "acquisition": "profile",
+   "acquisition_note": "Nadir-only radar altimeter with no swath: one range measurement across-track per pulse. Operates 100% in SAR mode (~300 m along-track resolution, used as footprint_m). Day and night.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "profile",
+    "beams_cross_track_km": [
+     0
+    ],
+    "footprint_m": 300
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814.5,
+    "inclination_deg": 98.65,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "spectral": "Ku/C-band SAR radar altimeter",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/sentinel_3a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=41335&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.footprint_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "S3B_SRAL",
+   "platform": "Sentinel-3B",
+   "short": "S3B",
+   "object_name": "SENTINEL-3B",
+   "norad_id": 43437,
+   "cospar_id": "2018-039A",
+   "instrument": "SRAL",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2018-04-25",
+   "categories": [
+    "lidar_altimetry"
+   ],
+   "tags": [
+    "ocean",
+    "water",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "profile",
+   "acquisition_note": "Nadir-only radar altimeter with no swath: one range measurement across-track per pulse. Operates 100% in SAR mode (~300 m along-track resolution, used as footprint_m). Day and night.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "profile",
+    "beams_cross_track_km": [
+     0
+    ],
+    "footprint_m": 300
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814.5,
+    "inclination_deg": 98.65,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "spectral": "Ku/C-band SAR radar altimeter",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/sentinel_3b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43437&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.footprint_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "METOPB_AVHRR",
+   "platform": "Metop-B",
+   "short": "MetB",
+   "object_name": "METOP-B",
+   "norad_id": 38771,
+   "cospar_id": "2012-049A",
+   "instrument": "AVHRR/3",
+   "agency": "EUMETSAT / ESA (instrument NOAA)",
+   "launch": "2012-09-17",
+   "categories": [
+    "meteo_polar",
+    "thermal"
+   ],
+   "tags": [
+    "thermal",
+    "swir"
+   ],
+   "status": "degraded",
+   "status_note": "Metop-B is still operational (EUMETSAT, updated 5 Nov 2026), but AVHRR/3 near-visible channels 1, 2 and 3A have been degraded since July 2023 and are all out of SNR specification (OSCAR).",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global, continuous. IR channels image day and night; visible/NIR channels only on daylit (descending, ~09:00 LT) passes.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2900
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 830,
+    "ltdn": "09:00"
+   },
+   "resolution_m": {
+    "min": 1100,
+    "max": 1100
+   },
+   "spectral": "6 channels: 0.63, 0.86, 1.61, 3.74, 10.8, 12.0 um",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/avhrr_3",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/our-satellites/metop-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/avhrr_3",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/avhrr_3",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=38771&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "METOPC_AVHRR",
+   "platform": "Metop-C",
+   "short": "MetC",
+   "object_name": "METOP-C",
+   "norad_id": 43689,
+   "cospar_id": "2018-087A",
+   "instrument": "AVHRR/3",
+   "agency": "EUMETSAT / ESA (instrument NOAA)",
+   "launch": "2018-11-07",
+   "categories": [
+    "meteo_polar",
+    "thermal"
+   ],
+   "tags": [
+    "thermal",
+    "swir"
+   ],
+   "status": "active",
+   "status_note": "",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global, continuous. IR channels image day and night; visible/NIR channels only on daylit (descending, ~09:30 LT) passes.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2900
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 827,
+    "ltdn": "09:31"
+   },
+   "resolution_m": {
+    "min": 1100,
+    "max": 1100
+   },
+   "spectral": "6 channels: 0.63, 0.86, 1.61, 3.74, 10.8, 12.0 um",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/avhrr_3",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_c",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/our-satellites/metop-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_c",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/avhrr_3",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/avhrr_3",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43689&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "METOPSGA1_METIMAGE",
+   "platform": "Metop-SG-A1",
+   "short": "SGA1",
+   "object_name": "METOP-SGA1",
+   "norad_id": 65159,
+   "cospar_id": "2025-172A",
+   "instrument": "METimage",
+   "agency": "EUMETSAT / ESA (instrument DLR)",
+   "launch": "2025-08-13",
+   "categories": [
+    "meteo_polar",
+    "thermal"
+   ],
+   "tags": [
+    "thermal",
+    "swir"
+   ],
+   "status": "commissioning",
+   "status_note": "Metop-SGA1 is still in commissioning (EUMETSAT, updated 5 Nov 2026). METimage level-1 processor released to direct-broadcast users on 2 Sep 2026 (patch 5 Oct 2026); NWP SAF expects all instruments to finish commissioning ~18 months after launch (early 2027). Data not yet operational.",
+   "note_expires": "2027-02-13",
+   "acquisition": "systematic",
+   "acquisition_note": "Global, continuous whisk-broom imager (+/-54 deg). IR channels image day and night; reflective channels only on daylit (descending, ~09:30 LT) passes.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2670
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 835,
+    "ltdn": "09:30"
+   },
+   "resolution_m": {
+    "min": 500,
+    "max": 500
+   },
+   "spectral": "20 channels, 443 nm - 13.345 um",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/metimage",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_sg_a1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/our-satellites/metop-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://nwp-saf.eumetsat.int/site/software/metop-sg-direct-broadcast-software/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_sg_a1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/metimage",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/metimage",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=65159&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "SNPP_VIIRS",
+   "platform": "Suomi-NPP",
+   "short": "SNPP",
+   "object_name": "SUOMI NPP",
+   "norad_id": 37849,
+   "cospar_id": "2011-061A",
+   "instrument": "VIIRS",
+   "agency": "NOAA / NASA",
+   "launch": "2011-10-28",
+   "categories": [
+    "meteo_polar",
+    "thermal"
+   ],
+   "tags": [
+    "day_night",
+    "thermal",
+    "swir",
+    "open_data"
+   ],
+   "status": "inactive",
+   "status_note": "NOAA permanently ceased delivery of all S-NPP science data (VIIRS, ATMS, CERES, OMPS) on 2 Nov 2026 (ended 15:40 UTC per NASA Earthdata) and disabled direct broadcast; users told to move to NOAA-21/NOAA-20. OSCAR marks the satellite inactive (VIIRS EOL 1 Nov 2026). The spacecraft still has current GP data on CelesTrak.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global, continuous. The Day/Night Band (0.5-0.9 um) and the IR bands image at night, so both the daytime ascending (~13:30 LT) and night-time descending passes are useful; reflective bands only by day. No new data after 2 Nov 2026.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 3000
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 824,
+    "ltan": "13:25"
+   },
+   "resolution_m": {
+    "min": 375,
+    "max": 750
+   },
+   "spectral": "22 bands 0.41-12.0 um incl. Day/Night Band",
+   "data_access": "https://www.earthdata.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://www.nesdis.noaa.gov/news/cessation-of-suomi-national-polar-orbiting-partnership-s-npp-data-users-onafter-november-2-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.earthdata.nasa.gov/data/alerts-outages/reminder-new-suomi-npp-observations-cease-november-2-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/snpp",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/snpp",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=37849&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "N20_VIIRS",
+   "platform": "NOAA-20",
+   "short": "N20",
+   "object_name": "NOAA 20 (JPSS-1)",
+   "norad_id": 43013,
+   "cospar_id": "2017-073A",
+   "instrument": "VIIRS",
+   "agency": "NOAA / NASA",
+   "launch": "2017-11-18",
+   "categories": [
+    "meteo_polar",
+    "thermal"
+   ],
+   "tags": [
+    "day_night",
+    "thermal",
+    "swir",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Secondary JPSS afternoon satellite (NOAA-21 is primary).",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global, continuous. The Day/Night Band (0.5-0.9 um) and the IR bands image at night, so both the daytime ascending (~13:30 LT) and night-time descending passes are useful; reflective bands only by day.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 3000
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 824,
+    "ltan": "13:30"
+   },
+   "resolution_m": {
+    "min": 375,
+    "max": 750
+   },
+   "spectral": "22 bands 0.41-12.0 um incl. Day/Night Band",
+   "data_access": "https://www.earthdata.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/noaa_20",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/noaa_20",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.nesdis.noaa.gov/news/cessation-of-suomi-national-polar-orbiting-partnership-s-npp-data-users-onafter-november-2-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43013&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "N21_VIIRS",
+   "platform": "NOAA-21",
+   "short": "N21",
+   "object_name": "NOAA 21 (JPSS-2)",
+   "norad_id": 54234,
+   "cospar_id": "2022-150A",
+   "instrument": "VIIRS",
+   "agency": "NOAA / NASA",
+   "launch": "2022-11-10",
+   "categories": [
+    "meteo_polar",
+    "thermal"
+   ],
+   "tags": [
+    "day_night",
+    "thermal",
+    "swir",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Primary JPSS afternoon satellite.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Global, continuous. The Day/Night Band (0.5-0.9 um) and the IR bands image at night, so both the daytime ascending (~13:30 LT) and night-time descending passes are useful; reflective bands only by day.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 3000
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 824,
+    "ltan": "13:30"
+   },
+   "resolution_m": {
+    "min": 375,
+    "max": 750
+   },
+   "spectral": "22 bands 0.41-12.0 um incl. Day/Night Band",
+   "data_access": "https://www.earthdata.nasa.gov/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/noaa_21",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/noaa_21",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.nesdis.noaa.gov/news/cessation-of-suomi-national-polar-orbiting-partnership-s-npp-data-users-onafter-november-2-2026",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/viirs",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=54234&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "S5P_TROPOMI",
+   "platform": "Sentinel-5P",
+   "short": "S5P",
+   "object_name": "SENTINEL-5P",
+   "norad_id": 42969,
+   "cospar_id": "2017-064A",
+   "instrument": "TROPOMI",
+   "agency": "ESA / European Commission / Netherlands",
+   "launch": "2017-10-13",
+   "categories": [
+    "atmosphere"
+   ],
+   "tags": [
+    "atmosphere",
+    "swir",
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Satellite and TROPOMI performing well; operations secured until end of 2027, extension under discussion. Loose formation with Suomi-NPP ends by Q4 2026 (ESA, May 2026).",
+   "note_expires": "2027-12-31",
+   "acquisition": "systematic",
+   "acquisition_note": "Daylight measurements only (UV-VIS-NIR-SWIR spectrometer); full daily coverage poleward of 7 deg latitude, >95% between 7S and 7N.",
+   "pass_filter": "day_ascending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2600
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 824,
+    "ltan": "13:30",
+    "repeat_days": 16
+   },
+   "resolution_m": {
+    "min": 5500,
+    "max": 7000
+   },
+   "spectral": "UV-VIS (270-495 nm), NIR (710-775 nm), SWIR (2305-2385 nm)",
+   "data_access": "https://dataspace.copernicus.eu/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://sentiwiki.copernicus.eu/web/s5p-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://sentiwiki.copernicus.eu/web/s5p-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://sentiwiki.copernicus.eu/web/s5p-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://ceos.org/document_management/Virtual_Constellations/AC-VC/Meetings/AC-VC-22/Presentations/AC-VC_3.3_Hummel_V1.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/sentinel_5p",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/tropomi",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=42969&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "resolution_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "METOPSGA1_S5",
+   "platform": "Metop-SG-A1",
+   "short": "SGA1S5",
+   "object_name": "METOP-SGA1",
+   "norad_id": 65159,
+   "cospar_id": "2025-172A",
+   "instrument": "Sentinel-5 (UVNS)",
+   "agency": "ESA / EUMETSAT / European Commission",
+   "launch": "2025-08-13",
+   "categories": [
+    "atmosphere"
+   ],
+   "tags": [
+    "atmosphere",
+    "swir",
+    "open_data"
+   ],
+   "status": "commissioning",
+   "status_note": "Metop-SGA1 still in commissioning (EUMETSAT, 5 Nov 2026). EUMETSAT plan (May 2026): ESA-to-EUMETSAT handover from Aug 2026, L1 and first L2 products late summer 2026, remaining L2 in Q4 2026, SWIR products (CO, CH4) possibly later. Actual product release status in Nov 2026 not confirmed.",
+   "note_expires": "2027-02-13",
+   "acquisition": "systematic",
+   "acquisition_note": "Daylight measurements only (UV-VIS-NIR-SWIR spectrometer), descending morning orbit (~09:30 LT).",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 2670
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 835,
+    "ltdn": "09:30"
+   },
+   "resolution_m": {
+    "min": 7500,
+    "max": 50000
+   },
+   "spectral": "UV1 270-310, UV2 300-370, VIS 370-500, NIR 685-773, SWIR 1595-1675 and 2305-2385 nm",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://ceos.org/document_management/Virtual_Constellations/AC-VC/Meetings/AC-VC-22/Presentations/AC-VC_3.12_Lindstrot_v1.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/sentinel_5",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/metop_sg_a1",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/our-satellites/metop-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://ceos.org/document_management/Virtual_Constellations/AC-VC/Meetings/AC-VC-22/Presentations/AC-VC_3.12_Lindstrot_v1.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/sentinel_5",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://space.oscar.wmo.int/instruments/view/sentinel_5",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=65159&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "MET12_FCI",
+   "platform": "Meteosat-12 (MTG-I1)",
+   "short": "MET12",
+   "object_name": "METEOSAT-12 (MTG-I1)",
+   "norad_id": 54743,
+   "cospar_id": "2022-170C",
+   "instrument": "FCI",
+   "agency": "EUMETSAT / ESA / European Commission",
+   "launch": "2022-12-13",
+   "categories": [
+    "meteo_geo"
+   ],
+   "tags": [
+    "thermal",
+    "swir"
+   ],
+   "status": "active",
+   "status_note": "Prime operational satellite at 0 deg (full disc every 10 min) since June 2025; Meteosat-10 runs in parallel at 0 deg until ~Q2 2027. The 2.5-min rapid scan over Europe is to come from MTG-I2 (launched 27 Aug 2026, in commissioning; EUMETSAT: 'from end 2026'). EUMETSAT reports loss of the FCI on-board calibration source, mitigated with IASI-referenced IR calibration.",
+   "note_expires": null,
+   "acquisition": "continuous_geo",
+   "acquisition_note": "Full disc (Europe, Africa, Atlantic) every 10 min, day and night (IR); reflective channels by day only.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "continuous_geo",
+    "sub_lon": 0.0,
+    "repeat_min": 10,
+    "max_view_zenith_deg": 70,
+    "rapid_scan_note": "No rapid scan from Meteosat-12. Europe RSS (2.5 min) planned from MTG-I2 from end 2026; the MSG 5-min RSS continues from Meteosat-11 at 9.5E."
+   },
+   "orbit": {
+    "type": "geo"
+   },
+   "resolution_m": {
+    "min": 500,
+    "max": 2000
+   },
+   "spectral": "16 channels 0.44-13.3 um",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://www.eumetsat.int/our-satellites/meteosat-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/fci",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/our-satellites/meteosat-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/meteosat_12",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www-cdn.eumetsat.int/files/2026-05/1-%20MTG%20Africa%20satellites%20and%20services%20Sally_PDF.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://space.oscar.wmo.int/instruments/view/fci",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www-cdn.eumetsat.int/files/2026-05/1-%20MTG%20Africa%20satellites%20and%20services%20Sally_PDF.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=54743&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.max_view_zenith_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "MET10_SEVIRI",
+   "platform": "Meteosat-10",
+   "short": "MET10",
+   "object_name": "METEOSAT-10 (MSG-3)",
+   "norad_id": 38552,
+   "cospar_id": "2012-035B",
+   "instrument": "SEVIRI",
+   "agency": "EUMETSAT / ESA",
+   "launch": "2012-07-05",
+   "categories": [
+    "meteo_geo"
+   ],
+   "tags": [
+    "thermal",
+    "swir"
+   ],
+   "status": "active",
+   "status_note": "At 0 deg providing the MSG 0-deg full-disc SEVIRI service (15 min) in parallel with Meteosat-12 (prime) until ~Q2 2027, then backup to Meteosat-12 (OSCAR). Temporary mission swap with Meteosat-11 on 24-28 Apr 2026; nominal 0-deg service from Meteosat-10 resumed 28 Apr 2026. CelesTrak GP data show ~5.0 deg inclination, so the sub-satellite point oscillates N-S by about +/-5 deg daily.",
+   "note_expires": null,
+   "acquisition": "continuous_geo",
+   "acquisition_note": "Full disc every 15 min, day and night (IR); reflective channels by day only.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "continuous_geo",
+    "sub_lon": 0.0,
+    "repeat_min": 15,
+    "max_view_zenith_deg": 70
+   },
+   "orbit": {
+    "type": "geo"
+   },
+   "resolution_m": {
+    "min": 1000,
+    "max": 3000
+   },
+   "spectral": "12 channels (11 narrow-band 0.6-13.4 um + HRV)",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/satellites/view/meteosat_10",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.ospo.noaa.gov/data/messages/2026/04/MSG_20260428_1831.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eumetsat.int/meteosat-second-generation",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/meteosat_10",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.ospo.noaa.gov/data/messages/2026/04/MSG_20260428_1831.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/meteosat_12",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www-cdn.eumetsat.int/files/2026-05/1-%20MTG%20Africa%20satellites%20and%20services%20Sally_PDF.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www-cdn.eumetsat.int/files/2026-05/1-%20MTG%20Africa%20satellites%20and%20services%20Sally_PDF.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=38552&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.max_view_zenith_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "MET11_SEVIRI",
+   "platform": "Meteosat-11",
+   "short": "MET11",
+   "object_name": "METEOSAT-11 (MSG-4)",
+   "norad_id": 40732,
+   "cospar_id": "2015-034A",
+   "instrument": "SEVIRI",
+   "agency": "EUMETSAT / ESA",
+   "launch": "2015-07-15",
+   "categories": [
+    "meteo_geo"
+   ],
+   "tags": [
+    "thermal",
+    "swir"
+   ],
+   "status": "active",
+   "status_note": "At 9.5E providing the MSG Rapid Scanning Service (Europe and North Africa every 5 min) since 22 Mar 2023; also full-disc backup. Temporarily ran full-disc mode 24-28 Apr 2026; RSS from Meteosat-11 resumed 28 Apr 2026.",
+   "note_expires": null,
+   "acquisition": "continuous_geo",
+   "acquisition_note": "Rapid scan only: imaging limited to the northern part of the disc (Europe and North Africa); no full-disc images in nominal operations. IR day and night, reflective channels by day only.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "continuous_geo",
+    "sub_lon": 9.5,
+    "repeat_min": 5,
+    "max_view_zenith_deg": 70,
+    "rapid_scan_note": "Operates in RSS mode: repeat_min is the 5-min rapid-scan cycle over Europe/North Africa, not a full-disc repeat."
+   },
+   "orbit": {
+    "type": "geo"
+   },
+   "resolution_m": {
+    "min": 1000,
+    "max": 3000
+   },
+   "spectral": "12 channels (11 narrow-band 0.6-13.4 um + HRV)",
+   "data_access": "https://user.eumetsat.int/",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/satellites/view/meteosat_11",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eumetsat.int/our-satellites/meteosat-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.eumetsat.int/meteosat-second-generation",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://www.ospo.noaa.gov/data/messages/2026/04/MSG_20260428_1831.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eumetsat.int/our-satellites/meteosat-series",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/meteosat_11",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.ospo.noaa.gov/data/messages/2026/04/MSG_20260428_1831.html",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.eumetsat.int/meteosat-second-generation",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://www-cdn.eumetsat.int/files/2026-05/1-%20MTG%20Africa%20satellites%20and%20services%20Sally_PDF.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://www-cdn.eumetsat.int/files/2026-05/1-%20MTG%20Africa%20satellites%20and%20services%20Sally_PDF.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=40732&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "swath.max_view_zenith_deg"
+   ],
+   "verified": true
+  },
+  {
+   "id": "SWARMA",
+   "platform": "Swarm A",
+   "short": "SWA",
+   "object_name": "SWARM A",
+   "norad_id": 39452,
+   "cospar_id": "2013-067B",
+   "instrument": "Magnetometers (VFM/ASM), EFI, accelerometer",
+   "agency": "ESA",
+   "launch": "2013-11-22",
+   "categories": [
+    "geophysics"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operating in 2026 (ESA Level-2 operational processor update 8 Sep 2026). ESA mission page still says operations 'till 2025' and OSCAR gives EOL >=2026; a formal extension beyond 2025 was not found.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "In-situ magnetic and electric field measurements along the orbit; no imaging swath. Swarm A and C fly side by side (~1.4 deg longitude apart at the equator).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "track_only"
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 460,
+    "inclination_deg": 87.35
+   },
+   "data_access": "https://earth.esa.int/eogateway/missions/swarm",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/swarm_a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/swarm_a",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39452&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "SWARMB",
+   "platform": "Swarm B",
+   "short": "SWB",
+   "object_name": "SWARM B",
+   "norad_id": 39451,
+   "cospar_id": "2013-067A",
+   "instrument": "Magnetometers (VFM/ASM), EFI, accelerometer",
+   "agency": "ESA",
+   "launch": "2013-11-22",
+   "categories": [
+    "geophysics"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operating in 2026 (ESA Level-2 operational processor update 8 Sep 2026). ESA mission page still says operations 'till 2025' and OSCAR gives EOL >=2026; a formal extension beyond 2025 was not found. Higher orbit; its orbital plane drifts relative to Swarm A/C.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "In-situ magnetic and electric field measurements along the orbit; no imaging swath. Swarm A and C fly side by side (~1.4 deg longitude apart at the equator).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "track_only"
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 530,
+    "inclination_deg": 87.75
+   },
+   "data_access": "https://earth.esa.int/eogateway/missions/swarm",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/swarm_b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/swarm_b",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39451&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "SWARMC",
+   "platform": "Swarm C",
+   "short": "SWC",
+   "object_name": "SWARM C",
+   "norad_id": 39453,
+   "cospar_id": "2013-067C",
+   "instrument": "Magnetometers (VFM/ASM), EFI, accelerometer",
+   "agency": "ESA",
+   "launch": "2013-11-22",
+   "categories": [
+    "geophysics"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operating in 2026 (ESA Level-2 operational processor update 8 Sep 2026). ESA mission page still says operations 'till 2025' and OSCAR gives EOL >=2026; a formal extension beyond 2025 was not found. The absolute scalar magnetometer (ASM) on Swarm C has failed (OSCAR).",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "In-situ magnetic and electric field measurements along the orbit; no imaging swath. Swarm A and C fly side by side (~1.4 deg longitude apart at the equator).",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "track_only"
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 460,
+    "inclination_deg": 87.35
+   },
+   "data_access": "https://earth.esa.int/eogateway/missions/swarm",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/swarm_c",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/swarm_c",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://earth.esa.int/eogateway/missions/swarm",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=39453&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [],
+   "verified": true
+  },
+  {
+   "id": "GRACEFO_1",
+   "platform": "GRACE-FO 1",
+   "short": "GFO1",
+   "object_name": "GRACE-FO 1",
+   "norad_id": 43476,
+   "cospar_id": "2018-047A",
+   "instrument": "Microwave and laser ranging (KBR/LRI), accelerometer",
+   "agency": "NASA / DLR (GFZ)",
+   "launch": "2018-05-22",
+   "categories": [
+    "geophysics"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operational in extended mission (OSCAR, updated 9 Nov 2026; EOL >=2029). Outcome of NASA's 2026 Senior Review not found.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Gravity field from inter-satellite ranging between the two spacecraft (~220 km apart along-track); no imaging swath. Altitude given is nominal; the orbit decays over time.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "track_only"
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 500,
+    "inclination_deg": 89
+   },
+   "data_access": "https://podaac.jpl.nasa.gov/GRACE-FO",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/grace_c_grace_fo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://gracefo.jpl.nasa.gov/mission/overview/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/grace_c_grace_fo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://gracefo.jpl.nasa.gov/mission/overview/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43476&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "instrument"
+   ],
+   "verified": true
+  },
+  {
+   "id": "GRACEFO_2",
+   "platform": "GRACE-FO 2",
+   "short": "GFO2",
+   "object_name": "GRACE-FO 2",
+   "norad_id": 43477,
+   "cospar_id": "2018-047B",
+   "instrument": "Microwave and laser ranging (KBR/LRI), accelerometer",
+   "agency": "NASA / DLR (GFZ)",
+   "launch": "2018-05-22",
+   "categories": [
+    "geophysics"
+   ],
+   "tags": [
+    "open_data"
+   ],
+   "status": "active",
+   "status_note": "Operational in extended mission (OSCAR, updated 9 Nov 2026; EOL >=2029). Outcome of NASA's 2026 Senior Review not found.",
+   "note_expires": null,
+   "acquisition": "systematic",
+   "acquisition_note": "Gravity field from inter-satellite ranging between the two spacecraft (~220 km apart along-track); no imaging swath. Altitude given is nominal; the orbit decays over time.",
+   "pass_filter": "any",
+   "lat_limits": null,
+   "swath": {
+    "model": "track_only"
+   },
+   "orbit": {
+    "type": "non_sso",
+    "altitude_km": 500,
+    "inclination_deg": 89
+   },
+   "data_access": "https://podaac.jpl.nasa.gov/GRACE-FO",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "status",
+     "url": "https://space.oscar.wmo.int/satellites/view/grace_d_grace_fo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://gracefo.jpl.nasa.gov/mission/overview/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://space.oscar.wmo.int/satellites/view/grace_d_grace_fo",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://gracefo.jpl.nasa.gov/mission/overview/",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=43477&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "instrument"
+   ],
+   "verified": true
+  }
+ ]
 }

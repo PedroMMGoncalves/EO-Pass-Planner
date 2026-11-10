@@ -15,7 +15,8 @@ const fx = read('./fixtures/sgp4_skyfield.json');
 const catalogue = read('../data/catalogue.json');
 const tles = Object.fromEntries(fx.satellites.map((s) => [String(s.norad), { line1: s.line1, line2: s.line2, epoch: s.samples[0].utc }]));
 const START = fx.satellites[0].samples[0].utc;
-const entries = catalogue.entries.filter((e) => e.status === 'active');
+// Only the instruments whose TLEs are in the fixture (Landsat 8/9, Sentinel-2B/C).
+const entries = catalogue.entries.filter((e) => e.status === 'active' && tles[String(e.norad_id)] && e.swath.model === 'nadir_symmetric');
 const point = { type: 'Point', coordinates: [-7.971, 37.573] };
 const result = predictPasses({ entries, tles, roi: point, start: START, days: 16 });
 

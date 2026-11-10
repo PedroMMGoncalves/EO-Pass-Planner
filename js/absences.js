@@ -19,10 +19,16 @@
 
 import { t, formatDay, formatTime } from './i18n.js';
 
+/** Best pass; systematic/partial acquisitions are preferred over tasked opportunities. */
 export function bestPass(passes) {
+  const exp = passes.filter((p) => p.imaging_expected);
+  const firm = exp.filter((p) => !p.opportunity);
+  return pickBest(firm.length ? firm : exp);
+}
+
+function pickBest(passes) {
   let best = null;
   for (const p of passes) {
-    if (!p.imaging_expected) continue;
     if (!best || p.coverage_pct > best.coverage_pct + 1e-9
       || (Math.abs(p.coverage_pct - best.coverage_pct) <= 1e-9 && p.closest_utc < best.closest_utc)) best = p;
   }
@@ -36,9 +42,11 @@ export function answerSentence(result, { tz, days, isPoint }) {
   if (!best) return { main: t('answer_none', { days }), sub: t('answer_none_hint') };
   const when = formatDay(best.closest_utc, tz);
   const time = formatTime(best.closest_utc, tz);
-  const main = isPoint
-    ? t('answer_point', { sat: best.platform, when, time })
-    : t('answer_poly', { sat: best.platform, cov: Math.round(best.coverage_pct), when, time });
+  let main;
+  if (best.opportunity) main = t('answer_tasked', { sat: best.platform, when, time });
+  else if (best.model === 'profile') main = t('answer_profile', { sat: best.platform, km: Math.max(0, -best.edge_margin_km).toFixed(1), when, time });
+  else if (isPoint) main = t('answer_point', { sat: best.platform, when, time });
+  else main = t('answer_poly', { sat: best.platform, cov: Math.round(best.coverage_pct), when, time });
   const n = exp.length - 1;
   const sub = [
     n > 0 ? t(n === 1 ? 'answer_more_one' : 'answer_more_other', { n, days }) : '',
@@ -53,7 +61,7 @@ export function absences(result, entries, tz) {
   const out = [];
   for (const e of entries) {
     const r = result.per_entry[e.id];
-    if (!r || r.n_expected > 0) continue;
+    if (!r || r.n_expected > 0 || r.status === 'geo') continue;
     let text;
     if (r.status === 'unsupported_model') text = t('abs_unsupported');
     else if (r.status === 'no_tle') text = t('abs_no_tle');

@@ -23,6 +23,12 @@
   --surface: #F7F9FA;
   --warn: #B3261E;
   --optical: #1F7A8C;
+  --accent: #1F7A8C;
+  --row-hover: #EEF3F5;
+  --row-selected: #DCE8EC;
+  --label-bg: rgba(247, 249, 250, 0.85);
+  --imaging-glow: rgba(31, 122, 140, 0.25);
+  --on-ink: #F7F9FA;
 
   --r-control: 6px;
   --r-drawer: 12px;
@@ -39,6 +45,24 @@
   --display: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
 }
 
+/* Dark theme: Dracula palette (https://draculatheme.com/contribute, MIT). */
+[data-theme="dracula"] {
+  color-scheme: dark;
+  --paper: #282A36;
+  --ink: #F8F8F2;
+  --ink-soft: #C0C4D6;
+  --rule: #44475A;
+  --surface: #21222C;
+  --warn: #FF5555;
+  --optical: #8BE9FD;
+  --accent: #BD93F9;
+  --row-hover: #343746;
+  --row-selected: #44475A;
+  --label-bg: rgba(40, 42, 54, 0.85);
+  --imaging-glow: rgba(139, 233, 253, 0.3);
+  --on-ink: #282A36;
+}
+
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
@@ -50,14 +74,14 @@ h2, h3 { font-weight: 600; margin: 0 0 0.4rem; }
 h2 { font-size: var(--fs-16); }
 h3 { font-size: var(--fs-20); margin-top: 1.2rem; }
 a { color: var(--ink); }
-:focus-visible { outline: 3px solid var(--optical); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 [hidden] { display: none !important; }
 
 /* ---------- controls ---------- */
 button, input, select { font: inherit; color: inherit; }
 button { cursor: pointer; border-radius: var(--r-control); padding: 0.35rem 0.8rem; border: 1px solid var(--ink); }
 button:disabled { cursor: not-allowed; opacity: 0.45; }
-.primary { background: var(--ink); color: var(--surface); font-weight: 600; width: 100%; padding: 0.6rem; }
+.primary { background: var(--ink); color: var(--on-ink); font-weight: 600; width: 100%; padding: 0.6rem; }
 .secondary { background: var(--surface); }
 .quiet { background: transparent; border-color: var(--rule); }
 input[type="number"], input[type="datetime-local"], select {
@@ -91,7 +115,7 @@ label > span { display: block; font-size: var(--fs-13); color: var(--ink-soft); 
 .segmented button:first-child { border-radius: var(--r-control) 0 0 var(--r-control); }
 .segmented button:last-child { border-radius: 0 var(--r-control) var(--r-control) 0; }
 .segmented button + button { border-left: 0; }
-.segmented button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.segmented button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
 .row { display: flex; gap: 0.5rem; }
 details { border-top: 1px solid var(--rule); padding-top: 0.4rem; }
 details > summary { cursor: pointer; font-size: var(--fs-13); font-weight: 600; }
@@ -105,6 +129,12 @@ input[type="file"] { font-size: var(--fs-13); max-width: 100%; }
 .field { display: block; }
 .instruments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
 .instruments .check { align-items: center; }
+.instruments .group > details { border-top: 0; padding-top: 0; }
+.instruments .group > details > summary { display: flex; align-items: center; gap: 0.4rem; font-size: var(--fs-13); padding: 0.15rem 0; }
+.instruments .group > details > summary::marker { content: ''; }
+.instruments .group > details > summary::before { content: '▸'; width: 0.8em; color: var(--ink-soft); }
+.instruments .group > details[open] > summary::before { content: '▾'; }
+.instruments .instruments { padding-left: 1.3rem; margin: 0.25rem 0 0.5rem; }
 .check > .inst-text { display: flex; flex-direction: column; line-height: 1.25; }
 .inst-text .meta { color: var(--ink-soft); font-family: var(--dense); font-variant-numeric: tabular-nums; }
 
@@ -121,12 +151,12 @@ input[type="file"] { font-size: var(--fs-13); max-width: 100%; }
 
 /* satellite markers */
 .sat-marker { display: flex; align-items: center; gap: 4px; pointer-events: none; }
-.sat-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--ink); }
+.sat-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); }
 .sat-label {
   font: 600 var(--fs-13)/1 var(--dense); color: var(--ink);
-  background: rgba(247, 249, 250, 0.85); padding: 1px 4px; border-radius: 3px;
+  background: var(--label-bg); padding: 1px 4px; border-radius: 3px;
 }
-.sat-marker.is-imaging .sat-dot { box-shadow: 0 0 0 1px var(--ink), 0 0 0 5px rgba(31, 122, 140, 0.25); }
+.sat-marker.is-imaging .sat-dot { box-shadow: 0 0 0 1px var(--ink), 0 0 0 5px var(--imaging-glow); }
 
 /* ---------- tabs ---------- */
 .tabs { padding: 0 1.25rem 2rem; }
@@ -143,8 +173,8 @@ th[aria-sort="ascending"] button::after { content: ' ▲'; font-size: 0.7em; }
 th[aria-sort="descending"] button::after { content: ' ▼'; font-size: 0.7em; }
 .num { text-align: right; }
 tbody tr { cursor: pointer; }
-tbody tr:hover { background: #EEF3F5; }
-tbody tr.is-selected { background: #DCE8EC; box-shadow: inset 3px 0 0 var(--ink); }
+tbody tr:hover { background: var(--row-hover); }
+tbody tr.is-selected { background: var(--row-selected); box-shadow: inset 3px 0 0 var(--accent); }
 .absences { padding-left: 1.1rem; max-width: 72ch; }
 .absences li { margin-bottom: 0.4rem; }
 .prose { max-width: 72ch; }
@@ -153,6 +183,13 @@ tbody tr.is-selected { background: #DCE8EC; box-shadow: inset 3px 0 0 var(--ink)
 /* ---------- MapLibre controls in the house style ---------- */
 .maplibregl-ctrl-group { border-radius: var(--r-control) !important; }
 .maplibregl-ctrl-attrib { font-family: var(--dense); }
+[data-theme="dracula"] .maplibregl-ctrl-group { background: var(--surface); }
+[data-theme="dracula"] .maplibregl-ctrl-group button + button { border-top-color: var(--rule); }
+[data-theme="dracula"] .maplibregl-ctrl button .maplibregl-ctrl-icon { filter: invert(1); }
+[data-theme="dracula"] .maplibregl-ctrl-attrib, [data-theme="dracula"] .maplibregl-ctrl-attrib-button { background-color: var(--surface); color: var(--ink-soft); }
+[data-theme="dracula"] .maplibregl-ctrl-attrib a { color: var(--ink-soft); }
+[data-theme="dracula"] .maplibregl-ctrl-scale { background: var(--label-bg); color: var(--ink); border-color: var(--ink); }
+[data-theme="dracula"] .dot { border-color: rgba(248, 248, 242, 0.4); }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1199px) {

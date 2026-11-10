@@ -19,6 +19,7 @@
     </div>
     <div class="bar-tools">
       <span id="freshness" class="badge"></span>
+      <button id="theme" type="button" class="quiet" aria-pressed="false">Tema escuro</button>
       <button id="lang" type="button" class="quiet">English</button>
     </div>
   </header>
@@ -82,6 +83,7 @@
           </select>
         </label>
         <button id="now" type="button" class="secondary" data-i18n="time_now">Agora</button>
+        <label class="speed"><span data-i18n="basemap_label">Mapa de base</span><select id="basemap"></select></label>
         <output id="clock" class="clock"></output>
       </div>
     </main>
@@ -91,6 +93,7 @@
     <div role="tablist" class="tablist">
       <button role="tab" id="tab-table" aria-controls="panel-table" aria-selected="true" data-i18n="tab_table">Tabela</button>
       <button role="tab" id="tab-absences" aria-controls="panel-absences" aria-selected="false" tabindex="-1" data-i18n="tab_absences">Ausências</button>
+      <button role="tab" id="tab-geo" aria-controls="panel-geo" aria-selected="false" tabindex="-1" data-i18n="tab_geo">Geoestacionários</button>
       <button role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false" tabindex="-1" data-i18n="tab_about">Sobre e limitações</button>
     </div>
     <div role="tabpanel" id="panel-table" aria-labelledby="tab-table">
@@ -104,6 +107,10 @@
     </div>
     <div role="tabpanel" id="panel-absences" aria-labelledby="tab-absences" hidden>
       <ul id="absences" class="absences"></ul>
+    </div>
+    <div role="tabpanel" id="panel-geo" aria-labelledby="tab-geo" hidden>
+      <p class="hint" data-i18n="geo_hint"></p>
+      <ul id="geo-list" class="absences"></ul>
     </div>
     <div role="tabpanel" id="panel-about" aria-labelledby="tab-about" hidden class="prose"></div>
   </section>

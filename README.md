@@ -23,7 +23,14 @@ Work in progress.
   ETRS89/PT-TM06, UTM 28N/29N/32N/36S/37S or a proj4 definition; GeoJSON,
   KML, KMZ and zipped Shapefile upload; buffer; a shareable URL that
   reproduces the query.
-- [ ] Full catalogue, acquisition plans, weather, calendar, exports, documentation.
+- [x] Dark theme (Dracula palette) and basemaps: offline Natural Earth, Sentinel-2
+  cloudless 2024 (EOX), OpenStreetMap light/dark/detailed (OpenFreeMap).
+- [x] Catalogue of 63 instrument entries (58 not inactive) across optical, VHR,
+  hyperspectral, thermal, SAR, lidar/altimetry, meteorological, atmospheric and
+  geophysics missions, each with sources; swath models nadir_symmetric (with
+  optional nadir gap), side_looking, field_of_regard, profile, continuous_geo and
+  track_only.
+- [ ] Acquisition plans, weather, calendar, exports, documentation.
 
 ## Run locally
 
@@ -68,9 +75,10 @@ Other checks (in `tests/`):
 - SGP4 positions agree with Skyfield to within 5.8 m (TEME) up to 7 days from the TLE epoch.
 - Solar elevation agrees with Skyfield/DE421 to within 0.011°.
 
-Computation time for the 5 instruments over 16 days is 0.35–0.6 s per ROI
-(the Portugal polygon takes 0.6 s). This was measured in Node 22 on a laptop;
-the browser measurement will follow with the user interface.
+Computation time over 16 days, measured in Node 22 on a laptop: the 27 active
+systematic instruments over the mainland Portugal polygon take 3.4 s (the
+target is under 10 s); all 58 non-inactive entries take 6.4 s. In the browser
+(Edge, software rendering) the default selection for a point takes 2.6 s.
 
 ## Tests
 

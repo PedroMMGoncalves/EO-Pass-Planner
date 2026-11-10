@@ -16,7 +16,7 @@
 
 import * as sat from '../vendor/satellite.js';
 import { scanLine, geoInverse, wrap180 } from './geometry.js';
-import { crossTrackExtent } from './engine.js';
+import { swathIntervals, meanAltitudeKm } from './engine.js';
 import { solarElevation, subsolarPoint } from './sun.js';
 
 const DEG = 180 / Math.PI;
@@ -28,12 +28,18 @@ const TRACK_STEP_MS = 30000;
 const SWATH_HISTORY_MS = 4 * MIN;
 const SWATH_STEP_MS = 15000;
 
-/** Prepare satrecs once. Entries without a TLE or with an unsupported swath are skipped. */
+/**
+ * Prepare satrecs once. Entries without a TLE are skipped. Live swaths are
+ * drawn only for systematic/partial acquisition (not for tasked corridors,
+ * lidar beams, track proximity or geostationary imagers).
+ */
 export function makeTrackers(entries, tles) {
   return entries.flatMap((e) => {
     const tle = tles[String(e.norad_id)];
     if (!tle) return [];
-    return [{ entry: e, satrec: sat.twoline2satrec(tle.line1, tle.line2), extent: crossTrackExtent(e) }];
+    const satrec = sat.twoline2satrec(tle.line1, tle.line2);
+    const live = ['nadir_symmetric', 'side_looking'].includes(e.swath.model) && e.acquisition !== 'tasked';
+    return [{ entry: e, satrec, intervals: live ? swathIntervals(e, meanAltitudeKm(satrec)) : null }];
   });
 }
 
@@ -106,15 +112,17 @@ export function tracks(trackers, ms) {
 export function liveSwaths(trackers, ms) {
   const feats = [];
   for (const tr of trackers) {
-    if (!tr.extent) continue;
+    if (!tr.intervals) continue;
     let run = [];
     const flush = () => {
       if (run.length > 1) {
-        const left = run.map((l) => [l.left.lon, l.left.lat]);
-        const right = run.map((l) => [l.right.lon, l.right.lat]).reverse();
-        const ring = unwrap([...left, ...right]);
-        ring.push(ring[0]);
-        feats.push({ type: 'Feature', properties: { id: tr.entry.id }, geometry: { type: 'Polygon', coordinates: [ring] } });
+        for (let j = 0; j < tr.intervals.length; j++) {
+          const left = run.map((l) => [l[j].left.lon, l[j].left.lat]);
+          const right = run.map((l) => [l[j].right.lon, l[j].right.lat]).reverse();
+          const ring = unwrap([...left, ...right]);
+          ring.push(ring[0]);
+          feats.push({ type: 'Feature', properties: { id: tr.entry.id }, geometry: { type: 'Polygon', coordinates: [ring] } });
+        }
       }
       run = [];
     };
@@ -123,7 +131,7 @@ export function liveSwaths(trackers, ms) {
       const b = sub(tr.satrec, t + 1000);
       if (!a || !b || !isImaging(tr.entry, a, b, t)) { flush(); continue; }
       const h = geoInverse(a.lat, a.lon, b.lat, b.lon).azi1;
-      run.push(scanLine(a, h, tr.extent));
+      run.push(tr.intervals.map((iv) => scanLine(a, h, iv)));
     }
     flush();
   }

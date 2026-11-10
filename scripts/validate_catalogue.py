@@ -32,14 +32,17 @@ STATUSES = {"active", "commissioning", "degraded", "ending", "inactive"}
 ACQUISITIONS = {"systematic", "partial", "tasked", "continuous_geo", "profile"}
 PASS_FILTERS = {"day_descending", "day_ascending", "day_any", "any", "night_any"}
 PLAN_SOURCES = {"esa_s2_kml", "esa_s1_kml", None}
+# Required parameters per swath model. field_of_regard needs width_km plus
+# either max_offnadir_deg (agile optical) or access_incidence_deg (tasked SAR).
 SWATH_PARAMS = {
     "nadir_symmetric": {"width_km"},
     "side_looking": {"look_side", "incidence_deg"},
-    "field_of_regard": {"width_km", "max_offnadir_deg"},
+    "field_of_regard": {"width_km"},
     "profile": {"beams_cross_track_km"},
     "continuous_geo": {"sub_lon", "repeat_min", "max_view_zenith_deg"},
     "track_only": set(),
 }
+LOOK_SIDES = {"right", "left", "both"}
 REQUIRED = [
     "id", "platform", "object_name", "norad_id", "instrument", "categories",
     "tags", "status", "acquisition", "pass_filter", "swath", "data_access",
@@ -82,8 +85,10 @@ def validate(catalogue: dict, tles: dict | None, today: dt.date) -> tuple[list[s
             err(f"bad pass_filter {e.get('pass_filter')!r}")
         if e.get("plan_source") not in PLAN_SOURCES:
             err(f"bad plan_source {e.get('plan_source')!r}")
-        if not isinstance(e.get("norad_id"), int) and e.get("swath", {}).get("model") != "continuous_geo":
+        if not isinstance(e.get("norad_id"), int) and e.get("status") != "inactive":
             err("norad_id must be an integer")
+        if e.get("short") is not None and not (isinstance(e["short"], str) and 0 < len(e["short"]) <= 6):
+            err("short label must be 1-6 characters")
 
         swath = e.get("swath") or {}
         model = swath.get("model")
@@ -95,6 +100,23 @@ def validate(catalogue: dict, tles: dict | None, today: dt.date) -> tuple[list[s
                 err(f"swath model {model} missing {sorted(missing)}")
         if "width_km" in swath and not (isinstance(swath["width_km"], (int, float)) and swath["width_km"] > 0):
             err("swath.width_km must be > 0")
+        if model == "field_of_regard" and not any(k in swath for k in ("max_offnadir_deg", "offnadir_range_deg", "access_incidence_deg")):
+            err("field_of_regard needs max_offnadir_deg, offnadir_range_deg or access_incidence_deg")
+        if "offnadir_range_deg" in swath:
+            v = swath["offnadir_range_deg"]
+            if not (isinstance(v, list) and len(v) == 2 and -90 < v[0] < v[1] < 90):
+                err("swath.offnadir_range_deg must be [min, max], signed, positive = right of track")
+        for key in ("incidence_deg", "access_incidence_deg"):
+            if key in swath:
+                v = swath[key]
+                if not (isinstance(v, list) and len(v) == 2 and 0 <= v[0] < v[1] < 90):
+                    err(f"swath.{key} must be [near, far] with 0 <= near < far < 90")
+        if "look_side" in swath and swath["look_side"] not in LOOK_SIDES:
+            err(f"bad look_side {swath['look_side']!r}")
+        if model == "nadir_symmetric" and swath.get("gap_km", 0) >= swath.get("width_km", 0) > 0:
+            err("gap_km must be smaller than width_km")
+        if model == "profile" and not swath.get("beams_cross_track_km"):
+            err("profile needs at least one beam offset")
 
         lat = e.get("lat_limits")
         if lat is not None and not (len(lat) == 2 and -90 <= lat[0] < lat[1] <= 90):

@@ -17,6 +17,11 @@ export const CATEGORIES = [
 /** Categories enabled on first load. */
 export const DEFAULT_CATEGORIES = ['optical_multispectral', 'hyperspectral', 'sar', 'thermal'];
 
+/** Selected on first load: a default category as primary, and not commercial. */
+export function defaultSelected(e) {
+  return DEFAULT_CATEGORIES.includes(e.categories[0]) && !e.tags.includes('commercial');
+}
+
 /** Statuses shown unless the user includes commissioning/ending satellites. */
 const CORE_STATUSES = new Set(['active', 'degraded']);
 
@@ -62,25 +67,31 @@ export function noteExpired(entry, today = new Date()) {
 }
 
 /**
- * Category colour (spectral region) and marker shape. Colour encodes the part
- * of the spectrum sensed. The hex values are provisional until checked with a
- * colour-vision-deficiency simulator.
+ * Category colour (spectral region) and marker shape, for the light theme and
+ * the dark (Dracula palette) theme. Colour encodes the part of the spectrum
+ * sensed, with the same mapping in both themes (teal/cyan = VNIR-SWIR,
+ * red/orange = thermal, purple = microwave, green = lidar, grey = broadband).
+ * The hex values are provisional until checked with a colour-vision-deficiency
+ * simulator.
  */
 export const CATEGORY_STYLE = {
-  optical_multispectral: { colour: '#1F7A8C', shape: 'circle' },
-  optical_vhr: { colour: '#1F7A8C', shape: 'circle' },
-  hyperspectral: { colour: '#1F7A8C', colour2: '#C98A1B', shape: 'circle-stripe' },
-  thermal: { colour: '#C2412D', shape: 'triangle' },
-  sar: { colour: '#6B4FA0', shape: 'diamond' },
-  lidar_altimetry: { colour: '#2E8B3E', shape: 'bar' },
-  meteo_polar: { colour: '#6C7A86', shape: 'square' },
-  meteo_geo: { colour: '#6C7A86', shape: 'square' },
-  atmosphere: { colour: '#6C7A86', shape: 'square' },
-  geophysics: { colour: '#8C6E4F', shape: 'cross' },
+  optical_multispectral: { light: '#1F7A8C', dark: '#8BE9FD', shape: 'circle' },
+  optical_vhr: { light: '#1F7A8C', dark: '#8BE9FD', shape: 'circle' },
+  hyperspectral: { light: '#1F7A8C', dark: '#8BE9FD', light2: '#C98A1B', dark2: '#F1FA8C', shape: 'circle-stripe' },
+  thermal: { light: '#C2412D', dark: '#FFB86C', shape: 'triangle' },
+  sar: { light: '#6B4FA0', dark: '#BD93F9', shape: 'diamond' },
+  lidar_altimetry: { light: '#2E8B3E', dark: '#50FA7B', shape: 'bar' },
+  meteo_polar: { light: '#6C7A86', dark: '#A9B1D6', shape: 'square' },
+  meteo_geo: { light: '#6C7A86', dark: '#A9B1D6', shape: 'square' },
+  atmosphere: { light: '#6C7A86', dark: '#A9B1D6', shape: 'square' },
+  geophysics: { light: '#8C6E4F', dark: '#F1FA8C', shape: 'cross' },
 };
 
-/** Style of an entry: that of its first (primary) category. */
-export const entryStyle = (e) => CATEGORY_STYLE[e.categories[0]] ?? CATEGORY_STYLE.meteo_polar;
+/** Style of an entry (that of its first, primary category) in a theme. */
+export function entryStyle(e, theme = 'light') {
+  const s = CATEGORY_STYLE[e.categories[0]] ?? CATEGORY_STYLE.meteo_polar;
+  return { colour: theme === 'dracula' ? s.dark : s.light, shape: s.shape };
+}
 
 /** Short platform label for the globe ("Sentinel-2C" → "S2C", "Landsat 9" → "L9"). */
 export function shortName(e) {
@@ -89,5 +100,5 @@ export function shortName(e) {
   if (m) return `S${m[1]}${m[2]}`;
   m = p.match(/^Landsat (\d+)$/);
   if (m) return `L${m[1]}`;
-  return p;
+  return e.short ?? p;
 }

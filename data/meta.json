@@ -1,7 +1,7 @@
 {
- "updated_utc": "2026-11-10T09:57:43.499Z",
- "catalogue_version": "2026-11-10.1",
- "tle_count": 5,
+ "updated_utc": "2026-11-10T13:06:12.207Z",
+ "catalogue_version": "2026-11-10.2",
+ "tle_count": 48,
  "stale_tles": [],
  "sources": {
   "celestrak": {

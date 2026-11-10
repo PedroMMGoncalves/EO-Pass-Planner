@@ -25,5 +25,5 @@ const entries = catalogue.entries.filter(
 const t0 = performance.now();
 const result = predictPasses({ entries, tles, roi: query.roi, start: query.start, days: query.days, options: query.options });
 result.elapsed_ms = performance.now() - t0;
-for (const p of result.passes) delete p.footprint;
+for (const p of result.passes) { delete p.footprint; delete p.footprints; }
 process.stdout.write(JSON.stringify(result));

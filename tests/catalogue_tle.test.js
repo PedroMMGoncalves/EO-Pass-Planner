@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-import { filterEntries, noteExpired, DEFAULT_CATEGORIES } from '../js/catalogue.js';
+import { filterEntries, noteExpired, DEFAULT_CATEGORIES, defaultSelected } from '../js/catalogue.js';
 import { tleAgeDays, tleAgeLevel, dataFreshness } from '../js/tle.js';
 import { t, setLang } from '../js/i18n.js';
 
@@ -16,15 +16,23 @@ test('default filter hides transitional (ending) satellites', () => {
   assert.ok(ids.includes('S2C_MSI'));
   assert.ok(!ids.includes('S2A_MSI'), 'S2A is "ending" and needs includeTransitional');
   const all = filterEntries(catalogue.entries, { includeTransitional: true });
-  assert.equal(all.length, catalogue.entries.length);
+  assert.equal(all.length, catalogue.entries.filter((e) => e.status !== 'inactive').length);
 });
 
 test('category, thermal and resolution filters', () => {
-  const thermal = filterEntries(catalogue.entries, { categories: ['thermal'] }).map((e) => e.platform);
-  assert.deepEqual(thermal.sort(), ['Landsat 8', 'Landsat 9']);
-  const fine = filterEntries(catalogue.entries, { resolution: [0, 12] }).map((e) => e.id);
-  assert.ok(fine.every((id) => id.startsWith('S2')));
-  assert.equal(filterEntries(catalogue.entries, { categories: ['sar'] }).length, 0);
+  const thermal = filterEntries(catalogue.entries, { categories: ['thermal'] }).map((e) => e.id);
+  assert.ok(thermal.includes('L8_OLI_TIRS') && thermal.includes('S3A_SLSTR'));
+  assert.ok(!thermal.includes('TERRA_ASTER_TIR'), 'inactive entries are never listed');
+  const fine = filterEntries(catalogue.entries, { resolution: [0, 1] });
+  for (const e of fine) assert.ok(!e.resolution_m || e.resolution_m.min <= 1, e.id);
+  const sar = filterEntries(catalogue.entries, { categories: ['sar'] }).map((e) => e.id);
+  assert.ok(sar.includes('S1C_CSAR_IW') && !sar.includes('S1A_CSAR_IW'));
+});
+
+test('default selection: default categories, no commercial or geophysics', () => {
+  const sel = catalogue.entries.filter(defaultSelected).map((e) => e.id);
+  assert.ok(sel.includes('S2C_MSI') && sel.includes('S1D_CSAR_IW') && sel.includes('ENMAP_HSI'));
+  for (const id of ['PHR1A_OPT', 'TSX_SARX', 'SWARMA', 'MET12_FCI', 'N20_VIIRS']) assert.ok(!sel.includes(id), id);
 });
 
 test('S2A note expires after 2026-12-31', () => {
@@ -34,7 +42,7 @@ test('S2A note expires after 2026-12-31', () => {
 });
 
 test('every catalogue NORAD id has a TLE with the expected name', () => {
-  for (const e of catalogue.entries) {
+  for (const e of catalogue.entries.filter((x) => x.status !== 'inactive')) {
     const tle = tles[String(e.norad_id)];
     assert.ok(tle, `${e.id}: no TLE`);
     assert.equal(tle.name, e.object_name);

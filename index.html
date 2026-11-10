@@ -12,21 +12,25 @@
   <meta property="og:description" content="Quando é que os satélites de observação da Terra vão observar um local: passagens, cobertura, geometria, iluminação e nuvens.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="theme-color" content="#0B1730">
-  <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css">
+  <link rel="preload" href="vendor/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="vendor/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="vendor/fonts/barlow-semi-condensed-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="vendor/maplibre/maplibre-gl.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css"></noscript>
   <link rel="stylesheet" href="css/app.css">
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
   <header class="answer-bar">
-    <p class="wordmark"><img src="assets/icon-192.png" alt="" width="44" height="44" class="logo">EO Pass Planner</p>
+    <p class="wordmark"><img src="assets/icon-96.png" alt="" width="44" height="44" class="logo">EO Pass Planner</p>
     <div class="answer" aria-live="polite">
       <p id="answer-main" class="answer-main" data-i18n="answer_idle">Escolhe um local no globo para saber que satélites o vão observar.</p>
       <ul id="answer-lines" class="answer-lines"></ul>
-      <p id="answer-sub" class="answer-sub" data-i18n="answer_idle_sub"></p>
+      <p id="answer-sub" class="answer-sub" data-i18n="answer_idle_sub">Os satélites partem da posição actual, em tempo acelerado; a faixa colorida é o que cada sensor está a observar. “Agora” repõe o tempo real.</p>
     </div>
     <div class="bar-tools">
       <div class="fresh-wrap">
-        <button id="freshness" type="button" class="badge quiet" aria-expanded="false" aria-controls="fresh-details"></button>
+        <button id="freshness" type="button" class="badge quiet" aria-expanded="false" aria-controls="fresh-details">Dados actualizados há … h</button>
         <div id="fresh-details" class="fresh-details" hidden></div>
       </div>
       <button id="theme" type="button" class="quiet" aria-pressed="false">Tema escuro</button>
@@ -43,7 +47,7 @@
           <button type="button" data-mode="polygon" aria-pressed="false" data-i18n="mode_polygon">Polígono</button>
           <button type="button" data-mode="rectangle" aria-pressed="false" data-i18n="mode_rectangle">Rectângulo</button>
         </div>
-        <p id="draw-hint" class="hint"></p>
+        <p id="draw-hint" class="hint">Clica no globo para escolher um ponto.</p>
         <div id="draw-actions" class="row" hidden>
           <button id="draw-finish" type="button" class="secondary" data-i18n="draw_finish">Terminar</button>
           <button id="draw-cancel" type="button" class="quiet" data-i18n="draw_cancel">Cancelar</button>
@@ -58,7 +62,7 @@
         <details>
           <summary data-i18n="file_summary">Carregar ficheiro</summary>
           <input id="roi-file" type="file" accept=".geojson,.json,.kml,.kmz,.zip">
-          <p class="hint" data-i18n="file_hint"></p>
+          <p class="hint" data-i18n="file_hint">GeoJSON, KML, KMZ ou Shapefile em .zip (com o .prj). Vários elementos são fundidos num só.</p>
         </details>
         <label class="field"><span data-i18n="buffer_label">Margem à volta do local (km)</span><input id="buffer" type="number" min="0" max="200" step="0.5" value="0"></label>
         <p id="roi-summary" class="hint"></p>
@@ -69,12 +73,12 @@
         <h2 data-i18n="window_heading">Janela</h2>
         <label class="field"><span data-i18n="window_start">Início (UTC)</span><input id="start" type="datetime-local"></label>
         <label class="field"><span data-i18n="window_days">Duração (dias)</span><input id="days" type="number" min="1" max="30" value="16"></label>
-        <p id="days-warn" class="hint warn" hidden data-i18n="window_long"></p>
+        <p id="days-warn" class="hint warn" hidden data-i18n="window_long">Acima de 16 dias a incerteza da órbita cresce: confirma mais perto da data.</p>
       </section>
       <section>
         <h2 data-i18n="instruments_heading">Instrumentos</h2>
         <ul id="instruments" class="instruments"></ul>
-        <label class="check"><input id="transitional" type="checkbox"> <span data-i18n="include_transitional"></span></label>
+        <label class="check"><input id="transitional" type="checkbox"> <span data-i18n="include_transitional">Incluir satélites em fim de missão ou em comissionamento</span></label>
       </section>
       <button id="run" type="button" class="primary" disabled data-i18n="run">Calcular passagens</button>
       <p id="progress" class="hint" aria-live="polite"></p>
@@ -97,14 +101,14 @@
         <button id="now" type="button" class="secondary" data-i18n="time_now">Agora</button>
         <label class="scrub" id="scrub-wrap" hidden><span class="visually-hidden" data-i18n="scrub_label">Posição na janela</span><input id="scrub" type="range" min="0" max="1000" value="0"></label>
         <button id="replay" type="button" class="secondary icon" hidden aria-label="Repetir varrimento" title="Repetir varrimento">↻</button>
-        <label class="speed"><span class="visually-hidden" data-i18n="basemap_label">Mapa de base</span><select id="basemap" class="basemap-select"></select></label>
+        <label class="speed"><span class="visually-hidden" data-i18n="basemap_label">Mapa de base</span><select id="basemap" class="basemap-select"><option value="simple">Simples (funciona sem rede)</option></select></label>
         <output id="clock" class="clock"></output>
       </div>
     </main>
-      <div class="splitter" id="splitter" role="separator" tabindex="0" aria-controls="results" aria-label="Redimensionar o painel de resultados"></div>
+      <div class="splitter" id="splitter" role="separator" tabindex="0" aria-controls="results" aria-valuemin="15" aria-valuemax="85" aria-valuenow="45" aria-label="Redimensionar o painel de resultados"></div>
       <section class="tabs results" id="results" aria-label="Resultados">
         <div class="panel-tools">
-          <label class="speed"><span data-i18n="table_cat">Categoria</span><select id="table-cat"></select></label>
+          <label class="speed"><span data-i18n="table_cat">Categoria</span><select id="table-cat"><option value="">Todas</option></select></label>
           <label class="check"><input id="table-opp" type="checkbox" checked> <span data-i18n="table_opp">Incluir oportunidades geométricas</span></label>
           <label class="speed"><span data-i18n="max_cloud">Nuvens máx. (%)</span><input id="max-cloud" type="number" min="0" max="100" step="5" placeholder="–" class="narrow"></label>
           <label class="speed"><span data-i18n="max_aod">AOD máx.</span><input id="max-aod" type="number" min="0" max="5" step="0.05" placeholder="–" class="narrow"></label>
@@ -119,7 +123,7 @@
               <button id="export-geojson" type="button" class="secondary" disabled data-i18n="export_geojson">Footprints (GeoJSON)</button>
               <button id="export-geolibre" type="button" class="secondary" disabled data-i18n="export_geolibre">Abrir no GeoLibre (.geolibre)</button>
               <button id="print-sheet-btn" type="button" class="secondary" disabled data-i18n="print_sheet">Folha de campo (imprimir)</button>
-              <p class="hint" data-i18n="geolibre_hint"></p>
+              <p class="hint" data-i18n="geolibre_hint">O projecto .geolibre abre-se no GeoLibre (web.geolibre.app ou aplicação), da opengeos, para continuar a análise com outras camadas.</p>
             </div>
           </details>
         </div>
@@ -134,17 +138,17 @@
           <button role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false" tabindex="-1" data-i18n="tab_about">Sobre e limitações</button>
         </div>
         <div role="tabpanel" id="panel-calendar" aria-labelledby="tab-calendar">
-          <details class="howto"><summary data-i18n="calendar_howto">Como ler o calendário</summary><p class="hint" data-i18n="calendar_hint"></p></details>
+          <details class="howto"><summary data-i18n="calendar_howto">Como ler o calendário</summary><p class="hint" data-i18n="calendar_hint">Uma linha por instrumento, uma coluna por dia (hora local). A cor mais forte indica maior cobertura; o tracejado indica nuvens previstas; contorno sem preenchimento é oportunidade geométrica. O número indica várias passagens no dia.</p></details>
           <div id="calendar" class="cal-wrap"></div>
-          <p id="calendar-empty" class="hint" data-i18n="table_empty"></p>
+          <p id="calendar-empty" class="hint" data-i18n="table_empty">Ainda não há passagens. Escolhe um local e calcula.</p>
         </div>
         <div role="tabpanel" id="panel-table" aria-labelledby="tab-table" hidden>
           <div class="table-wrap"><table id="passes"><thead></thead><tbody></tbody></table></div>
-          <p id="table-empty" class="hint" data-i18n="table_empty"></p>
-          <p class="hint" data-i18n="cloud_legend"></p>
+          <p id="table-empty" class="hint" data-i18n="table_empty">Ainda não há passagens. Escolhe um local e calcula.</p>
+          <p class="hint" data-i18n="cloud_legend">Nuvens: valor pontual do modelo à hora da passagem (Open-Meteo); * = análise ou reanálise (passado). Não é a cobertura de nuvens da cena.</p>
         </div>
         <div role="tabpanel" id="panel-spectral" aria-labelledby="tab-spectral" hidden>
-          <details class="howto"><summary data-i18n="spectral_howto">Como ler o espectro</summary><p class="hint" data-i18n="spectral_hint"></p></details>
+          <details class="howto"><summary data-i18n="spectral_howto">Como ler o espectro</summary><p class="hint" data-i18n="spectral_hint">Bandas de cada instrumento seleccionado numa escala logarítmica de comprimento de onda, com as feições de absorção diagnósticas de minerais como referência. O eixo é interrompido entre o infravermelho térmico e as micro-ondas.</p></details>
           <div id="spectral" class="spectral-wrap"></div>
         </div>
         <div role="tabpanel" id="panel-insar" aria-labelledby="tab-insar" hidden>
@@ -157,7 +161,7 @@
           <ul id="absences" class="absences"></ul>
         </div>
         <div role="tabpanel" id="panel-geo" aria-labelledby="tab-geo" hidden>
-          <p class="hint" data-i18n="geo_hint"></p>
+          <p class="hint" data-i18n="geo_hint">Os satélites geoestacionários não têm passagens: observam continuamente o mesmo disco da Terra. O que importa é o ângulo de observação a partir do local.</p>
           <ul id="geo-list" class="absences"></ul>
         </div>
         <div role="tabpanel" id="panel-about" aria-labelledby="tab-about" hidden class="prose"></div>

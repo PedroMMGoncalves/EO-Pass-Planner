@@ -161,7 +161,12 @@ function rebuildTrackers() {
   lastDataUpdate = -Infinity;
 }
 
-function frame() {
+const FRAME_MS = 50; // markers at about 20 updates per second keep the main thread free
+let lastFrame = 0;
+
+function frame(ts = performance.now()) {
+  if (ts - lastFrame < FRAME_MS) { requestAnimationFrame(frame); return; }
+  lastFrame = ts;
   const now = simNow();
   // One marker per platform (several instruments can share a satellite, e.g. the ISS).
   const byNorad = new Map();
@@ -1233,6 +1238,8 @@ function initSplitter() {
   const apply = (frac) => {
     const f = Math.min(0.85, Math.max(0.15, frac));
     center.style.setProperty(varName(), `${(f * 100).toFixed(1)}%`);
+    sp.setAttribute('aria-valuenow', String(Math.round(f * 100)));
+    sp.setAttribute('aria-orientation', wideQuery.matches ? 'vertical' : 'horizontal');
     store(key(), String(f));
     return f;
   };
@@ -1319,7 +1326,7 @@ async function init() {
     },
   });
   globe.setColours(colourMap());
-  for (const id of Object.keys(BASEMAPS)) $('#basemap').add(new Option(t(`bm_${id}`), id));
+  $('#basemap').replaceChildren(...Object.keys(BASEMAPS).map((id) => new Option(t(`bm_${id}`), id)));
   $('#basemap').value = state.basemap;
   $('#basemap').addEventListener('change', () => {
     state.basemap = $('#basemap').value;
@@ -1411,7 +1418,8 @@ async function init() {
 
   rebuildTrackers();
   await globe.ready;
-  requestAnimationFrame(frame);
+  // Start the live layer once the page is idle, so it does not compete with the first render.
+  (window.requestIdleCallback ?? setTimeout)(() => requestAnimationFrame(frame), { timeout: 1500 });
   (window.requestIdleCallback ?? setTimeout)(() => tzReady());
   if (applyHash()) {
     renderStatic();

@@ -371,3 +371,13 @@ tbody tr.is-selected { background: var(--row-selected); box-shadow: inset 3px 0 
 .dot.shape-cross, .sat-dot.shape-cross { border-radius: 0; border: 0; box-shadow: none; clip-path: polygon(34% 0, 66% 0, 66% 34%, 100% 34%, 100% 66%, 66% 66%, 66% 100%, 34% 100%, 34% 66%, 0 66%, 0 34%, 34% 34%); }
 .dot.shape-circle-stripe, .sat-dot.shape-circle-stripe { background-image: linear-gradient(90deg, transparent 38%, var(--stripe, #fff) 38% 62%, transparent 62%); }
 .sat-dot.shape-triangle, .sat-dot.shape-cross { width: 14px; height: 14px; }
+
+/* Touch targets of at least 24 x 24 px (WCAG 2.2, 2.5.8) */
+.instruments .group > details > summary { min-height: 1.6rem; }
+.instruments input[type="checkbox"], .check input[type="checkbox"] { width: 1.2rem; height: 1.2rem; margin: 0.25rem; flex: none; }
+.info { width: 1.6rem; height: 1.6rem; }
+.answer-lines button { min-height: 1.5rem; }
+
+/* Fixed width: options added after load must not re-wrap the tool bar (layout shift) */
+.results .panel-tools #table-cat { width: 13rem; }
+.instruments .group > details > summary input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; }

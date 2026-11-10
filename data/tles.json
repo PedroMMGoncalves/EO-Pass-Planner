@@ -383,6 +383,31 @@
   "source": "celestrak",
   "fetched": "2026-11-10T13:04:21.696Z"
  },
+ "100689": {
+  "name": "FLEX",
+  "omm": {
+   "OBJECT_NAME": "FLEX",
+   "OBJECT_ID": "2026-209A",
+   "EPOCH": "2026-11-10T05:26:36.919680",
+   "MEAN_MOTION": 14.26736113,
+   "ECCENTRICITY": 0.00012071,
+   "INCLINATION": 98.6237,
+   "RA_OF_ASC_NODE": 19.4627,
+   "ARG_OF_PERICENTER": 89.3429,
+   "MEAN_ANOMALY": 270.789,
+   "EPHEMERIS_TYPE": 0,
+   "CLASSIFICATION_TYPE": "U",
+   "NORAD_CAT_ID": 100689,
+   "ELEMENT_SET_NO": 999,
+   "REV_AT_EPOCH": 799,
+   "BSTAR": 7.149725e-06,
+   "MEAN_MOTION_DOT": -2.6e-07,
+   "MEAN_MOTION_DDOT": 0
+  },
+  "epoch": "2026-11-10T05:26:36.919Z",
+  "source": "celestrak-omm",
+  "fetched": "2026-11-10T13:32:12.404Z"
+ },
  "100690": {
   "name": "SENTINEL-3C",
   "omm": {

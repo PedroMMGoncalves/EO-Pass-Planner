@@ -24,9 +24,22 @@ import { loadTles, loadMeta, dataFreshness } from './tle.js';
 import { t, setLang, getLang, formatDateTime, formatTimeSec } from './i18n.js';
 import { createGlobe, BASEMAPS } from './globe.js';
 import { makeTrackers, positions, tracks, liveSwaths, nightPolygon } from './live.js';
-import { answerSentence, absences } from './absences.js';
-import { passesToCsv, download } from './export.js';
-import { ENGINE_VERSION } from './engine.js';
+import { answerSentence, absences, displayName } from './absences.js';
+import {
+  passesToCsv, passesToIcs, footprintsGeoJSON, geolibreProject, download,
+} from './export.js';
+import {
+  ENGINE_VERSION, swathIntervals, meanAltitudeKm, satrecFrom,
+} from './engine.js';
+import { fetchCloudSeries, cloudAt, cloudRelevant } from './weather.js';
+import { s2TilesForRoi, s1RelativeOrbit } from './tiles.js';
+import { searchAcquisitions, groupByPass } from './stac.js';
+import { insarTracks } from './insar.js';
+import { annotatePlans } from './plans.js';
+import { renderCalendar } from './calendar.js';
+import {
+  renderDrawer, renderInsar, renderStac, printFieldSheet,
+} from './panels.js';
 
 const $ = (sel) => document.querySelector(sel);
 const stored = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
@@ -45,6 +58,12 @@ const state = {
   days: 16,
   selectedPass: null,
   sort: { key: 'closest_utc', dir: 1, col: 2 },
+  cloudSeries: null,
+  cloudError: null,
+  stac: { loading: false, groups: null, items: [], errors: {} },
+  droneMinutes: 30,
+  pendingPass: null,
+  drawerOpen: false,
   theme: stored('eopp-theme') === 'dracula' ? 'dracula' : 'light',
   basemap: stored('eopp-basemap') || 'simple',
   clock: { baseSim: Date.now(), baseReal: performance.now(), speed: reducedMotion ? 1 : 60, playing: true },
@@ -190,6 +209,8 @@ function setRoiGeom(geom, { warnings = [], fly = false } = {}) {
   try { state.tz = tzlookup(a.lat, a.lon); } catch { state.tz = 'UTC'; }
   state.result = null;
   state.selectedPass = null;
+  state.drawerOpen = false;
+  renderDrawerPanel();
   renderFootprints();
   $('#run').disabled = false;
   $('#export-csv').disabled = true;
@@ -235,6 +256,8 @@ function clearRoi() {
   state.roi = null;
   state.roiRaw = null;
   state.result = null;
+  state.drawerOpen = false;
+  renderDrawerPanel();
   state.simplifiedNote = '';
   globe.setRoi(null);
   renderFootprints();
@@ -310,7 +333,7 @@ function runPasses() {
 }
 
 function updateHash(startVal, days, entries) {
-  const defaults = filterEntries(state.catalogue.entries, {}).map((e) => e.id);
+  const defaults = filterEntries(state.catalogue.entries, {}).filter(defaultSelected).map((e) => e.id);
   const ids = entries.map((e) => e.id);
   const sameAsDefault = ids.length === defaults.length && ids.every((id) => defaults.includes(id));
   const hash = buildHash({
@@ -336,31 +359,104 @@ function applyHash() {
   if (q.days) $('#days').value = String(q.days);
   if (q.start) $('#start').value = q.start;
   if (q.buffer) $('#buffer').value = String(q.buffer);
+  if (q.pass) state.pendingPass = q.pass;
   if (!q.roi) return false;
   setRoiGeom(q.roi, { fly: true });
   return true;
 }
 
-function onResult(fresh = false) {
-  const entriesById = Object.fromEntries(state.catalogue.entries.map((e) => [e.id, e]));
-  const a = answerSentence(state.result, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point', entriesById });
-  setAnswer(a.main, a.sub, a.lines);
-  renderTableCategories();
-  renderTable();
-  renderAbsences();
-  renderGeo();
-  $('#export-csv').disabled = !state.result.passes.some((p) => p.imaging_expected);
-  $('#copy-link').disabled = false;
-  if (fresh && a.best) selectPass(a.best.id, { fly: true });
-  else renderFootprints();
+const byIdCache = new WeakMap();
+function entriesById() {
+  if (!byIdCache.has(state.catalogue)) byIdCache.set(state.catalogue, Object.fromEntries(state.catalogue.entries.map((e) => [e.id, e])));
+  return byIdCache.get(state.catalogue);
 }
 
-function selectPass(id, { fly = false } = {}) {
+function refreshViews() {
+  const a = answerSentence({ ...state.result, passes: answerPasses() }, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point', entriesById: entriesById() });
+  const cloudNote = state.cloudError ? ` ${t('cloud_error')}` : '';
+  const bestCloud = a.best?.cloud && cloudRelevant(entriesById()[a.best.entry_id]) ? ` ${t('answer_cloud', { v: Math.round(a.best.cloud.total), kind: t(`cloud_${a.best.cloud.kind}`) })}` : '';
+  setAnswer(a.main, a.sub + bestCloud + cloudNote, a.lines);
+  renderTableCategories();
+  renderTable();
+  renderCalendarTab();
+  renderAbsences();
+  renderGeo();
+  renderInsarTab();
+  renderStacTab();
+  renderDrawerPanel();
+  const any = state.result.passes.some((p) => p.imaging_expected);
+  for (const id of ['#export-csv', '#export-ics', '#export-geojson', '#export-geolibre', '#print-sheet-btn']) $(id).disabled = !any;
+  $('#copy-link').disabled = false;
+  return a;
+}
+
+function onResult(fresh = false) {
+  const a = refreshViews();
+  if (fresh) {
+    const pending = state.pendingPass && state.result.passes.find((p) => p.id === state.pendingPass);
+    state.pendingPass = null;
+    if (pending) selectPass(pending.id, { fly: true, open: true });
+    else if (a.best) selectPass(a.best.id, { fly: true });
+    else renderFootprints();
+    enrich();
+  } else {
+    renderFootprints();
+  }
+}
+
+/** Plans, tiles, cloud and STAC: added after the geometric result, each re-rendering the views. */
+async function enrich() {
+  const res = state.result;
+  const anchor = roiAnchor(state.roi);
+  const byId = entriesById();
+  // S2 tiles (same for every S2 pass over this ROI).
+  const tiles = s2TilesForRoi(state.roi);
+  for (const p of res.passes) if (/^Sentinel-2/.test(p.platform)) p.tiles = tiles;
+  // ESA acquisition plans.
+  annotatePlans(res.passes, byId, anchor).then(() => { if (state.result === res) refreshViews(); });
+  // Cloud cover at the anchor.
+  state.cloudSeries = null;
+  state.cloudError = null;
+  fetchCloudSeries(anchor, res.window.start_utc - 3 * 3600000, res.window.end_utc + 3 * 3600000)
+    .then((series) => {
+      if (state.result !== res) return;
+      state.cloudSeries = series;
+      for (const p of res.passes) if (cloudRelevant(byId[p.entry_id])) p.cloud = cloudAt(series, p.closest_utc);
+      refreshViews();
+    })
+    .catch(() => { if (state.result === res) { state.cloudError = true; refreshViews(); } });
+  // Real acquisitions (STAC): the past part of the window, and at least the last 36 days
+  // (three Sentinel-1 cycles) to infer relative orbits.
+  const now = Date.now();
+  const to = Math.min(res.window.end_utc, now);
+  const from = Math.min(res.window.start_utc, now - 36 * 86400000);
+  state.stac = { loading: true, groups: null, items: [], errors: {}, from, to };
+  renderStacTab();
+  const r = await searchAcquisitions(state.roi, from, to);
+  if (state.result !== res) return;
+  state.stac = { loading: false, items: r.items, groups: groupByPass(r.items), errors: r.errors, from, to };
+  for (const p of res.passes) if (/^Sentinel-1/.test(p.platform)) p.rel_orbit = s1RelativeOrbit(p, r.items.filter((x) => x.collection === 'sentinel-1-grd'));
+  refreshViews();
+}
+
+/** Expected passes after the opportunity and cloud filters (used by the answer). */
+function answerPasses() {
+  const opp = $('#table-opp').checked;
+  const maxCloud = $('#max-cloud').value === '' ? null : Number($('#max-cloud').value);
+  return (state.result?.passes ?? []).filter((p) => p.imaging_expected
+    && (opp || !p.opportunity)
+    && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud));
+}
+
+function selectPass(id, { fly = false, open = true } = {}) {
   state.selectedPass = id;
   const p = state.result?.passes.find((x) => x.id === id);
   renderFootprints();
   for (const tr of document.querySelectorAll('#passes tbody tr')) tr.classList.toggle('is-selected', tr.dataset.id === id);
+  for (const c of document.querySelectorAll('.cal-cell[data-id]')) c.classList.toggle('is-selected', c.dataset.id === id);
   markAnswerLine();
+  if (open) state.drawerOpen = true;
+  renderDrawerPanel();
   if (!p) return;
   // Show the pass: start 90 s before closest approach at 10x (directly at closest approach with reduced motion).
   setClock(reducedMotion
@@ -416,17 +512,162 @@ const COLS = [
   { key: 'view_angle_deg', label: 'col_view', cell: (p) => p.view_angle_deg.toFixed(1), num: true },
   { key: 'sun_elevation_deg', label: 'col_sun', cell: (p) => p.sun_elevation_deg.toFixed(0), num: true },
   { key: 'tle_age_days', label: 'col_tle', cell: (p) => p.tle_age_days.toFixed(1), num: true, warn: (p) => p.tle_age_days > 7 },
+  { key: 'cloud', label: 'col_cloud', cell: (p) => cloudCell(p), num: true, sortVal: (p) => p.cloud?.total ?? 999 },
+  { key: 'plan', label: 'col_plan', cell: (p) => (p.plan ? t(`plan_${p.plan.status}`) : ''), warn: (p) => p.plan?.status === 'not_planned' },
+  { key: 'tiles', label: 'col_tile_orbit', cell: (p) => p.tiles?.join(' ') ?? (p.rel_orbit ? `${t('orbit_abbr')} ${p.rel_orbit}` : '') },
   { key: 'acquisition', label: 'col_acq', cell: (p) => t(`acq_${p.acquisition}`) },
 ];
+
+function cloudCell(p) {
+  const e = entriesById()[p.entry_id];
+  if (!cloudRelevant(e)) return t('cloud_na_short');
+  return p.cloud ? `${Math.round(p.cloud.total)}${p.cloud.kind === 'forecast' ? '' : '*'}` : '–';
+}
 
 /** Expected-imaging passes after the table filters (category, opportunities). */
 function visiblePasses() {
   const cat = $('#table-cat').value;
   const opp = $('#table-opp').checked;
   const byId = Object.fromEntries(state.catalogue.entries.map((e) => [e.id, e]));
+  const maxCloud = $('#max-cloud').value === '' ? null : Number($('#max-cloud').value);
   return (state.result?.passes ?? []).filter((p) => p.imaging_expected
     && (opp || !p.opportunity)
+    && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud)
     && (!cat || byId[p.entry_id]?.categories[0] === cat));
+}
+
+// ---------- calendar, drawer, InSAR, STAC ----------
+
+const DAY_FMT = new Map();
+function dayLabel(ms) {
+  const k = `${getLang()}|${state.tz}`;
+  if (!DAY_FMT.has(k)) DAY_FMT.set(k, new Intl.DateTimeFormat(getLang() === 'pt' ? 'pt-PT' : 'en-GB', { timeZone: state.tz, day: 'numeric', month: 'numeric' }));
+  return DAY_FMT.get(k).format(ms);
+}
+const fmtDate = (ms, tz) => new Intl.DateTimeFormat(getLang() === 'pt' ? 'pt-PT' : 'en-GB', { timeZone: tz, weekday: 'short', day: 'numeric', month: 'short' }).format(ms);
+
+function renderCalendarTab() {
+  const root = $('#calendar');
+  if (!state.result) { root.replaceChildren(); $('#calendar-empty').hidden = false; return; }
+  const ok = renderCalendar(root, {
+    passes: visiblePasses(),
+    entries: state.ranEntries,
+    categories: CATEGORIES,
+    tz: state.tz,
+    startMs: state.result.window.start_utc,
+    endMs: state.result.window.end_utc,
+    colourOf,
+    cloudOf: (p) => (p.cloud ? p.cloud.total : null),
+    onSelect: (id) => selectPass(id, { fly: true }),
+    selectedId: state.selectedPass,
+    t,
+    formatTime: (ms, tz) => formatTimeSec(ms, tz).slice(0, 5),
+    dayLabel,
+    nameOf: (e) => `${e.platform} ${e.instrument}`,
+  });
+  $('#calendar-empty').hidden = ok;
+}
+
+function renderDrawerPanel() {
+  const root = $('#drawer');
+  const p = state.drawerOpen ? state.result?.passes.find((x) => x.id === state.selectedPass) : null;
+  if (!p) { renderDrawer(root, { pass: null }); return; }
+  const e = entriesById()[p.entry_id];
+  const tle = state.tles[String(e.norad_id)];
+  const intervals = swathIntervals(e, meanAltitudeKm(satrecFrom(tle))) ?? [[0, 0]];
+  const css = getComputedStyle(document.documentElement);
+  renderDrawer(root, {
+    pass: p, entry: e, intervals, tz: state.tz, t,
+    fmt: { dateTime: formatDateTime, time: (ms, tz) => formatTimeSec(ms, tz).slice(0, 5) },
+    colour: colourOf(e), ink: css.getPropertyValue('--ink').trim(), soft: css.getPropertyValue('--ink-soft').trim(),
+    cloudSeries: state.cloudSeries, cloudRelevant: cloudRelevant(e),
+    anchorLon: roiAnchor(state.roi).lon,
+    droneMinutes: state.droneMinutes,
+    onDroneMinutes: (n) => { state.droneMinutes = n; renderDrawerPanel(); },
+    onClose: () => { state.drawerOpen = false; renderDrawerPanel(); },
+    onIcs: () => download(`passagem_${p.id}.ics`, icsFor([p]), 'text/calendar;charset=utf-8'),
+    onCopyLink: () => copyLink(p.id),
+  });
+}
+
+function icsFor(passes) {
+  const anchor = roiAnchor(state.roi);
+  return passesToIcs(passes, {
+    anchor,
+    describe: (p) => ({
+      summary: t('ics_summary', { sat: `${p.platform} ${p.instrument}`, cov: Math.round(p.coverage_pct) }),
+      description: [
+        `${t('col_local')}: ${formatDateTime(p.closest_utc, state.tz)} (${state.tz})`,
+        `${t('col_dir')}: ${t(`dir_${p.direction}`)}`,
+        `${t('col_cov')}: ${p.coverage_pct.toFixed(1)} %`,
+        `${t('col_edge')}: ${p.edge_margin_km.toFixed(1)} km`,
+        `${t('col_view')}: ${p.view_angle_deg.toFixed(1)}`,
+        p.cloud ? `${t('col_cloud')}: ${Math.round(p.cloud.total)} % (${t(`cloud_${p.cloud.kind}`)})` : '',
+        p.plan ? `${t('col_plan')}: ${t(`plan_${p.plan.status}`)}` : '',
+        `${t('col_acq')}: ${t(`acq_${p.acquisition}`)}`,
+        t('ics_note'),
+      ].filter(Boolean).join('\n'),
+    }),
+  });
+}
+
+async function copyLink(passId = null) {
+  const url = new URL(location.href);
+  const q = new URLSearchParams(url.hash.slice(1));
+  if (passId) q.set('p', passId); else q.delete('p');
+  url.hash = q.toString();
+  try {
+    await navigator.clipboard.writeText(url.href);
+    $('#link-status').textContent = t('link_copied');
+  } catch {
+    $('#link-status').textContent = url.href;
+  }
+  setTimeout(() => { $('#link-status').textContent = ''; }, 4000);
+}
+
+function renderInsarTab() {
+  const sar = visiblePasses().filter((p) => entriesById()[p.entry_id]?.categories[0] === 'sar' && !p.opportunity);
+  renderInsar($('#insar'), insarTracks(sar), {
+    t, tz: state.tz, fmt: { date: fmtDate }, onSelect: (id) => selectPass(id, { fly: true }),
+  });
+}
+
+function renderStacTab() {
+  renderStac($('#stac'), state.stac, { t, tz: state.tz, fmt: { date: fmtDate, dateTime: formatDateTime } });
+}
+
+function exportAll(kind) {
+  const passes = visiblePasses();
+  const stamp = new Date().toISOString().slice(0, 10);
+  if (kind === 'ics') download(`passagens_${stamp}.ics`, icsFor(passes), 'text/calendar;charset=utf-8');
+  if (kind === 'geojson') download(`passagens_${stamp}.geojson`, JSON.stringify(footprintsGeoJSON(passes, { roi: state.roi, tz: state.tz })), 'application/geo+json');
+  if (kind === 'geolibre') {
+    const catOf = (p) => entriesById()[p.entry_id]?.categories[0] ?? 'other';
+    const project = geolibreProject(passes, {
+      roi: state.roi, anchor: roiAnchor(state.roi), tz: state.tz,
+      name: `EO Pass Planner ${stamp}`,
+      categoryOf: catOf,
+      colourOf: (c) => entryStyle({ categories: [c] }, 'light').colour,
+      labelOf: (c) => t(`cat_${c}`),
+    });
+    download(`eo-pass-planner_${stamp}.geolibre`, JSON.stringify(project), 'application/json');
+  }
+}
+
+function printSheet() {
+  let mapImage = null;
+  try { mapImage = globe.map.getCanvas().toDataURL('image/png'); } catch { /* tainted or unavailable */ }
+  const table = $('#passes').cloneNode(true);
+  table.querySelectorAll('button').forEach((b) => b.replaceWith(document.createTextNode(b.textContent)));
+  const provenance = t('print_prov', {
+    when: formatDateTime(Date.now(), state.tz), tz: state.tz, cat: state.catalogue.version,
+    data: state.meta?.updated_utc ?? '?', engine: ENGINE_VERSION, url: location.href,
+  });
+  printFieldSheet($('#print-sheet'), {
+    t, answer: `${$('#answer-main').textContent} ${$('#answer-sub').textContent}`,
+    roiSummary: $('#roi-summary').textContent, mapImage, table, provenance,
+    limitations: (t('about_html').match(/<ul>[\s\S]*?<\/ul>/) ?? [''])[0],
+  });
 }
 
 function renderTableCategories() {
@@ -464,7 +705,9 @@ function renderTable() {
   body.replaceChildren();
   const rows = visiblePasses();
   const { key, dir } = state.sort;
-  rows.sort((a, b) => (a[key] < b[key] ? -dir : a[key] > b[key] ? dir : a.closest_utc - b.closest_utc));
+  const col = COLS[state.sort.col];
+  const val = col?.sortVal ?? ((p) => p[key] ?? '');
+  rows.sort((a, b) => (val(a) < val(b) ? -dir : val(a) > val(b) ? dir : a.closest_utc - b.closest_utc));
   for (const p of rows) {
     const tr = document.createElement('tr');
     tr.dataset.id = p.id;
@@ -737,15 +980,7 @@ async function init() {
   });
   $('#buffer').addEventListener('change', () => { if (state.roiRaw) setRoiGeom(state.roiRaw, { warnings: state.roiWarnings }); });
   $('#roi-clear').addEventListener('click', clearRoi);
-  $('#copy-link').addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(location.href);
-      $('#link-status').textContent = t('link_copied');
-    } catch {
-      $('#link-status').textContent = location.href;
-    }
-    setTimeout(() => { $('#link-status').textContent = ''; }, 4000);
-  });
+  $('#copy-link').addEventListener('click', () => copyLink(null));
   $('#days').addEventListener('input', () => { $('#days-warn').hidden = !(Number($('#days').value) > 16); });
   $('#transitional').addEventListener('change', () => {
     for (const e of state.catalogue.entries) if (e.status !== 'active') state.selected.add(e.id);
@@ -753,8 +988,13 @@ async function init() {
     rebuildTrackers();
   });
   $('#run').addEventListener('click', runPasses);
-  $('#table-cat').addEventListener('change', renderTable);
-  $('#table-opp').addEventListener('change', renderTable);
+  $('#table-cat').addEventListener('change', () => { renderTable(); renderCalendarTab(); renderInsarTab(); });
+  $('#table-opp').addEventListener('change', () => { if (state.result) refreshViews(); });
+  $('#max-cloud').addEventListener('change', () => { if (state.result) refreshViews(); });
+  $('#export-ics').addEventListener('click', () => exportAll('ics'));
+  $('#export-geojson').addEventListener('click', () => exportAll('geojson'));
+  $('#export-geolibre').addEventListener('click', () => exportAll('geolibre'));
+  $('#print-sheet-btn').addEventListener('click', printSheet);
   $('#play').addEventListener('click', () => setClock({ playing: !state.clock.playing }));
   $('#speed').addEventListener('change', () => setClock({ speed: Number($('#speed').value) }));
   $('#now').addEventListener('click', () => setClock({ baseSim: Date.now(), speed: 1, playing: true }));

@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+   <Document>
+      <name>S2 Planned Observations from 20261029T150000 to 20261116T180000</name>
+      <Style id="NOBS_NOMINAL">
+         <LineStyle>
+            <color>FF00FF00</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>4000FF00</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="NOBS_NRT">
+         <LineStyle>
+            <color>FF00FF7F</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>4000FF7F</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="NOBS_RT">
+         <LineStyle>
+            <color>FF00FFFF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>4000FFFF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="NOBS_NOT_RECORDING">
+         <LineStyle>
+            <color>FF0000FF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>400000FF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="SUN">
+         <LineStyle>
+            <color>FFFFFFFF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FFFFFF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="VIC">
+         <LineStyle>
+            <color>FFFF00FF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FF00FF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="DARK-O">
+         <LineStyle>
+            <color>FF7F7F7F</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>407F7F7F</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="DARK-C">
+         <LineStyle>
+            <color>FF000000</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40000000</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="RAW">
+         <LineStyle>
+            <color>FFFF0000</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FF0000</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="TEST">
+         <LineStyle>
+            <color>FFFFFF00</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FFFF00</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="MSMOON">
+         <LineStyle>
+            <color>FFFFFF00</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FFFF00</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Folder>
+         <name>S2A</name>
+         <Folder>
+            <name>NOBS</name>
+            <Folder>
+               <name>NOMINAL</name>
+               <Placemark>
+                  <name>59306-1</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-10-30T08:10:23.267</begin>
+                     <end>2026-10-30T08:40:38.091</end>
+                  </TimeSpan>
+                  <styleUrl>NOBS_NOMINAL</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>59306-1</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>NOBS</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-10-30T08:10:23.267</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-10-30T08:40:38.091</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>1814824</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>59306</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>78</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>503</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>59.85433180700529,70.3805673222241,0 56.301052517499755,70.94786363659674,0 52.42099616801228,67.6283140990766,0 49.432322408843106,64.24743448991406,0 47.03325206782918,60.82566514945153,0 45.04139766805821,57.3750278425389,0 43.34095738504731,53.90300726027597,0 41.855191260994516,50.414498060429395,0 40.53132634021378,46.91284656727671,0 39.3318792972797,43.40043931490179,0 38.229502141715926,39.87904825643817,0 37.20368243448604,36.350049860708225,0 36.238683299540256,32.814559621387936,0 35.32216060330693,29.273521225540247,0 34.44422009320831,25.727766008085123,0 33.596757718937745,22.178053165075134,0 32.77298629423713,18.625097175432373,0 31.967086954151927,15.069586540686387,0 31.173945176576048,11.512196555736924,0 30.388941342142143,7.953598254301439,0 29.607790184629778,4.394463823459545,0 28.826396172622225,0.8354705749133964,0 28.04071814309664,-2.722695112559894,0 27.24665073706563,-6.279335044810034,0 26.439899419317324,-9.83373559932446,0 25.61584524671712,-13.385162821306047,0 24.769390348600208,-16.932855369264026,0 23.89477304846413,-20.476014256171148,0 22.98533816306524,-24.013788017829434,0 22.03324265372398,-27.545251448166052,0 21.029074875767325,-31.06937515308684,0 19.961319578514885,-34.584983019995796,0 19.703176141002064,-35.398894229815944,0 21.2668922236607,-35.721858954734756,0 22.84331382984931,-36.02450417968582,0 23.06972612633695,-35.20713447886477,0 24.01373448615693,-31.678331771216484,0 24.913234906896637,-28.143425162614268,0 25.777372570996704,-24.60317511364165,0 26.61368366667577,-21.05828573696526,0 27.428544494549758,-17.509429021646678,0 28.22747123200953,-13.957260966675573,0 29.01535914561579,-10.402432764620526,0 29.796672283586243,-6.845598409048152,0 30.575600224564855,-3.2874199144796488,0 31.356194147339778,0.2714289229479678,0 32.142491894559946,3.8302594433516233,0 32.93864031554462,7.388365004383486,0 33.749022493790264,10.945017101924234,0 34.57839714434414,14.499459999093816,0 35.43206591790664,18.05090288390904,0 36.31607139511648,21.598508369902703,0 37.23744730484968,25.141375894626343,0 38.204543050405626,28.678517868514664,0 39.22745449071701,32.20882556619648,0 40.318608641891124,35.731020318179354,0 41.49357427531421,39.243583265456785,0 42.772209664189326,42.74465317380425,0 44.18032349862246,46.23187547362931,0 45.75211880447864,49.70217637205685,0 47.533964451335514,53.1514079612921,0 49.590183575590636,56.573792152271785,0 52.01237316044073,59.961003611720734,0 54.9347525324388,63.30060615802072,0 58.5600627528112,66.57327758210728,0 63.20382850453705,69.74767448282189,0 59.85433180700529,70.3805673222241,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+               </Folder>
+         </Folder>
+         </Folder>
+   </Document>
+</kml>

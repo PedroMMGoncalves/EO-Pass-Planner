@@ -162,6 +162,54 @@ input[type="file"] { font-size: var(--fs-13); max-width: 100%; }
 }
 .sat-marker.is-imaging .sat-dot { box-shadow: 0 0 0 1px var(--ink), 0 0 0 5px var(--imaging-glow); }
 
+/* ---------- pass drawer ---------- */
+.drawer {
+  position: absolute; top: 0.75rem; left: 0.75rem; z-index: 3; width: min(410px, calc(100% - 1.5rem));
+  max-height: calc(100% - 4.5rem); overflow-y: auto; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--rule); border-radius: var(--r-drawer); padding: 0.6rem 0.8rem 0.8rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+.drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.drawer-head h3 { margin: 0; font-size: var(--fs-16); }
+.drawer-head button { padding: 0 0.5rem; font-size: var(--fs-20); line-height: 1.2; }
+.geom-diagram { width: 100%; height: auto; font: 400 10px var(--dense); fill: var(--ink); }
+.geom-diagram .soft { fill: var(--ink-soft); }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.1rem 0.7rem; margin: 0.4rem 0; font: 400 var(--fs-13)/1.35 var(--dense); font-variant-numeric: tabular-nums; }
+.facts dt { color: var(--ink-soft); }
+.facts dd { margin: 0; }
+.spark-wrap { display: flex; align-items: center; gap: 0.6rem; }
+.spark { width: 160px; height: 34px; }
+.spark-now { stroke: var(--rule); stroke-dasharray: 2 2; }
+.drone { border-top: 1px solid var(--rule); margin-top: 0.4rem; padding-top: 0.4rem; }
+.drone .speed { display: flex; gap: 0.4rem; align-items: center; font-size: var(--fs-13); }
+.drone .speed > span { display: inline; }
+.narrow, .drone-min { width: 4.5rem !important; }
+.drawer-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: 0.5rem; }
+.drawer-actions a { font-size: var(--fs-13); }
+button.link { border: 0; background: none; padding: 0; color: var(--ink); text-decoration: underline; font: inherit; }
+
+/* ---------- calendar ---------- */
+.cal-wrap { overflow-x: auto; }
+.cal { display: grid; gap: 2px; font: 400 var(--fs-13)/1.2 var(--dense); font-variant-numeric: tabular-nums; align-items: stretch; }
+.cal-head { text-align: center; color: var(--ink-soft); padding: 0.2rem 0; position: sticky; top: 0; background: var(--paper); }
+.cal-weekend { color: var(--ink); font-weight: 600; }
+.cal-corner, .cal-name { position: sticky; left: 0; background: var(--paper); z-index: 1; }
+.cal-name { padding: 0.15rem 0.5rem 0.15rem 0; white-space: nowrap; }
+.cal-group { font-weight: 600; padding: 0.5rem 0 0.1rem; position: sticky; left: 0; color: var(--ink-soft); }
+.cal-cell { min-height: 1.5rem; border: 1px solid transparent; border-radius: 3px; background: var(--surface); padding: 0; font: 600 10px var(--dense); color: var(--ink); }
+button.cal-cell { cursor: pointer; }
+.cal-cell.is-opportunity { border-width: 2px; border-style: solid; }
+.cal-cell.is-selected { outline: 2px solid var(--ink); outline-offset: 1px; }
+
+/* ---------- exports ---------- */
+.exports { border: 0; padding: 0; position: relative; }
+.exports > summary { list-style: none; border: 1px solid var(--ink); border-radius: var(--r-control); padding: 0.35rem 0.8rem; background: var(--surface); font-size: var(--fs-16); font-weight: 400; }
+.exports > summary::-webkit-details-marker { display: none; }
+.exports-menu { position: absolute; right: 0; z-index: 5; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-drawer); padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; width: 18rem; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18); }
+.exports-menu button { text-align: left; }
+.insar-track h4 { margin: 0.8rem 0 0.2rem; font-size: var(--fs-16); }
+.print-sheet { display: none; }
+
 /* ---------- tabs ---------- */
 .tabs { padding: 0 1.25rem 2rem; }
 .tablist { display: flex; gap: 0; border-bottom: 1px solid var(--rule); }
@@ -214,4 +262,17 @@ tbody tr.is-selected { background: var(--row-selected); box-shadow: inset 3px 0 
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+/* ---------- printed field sheet ---------- */
+@media print {
+  body > *:not(.print-sheet) { display: none !important; }
+  .print-sheet { display: block; color: #000; background: #fff; font: 10pt/1.35 var(--sans); }
+  .print-sheet h1 { font: 600 16pt var(--display); margin: 0 0 4pt; }
+  .print-sheet h2 { font-size: 11pt; margin: 10pt 0 2pt; }
+  .print-sheet .ps-answer { font: 600 12pt var(--display); }
+  .print-sheet .ps-map { width: 100%; max-height: 9cm; object-fit: contain; border: 0.5pt solid #999; }
+  .print-sheet table { width: 100%; font-size: 7.5pt; background: #fff; }
+  .print-sheet th, .print-sheet td { padding: 1.5pt 3pt; border-bottom: 0.5pt solid #bbb; }
+  .print-sheet tr { break-inside: avoid; }
 }

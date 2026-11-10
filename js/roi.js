@@ -377,6 +377,7 @@ export function parseHash(hash) {
   if (q.get('i')) out.ids = q.get('i').split(',');
   if (q.get('t')) out.transitional = q.get('t') === '1';
   if (q.get('l')) out.lang = q.get('l');
+  if (q.get('p')) out.pass = q.get('p');
   return out;
 }
 
@@ -389,6 +390,7 @@ export function buildHash(s) {
   if (s.ids) q.set('i', s.ids.join(','));
   if (s.transitional) q.set('t', '1');
   if (s.lang && s.lang !== 'pt') q.set('l', s.lang);
+  if (s.pass) q.set('p', s.pass);
   return `#${q.toString()}`;
 }
 

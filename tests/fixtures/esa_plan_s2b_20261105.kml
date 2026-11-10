@@ -1,0 +1,395 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+   <Document>
+      <name>S2 Planned Observations from 20261105T120000 to 20261123T150000</name>
+      <Style id="NOBS_NOMINAL">
+         <LineStyle>
+            <color>FF00FF00</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>4000FF00</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="NOBS_NRT">
+         <LineStyle>
+            <color>FF00FF7F</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>4000FF7F</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="NOBS_RT">
+         <LineStyle>
+            <color>FF00FFFF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>4000FFFF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="NOBS_NOT_RECORDING">
+         <LineStyle>
+            <color>FF0000FF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>400000FF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="SUN">
+         <LineStyle>
+            <color>FFFFFFFF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FFFFFF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="VIC">
+         <LineStyle>
+            <color>FFFF00FF</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FF00FF</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="DARK-O">
+         <LineStyle>
+            <color>FF7F7F7F</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>407F7F7F</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="DARK-C">
+         <LineStyle>
+            <color>FF000000</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40000000</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="RAW">
+         <LineStyle>
+            <color>FFFF0000</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FF0000</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="TEST">
+         <LineStyle>
+            <color>FFFFFF00</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FFFF00</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Style id="MSMOON">
+         <LineStyle>
+            <color>FFFFFF00</color>
+            <width>2</width>
+         </LineStyle>
+         <PolyStyle>
+            <color>40FFFF00</color>
+            <fill>true</fill>
+         </PolyStyle>
+      </Style>
+      <Folder>
+         <name>S2B</name>
+         <Folder>
+            <name>NOBS</name>
+            <Folder>
+               <name>NOMINAL</name>
+               <Placemark>
+                  <name>50485-4</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-11-05T12:07:16.245</begin>
+                     <end>2026-11-05T12:07:37.893</end>
+                  </TimeSpan>
+                  <styleUrl>NOBS_NOMINAL</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>50485-4</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>NOBS</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-11-05T12:07:16.245</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-11-05T12:07:37.893</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>21648</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>50485</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>123</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>6</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>-27.456841831572838,-20.114599703680746,0 -28.807646128300007,-19.818903577083333,0 -29.115403420310543,-21.042679424924984,0 -27.753387209521446,-21.339820335822797,0 -26.385722824975854,-21.62598856679042,0 -26.100803456026913,-20.40001660594168,0 -27.456841831572838,-20.114599703680746,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+               <Placemark>
+                  <name>50485-5</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-11-05T12:16:33.362</begin>
+                     <end>2026-11-05T12:17:09.442</end>
+                  </TimeSpan>
+                  <styleUrl>NOBS_NOMINAL</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>50485-5</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>NOBS</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-11-05T12:16:33.362</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-11-05T12:17:09.442</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>36080</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>50485</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>123</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>10</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>-37.97705790711289,-52.71060330839092,0 -40.05117942001841,-52.31523693649508,0 -41.17622521954101,-54.32104901925077,0 -39.00715940356089,-54.73112028814668,0 -36.795244484636456,-55.10181693846927,0 -35.86616759524716,-53.06923717262522,0 -37.97705790711289,-52.71060330839092,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+               <Placemark>
+                  <name>50516-4</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-11-07T16:23:39.471</begin>
+                     <end>2026-11-07T16:28:38.935</end>
+                  </TimeSpan>
+                  <styleUrl>NOBS_NOMINAL</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>50516-4</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>NOBS</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-11-07T16:23:39.471</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-11-07T16:28:38.935</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>299464</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>50516</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>11</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>83</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>-114.02505346344523,-70.89175059588013,0 -117.49888335202569,-70.23097595839592,0 -123.94700705336993,-73.20717934683296,0 -132.84244067592053,-75.91897853594585,0 -145.35108353799063,-78.18430143313898,0 -162.41462366621633,-79.70522932954687,0 177.61393510299354,-80.1364577960703,0 177.19499034756296,-81.46887466969355,0 176.622116280833,-82.80109584086972,0 -156.77412150148842,-82.2254926430838,0 -136.69952321178036,-80.31572556933101,0 -124.02203024915458,-77.67312367136051,0 -115.88349905857532,-74.67131210752723,0 -110.32392044232176,-71.48321145121636,0 -114.02505346344523,-70.89175059588013,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+               </Folder>
+         </Folder>
+         <Folder>
+            <name>VIC</name>
+            <Folder>
+               <name>NOMINAL</name>
+               <Placemark>
+                  <name>50491-2</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-11-05T21:59:13.615</begin>
+                     <end>2026-11-05T22:01:05.463</end>
+                  </TimeSpan>
+                  <styleUrl>VIC</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>50491-2</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>VIC</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-11-05T21:59:13.615</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-11-05T22:01:05.463</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>111848</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>50491</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>129</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>31</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>-168.58460729797764,23.402697582318666,0 -169.96224310837715,23.687842555103522,0 -170.7953267112951,20.136180211554638,0 -171.48648248823338,17.118677634098482,0 -170.1657153564869,16.83670360978249,0 -168.84910610214436,16.54635315556712,0 -168.11222423629417,19.559878873099837,0 -167.21325629467782,23.105584212562384,0 -168.58460729797764,23.402697582318666,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+               </Folder>
+         </Folder>
+         <Folder>
+            <name>DARK-O</name>
+            <Folder>
+               <name>NOMINAL</name>
+               <Placemark>
+                  <name>50493-1</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-11-06T00:43:16.824</begin>
+                     <end>2026-11-06T00:44:03.728</end>
+                  </TimeSpan>
+                  <styleUrl>DARK-O</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>50493-1</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>DARK-O</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-11-06T00:43:16.824</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-11-06T00:44:03.728</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>46904</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>50493</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>131</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>13</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>-36.886607233835846,22.58443256430779,0 -35.51732158460823,22.869056628434233,0 -36.154241566832646,25.53116252329391,0 -37.55210668769484,25.244696837078553,0 -38.942989038065086,24.945195482578498,0 -38.249901623748094,22.288304815365034,0 -36.886607233835846,22.58443256430779,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+               </Folder>
+         </Folder>
+         <Folder>
+            <name>SUN</name>
+            <Folder>
+               <name>NOMINAL</name>
+               <Placemark>
+                  <name>50636-1</name>
+                  <visibility>0</visibility>
+                  <TimeSpan>
+                     <begin>2026-11-16T01:07:01.897</begin>
+                     <end>2026-11-16T01:07:45.193</end>
+                  </TimeSpan>
+                  <styleUrl>SUN</styleUrl>
+                  <ExtendedData>
+                     <Data name="ID">
+                        <value>50636-1</value>
+                     </Data>
+                     <Data name="Mode">
+                        <value>SUN</value>
+                     </Data>
+                     <Data name="ObservationTimeStart">
+                        <value>2026-11-16T01:07:01.897</value>
+                     </Data>
+                     <Data name="ObservationTimeStop">
+                        <value>2026-11-16T01:07:45.193</value>
+                     </Data>
+                     <Data name="ObservationDuration">
+                        <value>43296</value>
+                     </Data>
+                     <Data name="OrbitAbsolute">
+                        <value>50636</value>
+                     </Data>
+                     <Data name="OrbitRelative">
+                        <value>131</value>
+                     </Data>
+                     <Data name="Scenes">
+                        <value>12</value>
+                     </Data>
+                  </ExtendedData>
+                  <Polygon>
+                     <outerBoundaryIs>
+                        <LinearRing>
+                           <coordinates>165.68308047230997,70.44163859557027,0 162.1210552199119,71.01048516877944,0 159.21635524948456,68.64000531837448,0 162.47066595188707,68.12320717241401,0 165.5728631455905,67.54558831009896,0 169.03962229408705,69.80706755885907,0 165.68308047230997,70.44163859557027,0</coordinates>
+                        </LinearRing>
+                     </outerBoundaryIs>
+                  </Polygon>
+               </Placemark>
+            </Folder>
+         </Folder>
+      </Folder>
+   </Document>
+</kml>

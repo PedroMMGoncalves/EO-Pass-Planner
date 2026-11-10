@@ -1,7 +1,7 @@
 {
- "updated_utc": "2026-11-10T13:19:32.955Z",
- "catalogue_version": "2026-11-10.3",
- "tle_count": 49,
+ "updated_utc": "2026-11-10T13:39:53.996Z",
+ "catalogue_version": "2026-11-10.4",
+ "tle_count": 50,
  "stale_tles": [],
  "sources": {
   "celestrak": {
@@ -9,10 +9,8 @@
    "errors": []
   },
   "esa_plans": {
-   "ok": null,
-   "errors": [
-    "not implemented yet"
-   ]
+   "ok": true,
+   "errors": []
   }
  }
 }

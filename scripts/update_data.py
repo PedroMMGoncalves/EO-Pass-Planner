@@ -24,8 +24,9 @@ Rules:
   satellite.js json2satrec (same SGP4 mean elements).
 
 Limitations:
-- TLEs only, for now. ESA S1/S2 acquisition-plan conversion is not
-  implemented yet; meta.json reports it as such.
+- ESA Sentinel-1/-2 acquisition plans are converted by scripts/esa_plans.py
+  (see its docstring); plan failures are reported in meta.json and never
+  remove existing plan files. Plan errors do not change the exit code.
 - CelesTrak is the single TLE source. Its GP data can lag after manoeuvres.
 - History keeps every distinct epoch seen per day; days with no run have no file.
 """
@@ -41,6 +42,8 @@ import time
 from pathlib import Path
 
 import requests
+
+import esa_plans
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -284,6 +287,11 @@ def main(argv: list[str] | None = None) -> int:
         changes.append(f"history {day_path.name}")
     changes += prune_history(now.date())
 
+    plan_session = requests.Session()
+    plan_session.headers["User-Agent"] = USER_AGENT
+    plan_changes, plan_errors = esa_plans.update_plans(plan_session, DATA, now)
+    changes += plan_changes
+
     meta_path = DATA / "meta.json"
     meta_old = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
     stale = sorted(
@@ -292,7 +300,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     sources = {
         "celestrak": {"ok": not errors, "errors": errors},
-        "esa_plans": {"ok": None, "errors": ["not implemented yet"]},
+        "esa_plans": {"ok": not plan_errors, "errors": plan_errors},
     }
     if changes or sources != meta_old.get("sources") or stale != meta_old.get("stale_tles"):
         meta = {
@@ -311,6 +319,8 @@ def main(argv: list[str] | None = None) -> int:
         print(c)
     if args.changes_file:
         args.changes_file.write_text("\n".join(changes) + ("\n" if changes else ""), encoding="utf-8")
+    for e in plan_errors:
+        print(f"warning (ESA plans): {e}", file=sys.stderr)
     return 1 if errors else 0
 
 

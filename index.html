@@ -73,6 +73,7 @@
 
     <main class="map-wrap">
       <div id="globe" class="globe" role="application" aria-label="Globo"></div>
+      <aside id="drawer" class="drawer" hidden aria-live="polite"></aside>
       <div class="timebar">
         <button id="play" type="button" class="secondary" aria-pressed="true">Pausa</button>
         <label class="speed"><span data-i18n="time_speed">Velocidade</span>
@@ -91,23 +92,49 @@
   </div>
 
   <section class="tabs">
+    <div class="panel-tools">
+      <label class="speed"><span data-i18n="table_cat">Categoria</span><select id="table-cat"></select></label>
+      <label class="check"><input id="table-opp" type="checkbox" checked> <span data-i18n="table_opp">Incluir oportunidades geométricas</span></label>
+      <label class="speed"><span data-i18n="max_cloud">Nuvens máx. (%)</span><input id="max-cloud" type="number" min="0" max="100" step="5" placeholder="–" class="narrow"></label>
+      <span class="spacer"></span>
+      <span id="link-status" class="hint" aria-live="polite"></span>
+      <button id="copy-link" type="button" class="secondary" disabled data-i18n="copy_link">Copiar link</button>
+      <details class="exports">
+        <summary data-i18n="exports">Exportar</summary>
+        <div class="exports-menu">
+          <button id="export-csv" type="button" class="secondary" disabled data-i18n="export_csv">CSV</button>
+          <button id="export-ics" type="button" class="secondary" disabled data-i18n="export_ics">Calendário (.ics)</button>
+          <button id="export-geojson" type="button" class="secondary" disabled data-i18n="export_geojson">Footprints (GeoJSON)</button>
+          <button id="export-geolibre" type="button" class="secondary" disabled data-i18n="export_geolibre">Abrir no GeoLibre (.geolibre)</button>
+          <button id="print-sheet-btn" type="button" class="secondary" disabled data-i18n="print_sheet">Folha de campo (imprimir)</button>
+          <p class="hint" data-i18n="geolibre_hint"></p>
+        </div>
+      </details>
+    </div>
     <div role="tablist" class="tablist">
-      <button role="tab" id="tab-table" aria-controls="panel-table" aria-selected="true" data-i18n="tab_table">Tabela</button>
+      <button role="tab" id="tab-calendar" aria-controls="panel-calendar" aria-selected="true" data-i18n="tab_calendar">Calendário</button>
+      <button role="tab" id="tab-table" aria-controls="panel-table" aria-selected="false" tabindex="-1" data-i18n="tab_table">Tabela</button>
+      <button role="tab" id="tab-insar" aria-controls="panel-insar" aria-selected="false" tabindex="-1" data-i18n="tab_insar">Pares InSAR</button>
+      <button role="tab" id="tab-stac" aria-controls="panel-stac" aria-selected="false" tabindex="-1" data-i18n="tab_stac">Aquisições reais</button>
       <button role="tab" id="tab-absences" aria-controls="panel-absences" aria-selected="false" tabindex="-1" data-i18n="tab_absences">Ausências</button>
       <button role="tab" id="tab-geo" aria-controls="panel-geo" aria-selected="false" tabindex="-1" data-i18n="tab_geo">Geoestacionários</button>
       <button role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false" tabindex="-1" data-i18n="tab_about">Sobre e limitações</button>
     </div>
-    <div role="tabpanel" id="panel-table" aria-labelledby="tab-table">
-      <div class="panel-tools">
-        <label class="speed"><span data-i18n="table_cat">Categoria</span><select id="table-cat"></select></label>
-        <label class="check"><input id="table-opp" type="checkbox" checked> <span data-i18n="table_opp">Incluir oportunidades geométricas</span></label>
-        <span class="spacer"></span>
-        <span id="link-status" class="hint" aria-live="polite"></span>
-        <button id="copy-link" type="button" class="secondary" disabled data-i18n="copy_link">Copiar link</button>
-        <button id="export-csv" type="button" class="secondary" disabled data-i18n="export_csv">Exportar CSV</button>
-      </div>
+    <div role="tabpanel" id="panel-calendar" aria-labelledby="tab-calendar">
+      <p class="hint" data-i18n="calendar_hint"></p>
+      <div id="calendar" class="cal-wrap"></div>
+      <p id="calendar-empty" class="hint" data-i18n="table_empty"></p>
+    </div>
+    <div role="tabpanel" id="panel-table" aria-labelledby="tab-table" hidden>
       <div class="table-wrap"><table id="passes"><thead></thead><tbody></tbody></table></div>
       <p id="table-empty" class="hint" data-i18n="table_empty"></p>
+      <p class="hint" data-i18n="cloud_legend"></p>
+    </div>
+    <div role="tabpanel" id="panel-insar" aria-labelledby="tab-insar" hidden>
+      <div id="insar"></div>
+    </div>
+    <div role="tabpanel" id="panel-stac" aria-labelledby="tab-stac" hidden>
+      <div id="stac"></div>
     </div>
     <div role="tabpanel" id="panel-absences" aria-labelledby="tab-absences" hidden>
       <ul id="absences" class="absences"></ul>
@@ -118,5 +145,6 @@
     </div>
     <div role="tabpanel" id="panel-about" aria-labelledby="tab-about" hidden class="prose"></div>
   </section>
+  <div id="print-sheet" class="print-sheet"></div>
 </body>
 </html>

@@ -146,6 +146,7 @@ export function createGlobe(container, { onClick, onBasemapError, theme = 'light
     zoom: 2.1,
     attributionControl: { compact: true, customAttribution: 'CelesTrak' },
     renderWorldCopies: false,
+    canvasContextAttributes: { preserveDrawingBuffer: true }, // map image for the printed field sheet
   });
   map.addControl(new maplibregl.NavigationControl({ visualizePitch: false }), 'top-right');
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left');

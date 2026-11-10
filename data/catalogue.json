@@ -1,5 +1,5 @@
 {
- "version": "2026-11-10.3",
+ "version": "2026-11-10.4",
  "schema_note": "One entry per instrument on a platform. Rules in scripts/validate_catalogue.py. 'unverified_fields' lists fields whose values have not yet been checked against a cited source.",
  "entries": [
   {
@@ -4730,6 +4730,136 @@
    "unverified_fields": [
     "orbit",
     "swath.footprint_m"
+   ],
+   "verified": true
+  },
+  {
+   "id": "FLEX_FLORIS",
+   "platform": "FLEX",
+   "short": "FLEX",
+   "object_name": "FLEX",
+   "norad_id": 100689,
+   "cospar_id": "2026-209A",
+   "instrument": "FLORIS",
+   "agency": "ESA",
+   "launch": "2026-09-15",
+   "categories": [
+    "hyperspectral"
+   ],
+   "tags": [
+    "red_edge"
+   ],
+   "status": "commissioning",
+   "status_note": "ESA Earth Explorer 8, launched 15 Sep 2026 with Sentinel-3C on Vega-C (VV30); in commissioning (nominally 3 months). ESA: FLEX flies in tandem with Sentinel-3A first, and Sentinel-3C will later be moved in to replace 3A (no date given). CelesTrak elements of 2026-11-10 put FLEX about 13 s (~90 km) ahead of Sentinel-3A, with Sentinel-3C far out of phase. Data collections are listed as internal for now.",
+   "note_expires": "2026-12-15",
+   "acquisition": "systematic",
+   "acquisition_note": "Pushbroom imaging spectrometer, daylight only. Swath lies inside OLCI camera 4 of the companion Sentinel-3. Product goal is monthly global vegetation fluorescence maps; whether acquisition is restricted to land or a latitude band is not officially stated.",
+   "pass_filter": "day_descending",
+   "lat_limits": null,
+   "swath": {
+    "model": "nadir_symmetric",
+    "width_km": 150
+   },
+   "orbit": {
+    "type": "sso",
+    "altitude_km": 814,
+    "inclination_deg": 98.64,
+    "ltdn": "10:00",
+    "repeat_days": 27
+   },
+   "resolution_m": {
+    "min": 300,
+    "max": 300
+   },
+   "spectral": "500-780 nm, two pushbroom Offner spectrometers: high-res channel (0.1 nm sampling) in the O2-B 686-697 nm and O2-A 759-769 nm bands; low-res 0.5-2.0 nm in red-edge, chlorophyll absorption and PRI bands",
+   "data_access": "https://earth.esa.int/eogateway/missions/flex/flex-data",
+   "plan_source": null,
+   "sources": [
+    {
+     "field": "norad_id",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?CATNR=100689&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status",
+     "url": "https://www.eoportal.org/satellite-missions/flex",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://www.esa.int/Applications/Observing_the_Earth/FLEX_and_Sentinel-3C_launched",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "status_note",
+     "url": "https://celestrak.org/NORAD/elements/gp.php?INTDES=2026-209&FORMAT=JSON",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "launch",
+     "url": "https://www.esa.int/Newsroom/Press_Releases/FLEX_and_Sentinel-3C_launched",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://esamultimedia.esa.int/docs/EarthObservation/FLEX_Mission_kit_260914.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "swath",
+     "url": "https://space.oscar.wmo.int/instruments/view/floris",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "resolution_m",
+     "url": "https://esamultimedia.esa.int/docs/EarthObservation/FLEX_Mission_kit_260914.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://earth.esa.int/eogateway/missions/flex",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "spectral",
+     "url": "https://esamultimedia.esa.int/docs/EarthObservation/FLEX_Mission_kit_260914.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://esamultimedia.esa.int/docs/EarthObservation/FLEX_Mission_kit_260914.pdf",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "orbit",
+     "url": "https://www.eoportal.org/satellite-missions/flex",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "pass_filter",
+     "url": "https://sentiwiki.copernicus.eu/web/s3-mission",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition_note",
+     "url": "https://www.eoportal.org/satellite-missions/flex",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "acquisition",
+     "url": "https://space.oscar.wmo.int/instruments/view/floris",
+     "accessed": "2026-11-10"
+    },
+    {
+     "field": "data_access",
+     "url": "https://earth.esa.int/eogateway/missions/flex/flex-data",
+     "accessed": "2026-11-10"
+    }
+   ],
+   "unverified_fields": [
+    "orbit",
+    "acquisition",
+    "pass_filter"
    ],
    "verified": true
   },

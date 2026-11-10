@@ -18,8 +18,8 @@
 const RAD = Math.PI / 180;
 const DEG = 180 / Math.PI;
 
-export function solarPosition(time, latDeg, lonDeg) {
-  const ms = time instanceof Date ? time.getTime() : Number(time);
+/** Declination (rad) and equation of time (min) at `ms`. */
+function solarTerms(ms) {
   const jd = ms / 86400000 + 2440587.5;
   const T = (jd - 2451545) / 36525; // Julian centuries since J2000.0
 
@@ -45,7 +45,25 @@ export function solarPosition(time, latDeg, lonDeg) {
     - 1.25 * e * e * Math.sin(2 * M * RAD)
   );
 
-  const utcMin = ((ms % 86400000) + 86400000) % 86400000 / 60000;
+  return { decl, eqTimeMin };
+}
+
+const toMs = (time) => (time instanceof Date ? time.getTime() : Number(time));
+const utcMinutes = (ms) => (((ms % 86400000) + 86400000) % 86400000) / 60000;
+
+/** Sub-solar point {lat, lon} in degrees (for the day/night terminator). */
+export function subsolarPoint(time) {
+  const ms = toMs(time);
+  const { decl, eqTimeMin } = solarTerms(ms);
+  let lon = (720 - utcMinutes(ms) - eqTimeMin) / 4;
+  lon = ((lon + 180) % 360 + 360) % 360 - 180;
+  return { lat: decl * DEG, lon };
+}
+
+export function solarPosition(time, latDeg, lonDeg) {
+  const ms = toMs(time);
+  const { decl, eqTimeMin } = solarTerms(ms);
+  const utcMin = utcMinutes(ms);
   const trueSolarMin = (((utcMin + eqTimeMin + 4 * lonDeg) % 1440) + 1440) % 1440;
   const hourAngle = trueSolarMin / 4 - 180; // degrees, negative before solar noon
 

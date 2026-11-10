@@ -15,7 +15,12 @@ Work in progress.
   instruments (Landsat 8, Landsat 9, Sentinel-2A/B/C), TLE update workflow.
 - [x] Pass prediction engine (`nadir_symmetric` swath) and comparison with the
   reference implementation (see [Validation](#validation)).
-- [ ] User interface, full catalogue, acquisition plans, weather, exports, documentation.
+- [x] Globe (MapLibre GL JS, globe projection) with live satellite positions, ground
+  tracks, instantaneous swaths and the night side. Point ROI by click or
+  coordinates, pass computation in a Web Worker, answer sentence, pass table,
+  absences and CSV export.
+- [ ] Polygon ROI (drawing, coordinates in other CRS, file upload), URL sharing.
+- [ ] Full catalogue, acquisition plans, weather, calendar, exports, documentation.
 
 ## Run locally
 

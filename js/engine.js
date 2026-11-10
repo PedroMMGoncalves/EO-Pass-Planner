@@ -272,7 +272,19 @@ export function predictEntry(entry, tle, roi, startMs, endMs, options = {}) {
     const p = refineWindow(entry, satrec, tle, roi, w, extent, opts);
     if (p) passes.push(p);
   }
-  return { status: 'ok', passes, closest_km: closest.km, closest_utc: closest.t, reach_km: reachKm };
+  // Refine the overall closest approach (geodesic, 1 s) around the best coarse sample.
+  let best = { km: closest.km, t: closest.t, side: null };
+  if (closest.t !== null) {
+    for (let t = closest.t - opts.coarseStepS * 1000; t <= closest.t + opts.coarseStepS * 1000; t += 1000) {
+      const s = subPoint(satrec, t);
+      if (!s) continue;
+      const g = geoInverse(s.lat, s.lon, roi.anchor.lat, roi.anchor.lon);
+      if (g.km <= best.km) best = { km: g.km, t, side: Math.sin(g.azi1 / DEG) >= 0 ? 'E' : 'W' };
+    }
+  }
+  return {
+    status: 'ok', passes, closest_km: best.km, closest_utc: best.t, closest_side: best.side, reach_km: reachKm,
+  };
 }
 
 /**

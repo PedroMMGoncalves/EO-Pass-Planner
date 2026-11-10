@@ -60,3 +60,34 @@ export function noteExpired(entry, today = new Date()) {
   const t = typeof today === 'string' ? today : today.toISOString().slice(0, 10);
   return entry.note_expires < t;
 }
+
+/**
+ * Category colour (spectral region) and marker shape. Colour encodes the part
+ * of the spectrum sensed. The hex values are provisional until checked with a
+ * colour-vision-deficiency simulator.
+ */
+export const CATEGORY_STYLE = {
+  optical_multispectral: { colour: '#1F7A8C', shape: 'circle' },
+  optical_vhr: { colour: '#1F7A8C', shape: 'circle' },
+  hyperspectral: { colour: '#1F7A8C', colour2: '#C98A1B', shape: 'circle-stripe' },
+  thermal: { colour: '#C2412D', shape: 'triangle' },
+  sar: { colour: '#6B4FA0', shape: 'diamond' },
+  lidar_altimetry: { colour: '#2E8B3E', shape: 'bar' },
+  meteo_polar: { colour: '#6C7A86', shape: 'square' },
+  meteo_geo: { colour: '#6C7A86', shape: 'square' },
+  atmosphere: { colour: '#6C7A86', shape: 'square' },
+  geophysics: { colour: '#8C6E4F', shape: 'cross' },
+};
+
+/** Style of an entry: that of its first (primary) category. */
+export const entryStyle = (e) => CATEGORY_STYLE[e.categories[0]] ?? CATEGORY_STYLE.meteo_polar;
+
+/** Short platform label for the globe ("Sentinel-2C" → "S2C", "Landsat 9" → "L9"). */
+export function shortName(e) {
+  const p = e.platform;
+  let m = p.match(/^Sentinel-(\d)([A-Z])$/);
+  if (m) return `S${m[1]}${m[2]}`;
+  m = p.match(/^Landsat (\d+)$/);
+  if (m) return `L${m[1]}`;
+  return p;
+}

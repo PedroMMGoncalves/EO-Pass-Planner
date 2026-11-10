@@ -13,11 +13,9 @@ Inputs:  the Sentinel Online acquisition-plan pages (static HTML lists of KML li
 Outputs: data/plans/s1/<SAT>.geojson, data/plans/s2/<SAT>.geojson (SAT = S1C, S2B, ...)
          FeatureCollection, one feature per acquisition segment, one feature per line:
            geometry   Polygon, or MultiPolygon when split at the antimeridian
-                      (lon/lat, at most 40 vertices per ring, rounded to 0.001 deg,
+                      (lon/lat, at most 24 vertices per ring, rounded to 0.01 deg (about 1 km),
                       exterior ring counter-clockwise)
-           properties satellite, mode, start, stop (ISO UTC, "Z", whole seconds),
-                      orbit, rel_orbit; Sentinel-1 also pol, datatake and, for
-                      stripmap, swath
+           properties mode, start, stop (ISO UTC, "Z", whole seconds), rel_orbit
          plus a foreign member "plan":
            {format, satellite, mission, sources: [{name, last_modified}],
             window: [start, end], coverage: [[start, end], ...]}
@@ -81,8 +79,9 @@ PLAN_NAME = re.compile(
 KML_NS = "{http://www.opengis.net/kml/2.2}"
 FORMAT_VERSION = 1
 WINDOW_DAYS = 30
-MAX_VERTICES = 40
-ROUND_DEG = 3
+MAX_VERTICES = 24
+FEATURE_PROPS = ("mode", "start", "stop", "rel_orbit")
+ROUND_DEG = 2
 S1_MODES = {"IW", "EW", "SM", "WV"}
 S2_MODES = {"NOBS", "VIC"}
 S2_DROP_CLASS = "NOT_RECORDING"
@@ -363,7 +362,7 @@ def kml_to_segments(kml_bytes: bytes, satellite: str) -> list[dict]:
     Each segment: {satellite, mode, start, stop (ISO UTC "Z"), orbit, rel_orbit,
     polygon [[lon, lat], ...]} plus pol, datatake and swath (stripmap only) for
     Sentinel-1. `polygon` is closed, simplified to at most 40 vertices, rounded to
-    0.001 deg, with continuous longitudes (it may extend beyond +-180 deg).
+    0.01 deg, with continuous longitudes (it may extend beyond +-180 deg).
     Non-imaging modes and unusable placemarks are skipped; sorted by start.
     Raises ValueError for unparseable XML or documents declaring entities.
     """
@@ -471,7 +470,9 @@ def segment_to_feature(seg: dict) -> dict | None:
     geom = seg.get("geometry") or ring_to_geometry(seg["polygon"])
     if geom is None:
         return None
-    props = {k: v for k, v in seg.items() if k not in ("polygon", "geometry")}
+    # Only what the browser uses (the satellite is implied by the file): keeps
+    # the daily-changing files small in the repository history.
+    props = {k: seg[k] for k in FEATURE_PROPS if seg.get(k) is not None}
     return {"type": "Feature", "properties": props, "geometry": geom}
 
 
@@ -603,7 +604,7 @@ def _update_satellite(session, out_dir: Path, sat: str, own: list[dict], now: dt
         time.sleep(REQUEST_PAUSE_S)
     unchanged = all(r.status_code == 304 for r in responses.values())
     if unchanged and old_end is not None and max(p["valid_to"] for p in own) <= old_end:
-        segs = [dict(f["properties"], geometry=f["geometry"]) for f in old.get("features", [])]
+        segs = [dict(f["properties"], geometry=f["geometry"], satellite=sat) for f in old.get("features", [])]
         return write_plans(out_dir, segs, now, own, old_lm)
 
     last_modified = {}

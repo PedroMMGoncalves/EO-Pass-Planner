@@ -6,6 +6,8 @@ Outputs: exit code 0 if valid, 1 otherwise; errors and warnings on stdout.
 Rules:
 - Every entry has the required fields with valid enum values.
 - Every non-inactive entry cites a source for `status` and `swath` (hard error).
+- Constellation entries (several satellites selected by a CelesTrak query)
+  have no single NORAD id; they need `constellation.query` (group or name).
 - `verified: true` requires a source for `norad_id` as well.
 - If data/tles.json has the entry's NORAD id, its name must equal `object_name`.
 - A `note_expires` date in the past is a warning (the UI also shows it).
@@ -85,7 +87,14 @@ def validate(catalogue: dict, tles: dict | None, today: dt.date) -> tuple[list[s
             err(f"bad pass_filter {e.get('pass_filter')!r}")
         if e.get("plan_source") not in PLAN_SOURCES:
             err(f"bad plan_source {e.get('plan_source')!r}")
-        if not isinstance(e.get("norad_id"), int) and e.get("status") != "inactive":
+        constellation = e.get("constellation")
+        if constellation:
+            q = constellation.get("query") or {}
+            if not (q.get("group") or q.get("name")):
+                err("constellation.query needs 'group' or 'name'")
+            if "commercial" not in e.get("tags", []) and not constellation.get("open"):
+                warnings.append(f"{eid}: constellation without the 'commercial' tag")
+        elif not isinstance(e.get("norad_id"), int) and e.get("status") != "inactive":
             err("norad_id must be an integer")
         if e.get("short") is not None and not (isinstance(e["short"], str) and 0 < len(e["short"]) <= 6):
             err("short label must be 1-6 characters")

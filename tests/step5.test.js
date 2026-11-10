@@ -27,7 +27,7 @@ test('ESA plan cross-check: planned, not planned, no plan', () => {
   };
   const plan = prepare(fc);
   const anchor = { lat: 38, lon: -8 };
-  assert.deepEqual(planStatus(plan, { closest_utc: Date.parse('2026-11-12T11:30:00Z') }, anchor), { status: 'planned', mode: 'NOBS' });
+  assert.deepEqual(planStatus(plan, { closest_utc: Date.parse('2026-11-12T11:30:00Z') }, anchor), { status: 'planned', mode: 'NOBS', rel_orbit: null });
   assert.equal(planStatus(plan, { closest_utc: Date.parse('2026-11-15T11:30:00Z') }, anchor).status, 'not_planned');
   // After the last segment the nominal coverage is clipped: "no plan".
   assert.equal(planStatus(plan, { closest_utc: Date.parse('2026-11-19T11:30:00Z') }, anchor).status, 'no_plan');
@@ -184,4 +184,33 @@ test('spectral ruler: microwave wavelengths and rows for selected instruments', 
   assert.match(svg, /sr-hl/);
   assert.match(svg, /Al-OH/);
   assert.equal(spectralRuler(bands, [], { colourOf: () => '#000', t: (k) => k }), null);
+});
+
+test('Landsat WRS-2 path/row and ICESat-2 RGT from past acquisitions', async () => {
+  const { landsatPathRow } = await import('../js/tiles.js');
+  const { parseGranule, icesat2Rgt } = await import('../js/cmr.js');
+  const items = [
+    { platform: 'landsat-9', datetime: Date.parse('2026-10-31T11:08:49Z'), path_row: '203/034' },
+    { platform: 'landsat-9', datetime: Date.parse('2026-10-31T11:09:13Z'), path_row: '203/035' },
+    { platform: 'sentinel-2b', datetime: Date.parse('2026-10-31T11:30:00Z') },
+  ];
+  // Landsat 8 eight days later on the same WRS-2 path; Landsat 9 sixteen days later.
+  assert.equal(landsatPathRow({ platform: 'Landsat 8', closest_utc: Date.parse('2026-11-08T11:09:00Z') }, items), '203/034-035');
+  assert.equal(landsatPathRow({ platform: 'Landsat 9', closest_utc: Date.parse('2026-11-16T11:08:50Z') }, items), '203/034-035');
+  assert.equal(landsatPathRow({ platform: 'Landsat 9', closest_utc: Date.parse('2026-11-12T11:08:50Z') }, items), null);
+  assert.deepEqual(parseGranule('ATL08_20260829104504_11673206_007_01.h5'), { rgt: 1167, cycle: 32, segment: 6 });
+  const g = [{ rgt: 1167, time: Date.parse('2026-08-29T10:45:28Z') }];
+  assert.equal(icesat2Rgt({ closest_utc: Date.parse('2026-11-28T10:52:00Z') }, g), 1167, '91 days later, within the segment tolerance');
+  assert.equal(icesat2Rgt({ closest_utc: Date.parse('2026-11-20T10:52:00Z') }, g), null);
+});
+
+test('readable time-zone names', async () => {
+  const { setLang, zoneName } = await import('../js/i18n.js');
+  setLang('pt');
+  assert.equal(zoneName('Europe/Lisbon'), 'Lisboa');
+  assert.equal(zoneName('Africa/Sao_Tome'), 'São Tomé');
+  assert.equal(zoneName('America/Argentina/Buenos_Aires'), 'Buenos Aires');
+  setLang('en');
+  assert.equal(zoneName('Atlantic/Cape_Verde'), 'Cape Verde');
+  setLang('pt');
 });

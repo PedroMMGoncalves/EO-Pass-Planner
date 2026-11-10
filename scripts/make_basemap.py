@@ -1,10 +1,13 @@
 """Build the offline basemap layers in data/basemap/ from Natural Earth (public domain).
 
-Inputs:  Natural Earth 1:50m GeoJSON downloaded from
+Inputs:  Natural Earth GeoJSON downloaded from
          https://github.com/nvkelso/natural-earth-vector/tree/master/geojson
-         (ne_50m_land, ne_50m_admin_0_boundary_lines_land).
-Outputs: data/basemap/land.geojson, data/basemap/borders.geojson
-         (properties removed, coordinates rounded to 0.01°, ~1 km).
+         (ne_50m_land, ne_50m_admin_0_boundary_lines_land, and the 1:110m
+         versions ne_110m_land, ne_110m_admin_0_boundary_lines_land).
+Outputs: data/basemap/land.geojson, data/basemap/borders.geojson (1:50m) and
+         data/basemap/land-110m.geojson, data/basemap/borders-110m.geojson
+         (loaded first; the 1:50m files replace them when zooming in).
+         Properties removed, coordinates rounded to 0.01° (~1 km).
 Usage:   python scripts/make_basemap.py <dir with the downloaded files>
 Limitations: 1:50m generalisation; small islands and coastline detail are
          simplified. Intended as a light, offline context layer only.
@@ -42,3 +45,5 @@ if __name__ == "__main__":
     d = Path(sys.argv[1])
     convert(d / "ne_50m_land.geojson", ROOT / "data/basemap/land.geojson")
     convert(d / "ne_50m_admin_0_boundary_lines_land.geojson", ROOT / "data/basemap/borders.geojson")
+    convert(d / "ne_110m_land.geojson", ROOT / "data/basemap/land-110m.geojson")
+    convert(d / "ne_110m_admin_0_boundary_lines_land.geojson", ROOT / "data/basemap/borders-110m.geojson")

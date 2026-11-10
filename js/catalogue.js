@@ -71,26 +71,28 @@ export function noteExpired(entry, today = new Date()) {
  * the dark (Dracula palette) theme. Colour encodes the part of the spectrum
  * sensed, with the same mapping in both themes (teal/cyan = VNIR-SWIR,
  * red/orange = thermal, purple = microwave, green = lidar, grey = broadband).
- * The hex values are provisional until checked with a colour-vision-deficiency
- * simulator.
+ * Checked with scripts/check_palette.mjs (Machado et al. 2009 simulation):
+ * minimum CIELAB ΔE between categories under protanopia, deuteranopia and
+ * tritanopia is 14.9 (light) and 21.9 (dark); every colour has at least 3:1
+ * contrast against the page background. Marker shapes back up colour.
  */
 export const CATEGORY_STYLE = {
-  optical_multispectral: { light: '#1F7A8C', dark: '#8BE9FD', shape: 'circle' },
-  optical_vhr: { light: '#1F7A8C', dark: '#8BE9FD', shape: 'circle' },
-  hyperspectral: { light: '#1F7A8C', dark: '#8BE9FD', light2: '#C98A1B', dark2: '#F1FA8C', shape: 'circle-stripe' },
-  thermal: { light: '#C2412D', dark: '#FFB86C', shape: 'triangle' },
-  sar: { light: '#6B4FA0', dark: '#BD93F9', shape: 'diamond' },
-  lidar_altimetry: { light: '#2E8B3E', dark: '#50FA7B', shape: 'bar' },
-  meteo_polar: { light: '#6C7A86', dark: '#A9B1D6', shape: 'square' },
-  meteo_geo: { light: '#6C7A86', dark: '#A9B1D6', shape: 'square' },
-  atmosphere: { light: '#6C7A86', dark: '#A9B1D6', shape: 'square' },
-  geophysics: { light: '#8C6E4F', dark: '#F1FA8C', shape: 'cross' },
+  optical_multispectral: { light: '#1F8FAD', dark: '#80ECED', shape: 'circle' },
+  optical_vhr: { light: '#1F8FAD', dark: '#80ECED', shape: 'circle' },
+  hyperspectral: { light: '#1F8FAD', dark: '#80ECED', light2: '#E05414', dark2: '#E9CE4C', shape: 'circle-stripe' },
+  thermal: { light: '#E05414', dark: '#E36856', shape: 'triangle' },
+  sar: { light: '#6A3399', dark: '#B784CF', shape: 'diamond' },
+  lidar_altimetry: { light: '#1E5528', dark: '#B4E3B7', shape: 'bar' },
+  meteo_polar: { light: '#3E474E', dark: '#8D939A', shape: 'square' },
+  meteo_geo: { light: '#3E474E', dark: '#8D939A', shape: 'square' },
+  atmosphere: { light: '#3E474E', dark: '#8D939A', shape: 'square' },
+  geophysics: { light: '#86652A', dark: '#E9CE4C', shape: 'cross' },
 };
 
 /** Style of an entry (that of its first, primary category) in a theme. */
 export function entryStyle(e, theme = 'light') {
   const s = CATEGORY_STYLE[e.categories[0]] ?? CATEGORY_STYLE.meteo_polar;
-  return { colour: theme === 'dracula' ? s.dark : s.light, shape: s.shape };
+  return { colour: theme === 'dracula' ? s.dark : s.light, colour2: theme === 'dracula' ? s.dark2 : s.light2, shape: s.shape };
 }
 
 /** Short platform label for the globe ("Sentinel-2C" → "S2C", "Landsat 9" → "L9"). */

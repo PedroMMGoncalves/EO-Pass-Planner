@@ -1,0 +1,57 @@
+# Comparison with the reference Python implementation (eo-overpass-predictor,
+# MIT) at a pinned commit. Runs only when the engine or its libraries change,
+# or on demand, because installing the reference environment takes minutes.
+name: oracle
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "js/engine.js"
+      - "js/geometry.js"
+      - "js/sun.js"
+      - "scripts/oracle_compare.py"
+      - "scripts/run_engine.mjs"
+      - "vendor/satellite.js"
+      - "vendor/proj4.js"
+      - "vendor/polygon-clipping.js"
+      - "vendor/geographiclib-geodesic.js"
+
+concurrency:
+  group: oracle
+  cancel-in-progress: true
+
+jobs:
+  oracle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ORACLE_COMMIT: eb6bccea08501dda8b232c24d979f158181f50be
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .github/requirements-oracle.txt
+
+      - name: Fetch the reference implementation at the pinned commit
+        run: |
+          git init -q "$RUNNER_TEMP/oracle"
+          cd "$RUNNER_TEMP/oracle"
+          git remote add origin https://github.com/julianManning/eo-overpass-predictor.git
+          git fetch -q --depth 1 origin "$ORACLE_COMMIT"
+          git checkout -q FETCH_HEAD
+
+      - name: Install the reference environment
+        run: pip install -r .github/requirements-oracle.txt
+
+      - name: Compare engines
+        run: |
+          python scripts/oracle_compare.py --oracle-dir "$RUNNER_TEMP/oracle" --days 16 --report "$RUNNER_TEMP/oracle_residuals.md"
+          cat "$RUNNER_TEMP/oracle_residuals.md" >> "$GITHUB_STEP_SUMMARY"

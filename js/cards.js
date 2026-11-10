@@ -74,6 +74,10 @@ export function renderFreshDetails(root, meta, { t, formatDateTime }) {
   }
   rows.push([t('fresh_stale'), meta.stale_tles?.length ? meta.stale_tles.join(', ') : t('fresh_none')]);
   root.append(el('dl', { class: 'facts' }, rows.flatMap(([k, v]) => [el('dt', {}, k), el('dd', {}, v)])));
+  if (meta.catalogue_alerts?.length) {
+    root.append(el('h4', {}, t('alerts_title')));
+    root.append(el('ul', { class: 'card-sources' }, meta.catalogue_alerts.map((a) => el('li', { class: a.kind === 'stale_elements' ? 'is-warn' : '' }, `${a.id}: ${t(`alert_${a.kind}`, { d: a.detail })}`))));
+  }
   const errs = Object.entries(meta.sources ?? {}).flatMap(([k, s]) => (s.errors ?? []).map((m) => `${k}: ${m}`));
   if (errs.length) root.append(el('details', {}, el('summary', {}, t('fresh_errors')), el('ul', {}, errs.slice(0, 20).map((m) => el('li', {}, m)))));
 }

@@ -51,6 +51,7 @@ export function prepare(fc) {
     start: Date.parse(f.properties.start),
     stop: Date.parse(f.properties.stop),
     mode: f.properties.mode ?? '',
+    rel_orbit: f.properties.rel_orbit ?? null,
     polys: f.geometry.type === 'Polygon' ? [f.geometry.coordinates] : f.geometry.coordinates,
   })).filter((s) => Number.isFinite(s.start) && Number.isFinite(s.stop));
   const coverage = (fc.plan?.coverage ?? []).map(([a, b]) => [Date.parse(a), Date.parse(b)]);
@@ -70,7 +71,7 @@ export function planStatus(plan, pass, anchor) {
   if (!plan.coverage.some(([a, b]) => t >= a - SLACK && t <= b + SLACK)) return { status: 'no_plan' };
   for (const s of plan.segs) {
     if (t < s.start - SLACK || t > s.stop + SLACK) continue;
-    if (s.polys.some((poly) => pointInPolygon([anchor.lon, anchor.lat], poly))) return { status: 'planned', mode: s.mode };
+    if (s.polys.some((poly) => pointInPolygon([anchor.lon, anchor.lat], poly))) return { status: 'planned', mode: s.mode, rel_orbit: s.rel_orbit };
   }
   return { status: 'not_planned' };
 }
@@ -85,6 +86,10 @@ export async function annotatePlans(passes, entriesById, anchor, fetchImpl = fet
   const plans = Object.fromEntries(await Promise.all([...sats].map(async (s) => [s, await loadPlan(s, fetchImpl)])));
   for (const p of passes) {
     const sat = planSatellite(entriesById[p.entry_id] ?? {});
-    if (sat) p.plan = planStatus(plans[sat], p, anchor);
+    if (sat) {
+      p.plan = planStatus(plans[sat], p, anchor);
+      // The plan states the relative orbit of planned Sentinel-1 segments.
+      if (p.plan.rel_orbit && /^Sentinel-1/.test(p.platform)) p.rel_orbit = p.plan.rel_orbit;
+    }
   }
 }

@@ -30,7 +30,7 @@ const STRINGS = {
     answer_more_other: 'Há mais {n} passagens nos próximos {days} dias.',
     answer_none: 'Nenhum dos instrumentos seleccionados observa este local nos próximos {days} dias.',
     answer_none_hint: 'Alarga a janela ou selecciona mais instrumentos; o separador Ausências explica porquê.',
-    answer_tz: 'Horas locais ({tz}, UTC{offset}).',
+    answer_tz: 'Horas locais de {place} (UTC{offset}).',
 
     roi_heading: 'Local',
     mode_label: 'Forma do local',
@@ -306,6 +306,18 @@ const STRINGS = {
     atm_note_thermal: 'O vapor de água, a humidade e o vento afectam a temperatura de superfície medida e a sua correcção.',
     atm_note_sar: 'A chuva recente e a neve alteram o retroespalhamento e reduzem a coerência interferométrica; o vento torna rugosas as superfícies de água.',
     insar_rain: 'chuva 24 h antes: {a} / {b}',
+    col_rgt: 'Traço de referência ICESat-2 (RGT)',
+    col_member: 'Satélite da constelação',
+    col_manoeuvre: 'Manobra orbital',
+    manoeuvre_text: 'provável manobra a {date} (semieixo maior {da} m) entre o TLE e a passagem; a previsão pode ter erro de vários segundos',
+    icesat2_title: 'ICESat-2: traços anteriores sobre o local (ATL08, NASA CMR)',
+    icesat2_cycle: 'ciclo',
+    icesat2_note: 'Os traços de referência repetem-se a cada 91 dias; o RGT das passagens futuras é deduzido destes. Descarregar os dados requer uma conta Earthdata (gratuita).',
+    alerts_title: 'Alertas do catálogo',
+    alert_stale_elements: 'sem elementos orbitais recentes ({d}): possível fim de missão ou modo de segurança',
+    alert_note_expired: 'nota de estado expirada em {d}',
+    alert_no_elements: 'sem elementos orbitais',
+    members_count: '{n} satélites',
     table_cat: 'Categoria',
     table_all: 'Todas',
     table_opp: 'Incluir oportunidades geométricas (sensores programáveis)',
@@ -360,6 +372,8 @@ const STRINGS = {
 <li>O globo mostra a faixa enquanto o Sol está acima do horizonte no ponto sob o satélite e a direcção é a de aquisição; é uma aproximação do sensor ligado.</li>
 <li>O mapa de base (Natural Earth 1:50 m) é generalizado e serve só de contexto.</li>
 <li>Nuvens e condições atmosféricas são valores pontuais de modelos (Open-Meteo, CAMS), não o estado da cena; os aerossóis só têm previsão a 5 dias.</li>
+<li>As manobras orbitais são detectadas a partir do arquivo de elementos orbitais (desde 10 nov 2026) com um limiar provisório de 25 m no semieixo maior; manobras pequenas ou anteriores ao arquivo não são assinaladas.</li>
+<li>As constelações comerciais incluem os membros com elementos orbitais recentes na CelesTrak; nem todos estão necessariamente operacionais, e as suas imagens não são de acesso aberto.</li>
 </ul>
 <h3>Créditos</h3>
 <p>Método inspirado em <a href="https://github.com/julianManning/eo-overpass-predictor">eo-overpass-predictor</a> (Julian Manning, MIT), usado apenas como referência de validação. Bibliotecas: satellite.js, MapLibre GL JS, proj4js, polygon-clipping, GeographicLib, tz-lookup, togeojson, shpjs. Mapas de base: Natural Earth (domínio público), EOxCloudless 2024 (EOX, CC BY-NC-SA 4.0), OpenFreeMap (dados OpenStreetMap). Elementos orbitais: CelesTrak. Nuvens: Open-Meteo. Aquisições reais: Earth Search (Element 84) e Copernicus Data Space Ecosystem. Planos de aquisição: ESA. Tema escuro: paleta Dracula.</p>
@@ -385,7 +399,7 @@ const STRINGS = {
     answer_more_other: '{n} more passes in the next {days} days.',
     answer_none: 'None of the selected instruments observes this site in the next {days} days.',
     answer_none_hint: 'Extend the window or select more instruments; the Absences tab explains why.',
-    answer_tz: 'Times are local ({tz}, UTC{offset}).',
+    answer_tz: 'Times in {place} local time (UTC{offset}).',
 
     roi_heading: 'Place',
     mode_label: 'Shape of the place',
@@ -663,6 +677,18 @@ const STRINGS = {
     atm_note_thermal: 'Water vapour, humidity and wind affect the measured surface temperature and its correction.',
     atm_note_sar: 'Recent rain and snow change the backscatter and reduce interferometric coherence; wind roughens water surfaces.',
     insar_rain: 'rain 24 h before: {a} / {b}',
+    col_rgt: 'ICESat-2 reference ground track (RGT)',
+    col_member: 'Constellation satellite',
+    col_manoeuvre: 'Orbit manoeuvre',
+    manoeuvre_text: 'probable manoeuvre on {date} (semi-major axis {da} m) between the TLE and the pass; the prediction may be off by several seconds',
+    icesat2_title: 'ICESat-2: past tracks over the site (ATL08, NASA CMR)',
+    icesat2_cycle: 'cycle',
+    icesat2_note: 'Reference ground tracks repeat every 91 days; the RGT of future passes is derived from these. Downloading the data needs a (free) Earthdata account.',
+    alerts_title: 'Catalogue alerts',
+    alert_stale_elements: 'no recent orbital elements ({d}): possible end of mission or safe mode',
+    alert_note_expired: 'status note expired on {d}',
+    alert_no_elements: 'no orbital elements',
+    members_count: '{n} satellites',
     table_cat: 'Category',
     table_all: 'All',
     table_opp: 'Include geometric opportunities (tasked sensors)',
@@ -717,6 +743,8 @@ const STRINGS = {
 <li>The globe shows the swath while the sun is above the horizon under the satellite and the direction is the acquiring one; this approximates the sensor being on.</li>
 <li>The basemap (Natural Earth 1:50 m) is generalised and serves as context only.</li>
 <li>Cloud and atmospheric conditions are point model values (Open-Meteo, CAMS), not the state of the scene; aerosols are forecast only 5 days ahead.</li>
+<li>Orbit manoeuvres are detected from the element-set archive (since 10 Nov 2026) with a provisional 25 m semi-major-axis threshold; small manoeuvres, or those before the archive, are not flagged.</li>
+<li>Commercial constellations include the members with recent CelesTrak elements; not all are necessarily operational, and their imagery is not openly accessible.</li>
 </ul>
 <h3>Credits</h3>
 <p>Method inspired by <a href="https://github.com/julianManning/eo-overpass-predictor">eo-overpass-predictor</a> (Julian Manning, MIT), used only as a validation reference. Libraries: satellite.js, MapLibre GL JS, proj4js, polygon-clipping, GeographicLib, tz-lookup, togeojson, shpjs. Basemaps: Natural Earth (public domain), EOxCloudless 2024 (EOX, CC BY-NC-SA 4.0), OpenFreeMap (OpenStreetMap data). Orbital elements: CelesTrak. Cloud: Open-Meteo. Real acquisitions: Earth Search (Element 84) and Copernicus Data Space Ecosystem. Acquisition plans: ESA. Dark theme: Dracula palette.</p>
@@ -788,6 +816,33 @@ export function formatDayShort(ms, tz) {
   const { wd, day, mon } = dayParts(ms, tz);
   if (lang === 'pt') return `${WEEKDAY_PT_SHORT[wd]} ${day} ${MONTH_PT[mon]}.`;
   return fmt({ weekday: 'short', day: 'numeric', month: 'short' }, tz).format(ms).replace(',', '');
+}
+
+// Readable names for the time zones of the main working areas; others fall
+// back to the city part of the IANA name ("America/Sao_Paulo" -> "Sao Paulo").
+const ZONE_NAMES = {
+  'Europe/Lisbon': { pt: 'Lisboa', en: 'Lisbon' },
+  'Atlantic/Madeira': { pt: 'Madeira', en: 'Madeira' },
+  'Atlantic/Azores': { pt: 'Açores', en: 'the Azores' },
+  'Africa/Maputo': { pt: 'Maputo', en: 'Maputo' },
+  'Africa/Sao_Tome': { pt: 'São Tomé', en: 'São Tomé' },
+  'Atlantic/Cape_Verde': { pt: 'Cabo Verde', en: 'Cape Verde' },
+  'Africa/Bissau': { pt: 'Bissau', en: 'Bissau' },
+  'Africa/Luanda': { pt: 'Luanda', en: 'Luanda' },
+  'Europe/Madrid': { pt: 'Madrid', en: 'Madrid' },
+  'Atlantic/Canary': { pt: 'Canárias', en: 'the Canaries' },
+  'Europe/London': { pt: 'Londres', en: 'London' },
+  'Europe/Paris': { pt: 'Paris', en: 'Paris' },
+  'America/Sao_Paulo': { pt: 'São Paulo', en: 'São Paulo' },
+  'Asia/Dili': { pt: 'Díli', en: 'Dili' },
+  UTC: { pt: 'UTC', en: 'UTC' },
+};
+
+/** "Lisboa" / "Lisbon" for "Europe/Lisbon"; Etc/GMT zones are shown as UTC offsets. */
+export function zoneName(tz) {
+  if (ZONE_NAMES[tz]) return ZONE_NAMES[tz][lang] ?? ZONE_NAMES[tz].en;
+  if (/^Etc\//.test(tz)) return lang === 'pt' ? 'fuso marítimo' : 'nautical zone';
+  return tz.split('/').pop().replace(/_/g, ' ');
 }
 
 /** Duration in words: "3 dias e 21 h", "5 h 10 min", "40 min". */

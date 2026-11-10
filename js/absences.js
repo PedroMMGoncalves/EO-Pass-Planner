@@ -25,7 +25,7 @@
  */
 
 import {
-  t, formatDay, formatDayLong, formatDayShort, formatTime, utcOffset,
+  t, formatDay, formatDayLong, formatDayShort, formatTime, utcOffset, zoneName,
 } from './i18n.js';
 import { cloudRelevant } from './weather.js';
 import { CATEGORIES } from './catalogue.js';
@@ -38,6 +38,7 @@ const HALF = 50;
  */
 export function displayName(p, entriesById) {
   if (!entriesById) return p.platform;
+  if (p.member) return `${entriesById[p.entry_id]?.platform ?? ''} (${p.member})`;
   let n = 0;
   for (const e of Object.values(entriesById)) if (e.norad_id === p.norad_id && e.status !== 'inactive') n++;
   return n > 1 ? `${p.instrument.replace(/\s*\(.*\)$/, '')} (${p.platform})` : p.platform;
@@ -120,7 +121,7 @@ export function answerSentence(result, { tz, days, isPoint, entriesById = null }
   const sub = [
     n > 0 ? t(n === 1 ? 'answer_more_one' : 'answer_more_other', { n, days }) : '',
     best.acquisition === 'partial' ? t('answer_partial') : '',
-    t('answer_tz', { tz, offset: utcOffset(best.closest_utc, tz) }),
+    t('answer_tz', { place: zoneName(tz), offset: utcOffset(best.closest_utc, tz) }),
   ].filter(Boolean).join(' ');
   const lines = hl.length > 1 ? hl.map((h) => ({ cat: h.cat, pass: h.pass, text: shortLine(h.cat, h.pass, tz, isPoint, entriesById) })) : [];
   return { main, sub, best, lines };

@@ -1,0 +1,47 @@
+# End-to-end browser test and Lighthouse audit. On demand only (Actions
+# minutes): run it from the Actions tab before or after a release.
+name: e2e
+
+on:
+  workflow_dispatch:
+    inputs:
+      lighthouse_url:
+        description: "Page to audit with Lighthouse (empty to skip)"
+        default: "https://pedrommgoncalves.github.io/EO-Pass-Planner/"
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Install Playwright (Chromium only)
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.65.0
+          npx playwright install --with-deps chromium
+
+      - name: End-to-end test
+        run: |
+          python3 -m http.server 8765 >/dev/null 2>&1 &
+          sleep 1
+          node scripts/e2e.mjs
+
+      - name: Lighthouse (accessibility and performance)
+        if: ${{ inputs.lighthouse_url != '' }}
+        run: |
+          export CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          npx --yes lighthouse@12 "${{ inputs.lighthouse_url }}" --only-categories=accessibility,performance \
+            --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=lh.json --quiet
+          node scripts/lighthouse_summary.mjs lh.json >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-screenshots
+          path: e2e-output/*.png
+          retention-days: 3

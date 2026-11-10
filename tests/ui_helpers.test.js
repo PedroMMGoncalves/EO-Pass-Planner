@@ -31,11 +31,11 @@ test('answer sentence (pt and en)', () => {
   setLang('pt');
   const a = answerSentence(result, { tz: 'Europe/Lisbon', days: 16, isPoint: true });
   assert.match(a.main, /^O \S+ passa sobre o local (no|na) [a-zçá-]+, \d{1,2} de [a-zç]+, às \d\d:\d\d\.$/);
-  assert.match(a.sub, /^Há mais \d+ passagens nos próximos 16 dias\. Horas locais \(Europe\/Lisbon, UTC\+00:00\)\.$/);
+  assert.match(a.sub, /^Há mais \d+ passagens nos próximos 16 dias\. Horas locais de Lisboa \(UTC\+00:00\)\.$/);
   setLang('en');
   const e = answerSentence(result, { tz: 'Europe/Lisbon', days: 16, isPoint: true });
   assert.match(e.main, /passes over the site on [A-Z][a-z]+day \d{1,2} [A-Z][a-z]+ at \d\d:\d\d\.$/);
-  assert.match(e.sub, /Times are local \(Europe\/Lisbon, UTC\+0\d:00\)\./);
+  assert.match(e.sub, /Times in Lisbon local time \(UTC\+0\d:00\)\./);
   setLang('pt');
   const none = answerSentence({ passes: [], per_entry: {} }, { tz: 'UTC', days: 3, isPoint: true });
   assert.match(none.main, /^Nenhum dos instrumentos seleccionados observa este local nos próximos 3 dias\.$/);

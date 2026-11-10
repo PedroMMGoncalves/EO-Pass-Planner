@@ -44,6 +44,7 @@ from pathlib import Path
 import requests
 
 import esa_plans
+import orbit_watch
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -292,6 +293,23 @@ def main(argv: list[str] | None = None) -> int:
     plan_changes, plan_errors = esa_plans.update_plans(plan_session, DATA, now)
     changes += plan_changes
 
+    # Probable manoeuvres from the element-set archive.
+    if write_if_changed(DATA / "manoeuvres.json", dump_json(orbit_watch.manoeuvres_from_history(HISTORY))):
+        changes.append("manoeuvres.json")
+    alerts = orbit_watch.catalogue_alerts(catalogue, tles, now)
+
+    # Commercial constellations (members change; failures keep the old file).
+    members, member_errors = orbit_watch.constellation_members(plan_session, catalogue, now)
+    if members:
+        old_members = {}
+        cpath = DATA / "tles_constellations.json"
+        if cpath.exists():
+            old_members = json.loads(cpath.read_text(encoding="utf-8"))
+        merged = {**old_members, **members}
+        if write_if_changed(cpath, json.dumps(merged, separators=(",", ":")) + "\n"):
+            counts = ", ".join(f"{k} {len(v['members'])}" for k, v in members.items())
+            changes.append(f"constellations: {counts}")
+
     meta_path = DATA / "meta.json"
     meta_old = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
     stale = sorted(
@@ -301,13 +319,15 @@ def main(argv: list[str] | None = None) -> int:
     sources = {
         "celestrak": {"ok": not errors, "errors": errors},
         "esa_plans": {"ok": not plan_errors, "errors": plan_errors},
+        "constellations": {"ok": not member_errors, "errors": member_errors},
     }
-    if changes or sources != meta_old.get("sources") or stale != meta_old.get("stale_tles"):
+    if changes or sources != meta_old.get("sources") or stale != meta_old.get("stale_tles") or alerts != meta_old.get("catalogue_alerts"):
         meta = {
             "updated_utc": iso(now) if changes else meta_old.get("updated_utc", iso(now)),
             "catalogue_version": catalogue.get("version"),
             "tle_count": len(tles),
             "stale_tles": stale,
+            "catalogue_alerts": alerts,
             "sources": sources,
         }
         if write_if_changed(meta_path, dump_json(meta)) and not changes:
@@ -321,6 +341,8 @@ def main(argv: list[str] | None = None) -> int:
         args.changes_file.write_text("\n".join(changes) + ("\n" if changes else ""), encoding="utf-8")
     for e in plan_errors:
         print(f"warning (ESA plans): {e}", file=sys.stderr)
+    for a in alerts:
+        print(f"catalogue alert: {a['id']} {a['kind']} {a['detail']}", file=sys.stderr)
     return 1 if errors else 0
 
 

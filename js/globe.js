@@ -94,7 +94,9 @@ async function fetchVectorStyle(url) {
 }
 
 /** Build a complete style for a theme and basemap, carrying over current data. */
-async function buildStyle(theme, basemapId, data) {
+const DETAIL_ZOOM = 2.5; // above this zoom the 1:50 m basemap replaces the 1:110 m one
+
+async function buildStyle(theme, basemapId, data, detail) {
   const C = THEMES[theme] ?? THEMES.light;
   const bm = BASEMAPS[basemapId] ?? BASEMAPS.simple;
   const sources = Object.fromEntries(DATA_SOURCES.map((id) => [id, { type: 'geojson', data: data[id] ?? empty() }]));
@@ -102,8 +104,9 @@ async function buildStyle(theme, basemapId, data) {
   let base = [];
   let extra = {};
   if (bm.kind === 'simple') {
-    sources.land = { type: 'geojson', data: 'data/basemap/land.geojson', attribution: 'Natural Earth' };
-    sources.borders = { type: 'geojson', data: 'data/basemap/borders.geojson' };
+    const sfx = detail ? '' : '-110m';
+    sources.land = { type: 'geojson', data: `data/basemap/land${sfx}.geojson`, attribution: 'Natural Earth' };
+    sources.borders = { type: 'geojson', data: `data/basemap/borders${sfx}.geojson` };
     base = [
       { id: 'ocean', type: 'background', paint: { 'background-color': C.ocean } },
       { id: 'land', type: 'fill', source: 'land', paint: { 'fill-color': C.land } },
@@ -137,7 +140,7 @@ function colourise(fc, colours) {
 }
 
 export function createGlobe(container, { onClick, onBasemapError, theme = 'light', basemap = 'simple' }) {
-  const state = { theme, basemap };
+  const state = { theme, basemap, detail: false };
   const data = {};
   const map = new maplibregl.Map({
     container,
@@ -151,6 +154,14 @@ export function createGlobe(container, { onClick, onBasemapError, theme = 'light
   map.addControl(new maplibregl.NavigationControl({ visualizePitch: false }), 'top-right');
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left');
   map.on('click', (ev) => onClick?.({ lat: ev.lngLat.lat, lon: ev.lngLat.lng }));
+  // Light start: the 1:110 m land and borders load first; the 1:50 m files
+  // (about 1.3 MB) are fetched only when the user zooms in.
+  map.on('zoomend', () => {
+    if (state.detail || map.getZoom() < DETAIL_ZOOM) return;
+    state.detail = true;
+    map.getSource('land')?.setData('data/basemap/land.geojson');
+    map.getSource('borders')?.setData('data/basemap/borders.geojson');
+  });
   // Some online styles reference icons missing from their sprite; use a blank image.
   map.on('styleimagemissing', (ev) => {
     if (!map.hasImage(ev.id)) map.addImage(ev.id, { width: 1, height: 1, data: new Uint8Array(4) });
@@ -162,11 +173,11 @@ export function createGlobe(container, { onClick, onBasemapError, theme = 'light
     const v = ++styleVersion;
     let style;
     try {
-      style = await buildStyle(state.theme, state.basemap, data);
+      style = await buildStyle(state.theme, state.basemap, data, state.detail);
     } catch (err) {
       onBasemapError?.(state.basemap, err);
       state.basemap = 'simple';
-      style = await buildStyle(state.theme, 'simple', data);
+      style = await buildStyle(state.theme, 'simple', data, state.detail);
     }
     if (v !== styleVersion) return;
     map.setStyle(style, { diff: false });
@@ -221,7 +232,10 @@ export function createGlobe(container, { onClick, onBasemapError, theme = 'light
           const el = document.createElement('div');
           el.className = 'sat-marker';
           el.innerHTML = '<span class="sat-dot"></span><span class="sat-label"></span>';
-          el.querySelector('.sat-dot').style.background = s.colour;
+          const dotEl = el.querySelector('.sat-dot');
+          dotEl.style.background = s.colour;
+          dotEl.classList.add(`shape-${s.shape ?? 'circle'}`);
+          if (s.colour2) dotEl.style.setProperty('--stripe', s.colour2);
           el.querySelector('.sat-label').textContent = s.label;
           el.title = s.title;
           m = new maplibregl.Marker({ element: el, anchor: 'left', offset: [-6, 0], opacityWhenCovered: '0' }).setLngLat([s.lon, s.lat]).addTo(map);

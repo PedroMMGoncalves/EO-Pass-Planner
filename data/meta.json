@@ -1,14 +1,19 @@
 {
- "updated_utc": "2026-11-10T19:04:21.849Z",
- "catalogue_version": "2026-11-10.4",
- "tle_count": 50,
+ "updated_utc": "2026-11-10T21:25:26.703Z",
+ "catalogue_version": "2026-11-10.5",
+ "tle_count": 51,
  "stale_tles": [],
+ "catalogue_alerts": [],
  "sources": {
   "celestrak": {
    "ok": true,
    "errors": []
   },
   "esa_plans": {
+   "ok": true,
+   "errors": []
+  },
+  "constellations": {
    "ok": true,
    "errors": []
   }

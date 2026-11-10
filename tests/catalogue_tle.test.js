@@ -42,7 +42,7 @@ test('S2A note expires after 2026-12-31', () => {
 });
 
 test('every catalogue NORAD id has a TLE with the expected name', () => {
-  for (const e of catalogue.entries.filter((x) => x.status !== 'inactive')) {
+  for (const e of catalogue.entries.filter((x) => x.status !== 'inactive' && !x.constellation)) {
     const tle = tles[String(e.norad_id)];
     assert.ok(tle, `${e.id}: no TLE`);
     assert.equal(tle.name, e.object_name);

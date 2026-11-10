@@ -1,0 +1,10 @@
+numpy
+pandas
+geopandas
+shapely
+pyproj
+skyfield
+timezonefinder
+folium
+requests
+tzdata

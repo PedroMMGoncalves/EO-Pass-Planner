@@ -80,6 +80,10 @@ export function renderDrawer(root, c) {
   if (p.plan) facts.push([t('col_plan'), t(`plan_${p.plan.status}`) + (p.plan.mode ? ` (${p.plan.mode})` : '')]);
   if (p.tiles?.length) facts.push([t('col_tile'), p.tiles.join(', ')]);
   if (p.rel_orbit) facts.push([t('col_relorb'), String(p.rel_orbit)]);
+  if (p.path_row) facts.push(['WRS-2 path/row', p.path_row]);
+  if (p.rgt) facts.push([t('col_rgt'), String(p.rgt)]);
+  if (p.member) facts.push([t('col_member'), p.member]);
+  if (p.manoeuvre) facts.push([t('col_manoeuvre'), t('manoeuvre_text', { date: p.manoeuvre.after.slice(0, 10), da: Math.round(p.manoeuvre.delta_a_m) })]);
 
   const dl = el('dl', { class: 'facts' }, facts.flatMap(([k, v]) => [el('dt', {}, k), el('dd', {}, v)]));
   const atm = atmosphereBlock(p.atm, c.atmKind, t);
@@ -222,6 +226,18 @@ export function renderStac(root, state, c) {
     el('thead', {}, el('tr', {}, [c.t('col_sat'), c.t('col_local'), c.t('col_cloud'), c.t('stac_tile'), c.t('stac_mode'), ''].map((h, i) => el('th', { class: i === 2 ? 'num' : '' }, h)))),
     el('tbody', {}, rows))));
   root.append(el('p', { class: 'hint' }, c.t('stac_note')));
+  const ic = c.icesat2;
+  if (ic && (ic.loading || ic.granules?.length || ic.error)) {
+    root.append(el('h4', {}, c.t('icesat2_title')));
+    if (ic.loading) root.append(el('p', { class: 'hint' }, c.t('stac_loading')));
+    else if (ic.error) root.append(el('p', { class: 'error' }, c.t('stac_error', { list: `CMR: ${ic.error}` })));
+    else {
+      root.append(el('ul', { class: 'absences' }, ic.granules.slice(0, 40).map((g) => el('li', {},
+        `${c.fmt.dateTime(g.time, c.tz)}: RGT ${g.rgt}, ${c.t('icesat2_cycle')} ${g.cycle} `,
+        g.url ? el('a', { href: g.url, target: '_blank', rel: 'noopener' }, 'ATL08') : ''))));
+      root.append(el('p', { class: 'hint' }, c.t('icesat2_note')));
+    }
+  }
 }
 
 /** Build and print the field sheet. */

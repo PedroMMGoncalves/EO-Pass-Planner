@@ -12,7 +12,6 @@
  * computation (the change in area is shown); cloud forecast not yet included.
  */
 
-import tzlookup from '../vendor/tz-lookup.js';
 import {
   CRS, RoiError, parseCoordinates, readRoiFile, simplifyRoi, bufferRoi, createDrawer, parseHash, buildHash,
 } from './roi.js';
@@ -36,7 +35,8 @@ import {
 import {
   fetchAtmosphere, cloudAt, cloudRelevant, atmosphereAt, atmosphereKind, hourlyRows,
 } from './weather.js';
-import { s2TilesForRoi, s1RelativeOrbit } from './tiles.js';
+import { s2TilesForRoi, s1RelativeOrbit, landsatPathRow } from './tiles.js';
+import { searchIcesat2, icesat2Rgt } from './cmr.js';
 import { searchAcquisitions, groupByPass } from './stac.js';
 import { insarTracks } from './insar.js';
 import { annotatePlans } from './plans.js';
@@ -74,6 +74,9 @@ const state = {
   pendingPass: null,
   drawerOpen: false,
   bands: null,
+  manoeuvres: {},
+  constellationTles: null,
+  icesat2: { granules: [], error: null, loading: false },
   sweep: null,
   pastNote: '',
   theme: stored('eopp-theme') === 'dracula' ? 'dracula' : 'light',
@@ -104,6 +107,17 @@ function setClock(patch) {
 // ---------- theme ----------
 
 const colourOf = (e) => entryStyle(e, state.theme).colour;
+
+/** Category marker: colour plus shape (shapes back up colour, SPEC 8A.1). */
+function makeDot(e) {
+  const st = entryStyle(e, state.theme);
+  const dot = document.createElement('span');
+  dot.className = `dot shape-${st.shape}`;
+  dot.style.background = st.colour;
+  if (st.colour2) dot.style.setProperty('--stripe', st.colour2);
+  dot.setAttribute('aria-hidden', 'true');
+  return dot;
+}
 const colourMap = () => Object.fromEntries(state.catalogue.entries.map((e) => [e.id, colourOf(e)]));
 
 function setTheme(theme) {
@@ -164,6 +178,8 @@ function frame() {
     lat: p.lat,
     lon: p.lon,
     colour: colourOf(p.tr.entry),
+    shape: entryStyle(p.tr.entry, state.theme).shape,
+    colour2: entryStyle(p.tr.entry, state.theme).colour2,
     imaging,
   })));
   const real = performance.now();
@@ -193,6 +209,25 @@ function renderPlay() {
   b.setAttribute('aria-pressed', String(state.clock.playing));
 }
 
+// ---------- time zone (tz-lookup loaded on demand, ~74 KB) ----------
+
+let tzlookup = null;
+const tzReady = () => import('../vendor/tz-lookup.js').then((m) => { tzlookup = m.default; });
+
+/** IANA zone of a point; 'UTC' until the lookup table has loaded (then views refresh). */
+function zoneOf(lat, lon) {
+  if (tzlookup) {
+    try { return tzlookup(lat, lon); } catch { return 'UTC'; }
+  }
+  tzReady().then(() => {
+    if (!state.roi) return;
+    const a = roiAnchor(state.roi);
+    state.tz = zoneOf(a.lat, a.lon);
+    if (state.result) refreshViews();
+  });
+  return 'UTC';
+}
+
 // ---------- ROI ----------
 
 let drawer;
@@ -219,7 +254,7 @@ function setRoiGeom(geom, { warnings = [], fly = false } = {}) {
   state.roiWarnings = warnings;
   applyBuffer();
   const a = roiAnchor(state.roi);
-  try { state.tz = tzlookup(a.lat, a.lon); } catch { state.tz = 'UTC'; }
+  state.tz = zoneOf(a.lat, a.lon);
   state.result = null;
   state.selectedPass = null;
   state.drawerOpen = false;
@@ -307,8 +342,36 @@ function renderCoordsLabel() {
 
 // ---------- computation ----------
 
-let worker = null;
+let workers = [];
 let jobId = 0;
+
+/** Estimated relative cost of an entry (wide swaths refine longer windows). */
+function entryCost(e) {
+  const s = e.swath;
+  const w = s.width_km ?? (s.incidence_deg ? 400 : 100);
+  return 1 + (s.model === 'field_of_regard' ? 2 : 0) + w / 500;
+}
+
+/** Split entries into k groups of similar total cost (greedy, largest first). */
+function splitEntries(entries, k) {
+  const groups = Array.from({ length: k }, () => ({ cost: 0, list: [] }));
+  for (const e of [...entries].sort((a, b) => entryCost(b) - entryCost(a))) {
+    const g = groups.reduce((a, b) => (b.cost < a.cost ? b : a));
+    g.list.push(e);
+    g.cost += entryCost(e);
+  }
+  return groups.map((g) => g.list).filter((l) => l.length);
+}
+
+/** Merge the results of several workers into one engine result. */
+function mergeResults(parts) {
+  const first = parts[0];
+  return {
+    ...first,
+    passes: parts.flatMap((r) => r.passes).sort((a, b) => a.closest_utc - b.closest_utc),
+    per_entry: Object.assign({}, ...parts.map((r) => r.per_entry)),
+  };
+}
 
 function runPasses() {
   if (!state.roi) return;
@@ -322,29 +385,100 @@ function runPasses() {
     : '';
   renderRoiSummary();
   updateHash(startVal, days, entries);
-  worker?.terminate();
-  worker = new Worker(new URL('./engine.worker.js', import.meta.url), { type: 'module' });
-  const id = ++jobId;
-  const t0 = performance.now();
+  for (const w of workers) w.terminate();
+  const id0 = jobId + 1;
+  expandConstellations(entries).then(({ list, tles: extraTles }) => {
+    if (jobId !== id0) return;
+    startWorkers(id0, entries, list, extraTles, start, days, simp);
+  });
+  jobId = id0;
   $('#run').disabled = true;
   setAnswer(t('answer_computing'), '');
-  worker.onmessage = (ev) => {
-    const m = ev.data;
-    if (m.id !== id) return;
-    if (m.type === 'progress') $('#progress').textContent = t('progress', { done: m.done, total: m.total });
-    if (m.type === 'error') { $('#progress').textContent = m.message; $('#run').disabled = false; }
-    if (m.type === 'result') {
-      $('#run').disabled = false;
-      $('#progress').textContent = t('done_in', { n: m.result.passes.filter((p) => p.imaging_expected).length, s: ((performance.now() - t0) / 1000).toFixed(1) });
-      state.result = m.result;
-      state.ranEntries = entries;
-      state.days = days;
-      onResult(true);
+}
+
+/** Replace constellation entries by one entry per current member (element sets loaded on demand). */
+async function expandConstellations(entries) {
+  const groups = entries.filter((e) => e.constellation);
+  if (!groups.length) return { list: entries, tles: {} };
+  if (!state.constellationTles) {
+    try {
+      const res = await fetch('data/tles_constellations.json', { cache: 'no-cache' });
+      state.constellationTles = res.ok ? await res.json() : {};
+    } catch { state.constellationTles = {}; }
+  }
+  const list = entries.filter((e) => !e.constellation);
+  const tles = {};
+  for (const g of groups) {
+    for (const [norad, m] of Object.entries(state.constellationTles[g.id]?.members ?? {})) {
+      list.push({ ...g, id: `${g.id}~${norad}`, group_id: g.id, norad_id: Number(norad), object_name: m.name, platform: m.name, constellation: undefined });
+      tles[norad] = { name: m.name, omm: m.omm, epoch: m.epoch };
     }
-  };
+  }
+  return { list, tles };
+}
+
+/** Fold member results back into their constellation entry. */
+function foldConstellations(result) {
+  for (const p of result.passes) {
+    const i = p.entry_id.indexOf('~');
+    if (i < 0) continue;
+    p.member = p.platform;
+    p.entry_id = p.entry_id.slice(0, i);
+    p.id = `${p.entry_id}_${p.norad_id}_${new Date(p.closest_utc).toISOString().slice(0, 16)}`;
+  }
+  const per = {};
+  for (const [k, v] of Object.entries(result.per_entry)) {
+    const i = k.indexOf('~');
+    if (i < 0) { per[k] = v; continue; }
+    const g = k.slice(0, i);
+    const acc = per[g] ?? { status: 'ok', n_passes: 0, n_expected: 0, closest_km: Infinity, reach_km: 0, members: 0 };
+    acc.n_passes += v.n_passes ?? 0;
+    acc.n_expected += v.n_expected ?? 0;
+    acc.members += 1;
+    if ((v.closest_km ?? Infinity) < acc.closest_km) Object.assign(acc, { closest_km: v.closest_km, closest_utc: v.closest_utc, closest_side: v.closest_side });
+    acc.reach_km = Math.max(acc.reach_km, v.reach_km ?? 0);
+    per[g] = acc;
+  }
+  result.per_entry = per;
+  return result;
+}
+
+function startWorkers(id, entries, list, extraTles, start, days, simp) {
+  if (!list.length) { $('#run').disabled = false; $('#progress').textContent = ''; return; }
+  // One worker per spare core (at most 4): entries are independent.
+  const cores = navigator.hardwareConcurrency || 2;
+  const groups = splitEntries(list, Math.max(1, Math.min(4, cores - 1, list.length)));
+  workers = groups.map(() => new Worker(new URL('./engine.worker.js', import.meta.url), { type: 'module' }));
+  const t0 = performance.now();
+  const done = new Array(groups.length).fill(0);
+  const parts = new Array(groups.length).fill(null);
+  workers.forEach((w, gi) => {
+    w.onmessage = (ev) => {
+      const m = ev.data;
+      if (m.id !== id) return;
+      if (m.type === 'progress') {
+        done[gi] = m.done;
+        $('#progress').textContent = t('progress', { done: done.reduce((a, b) => a + b, 0), total: list.length });
+      }
+      if (m.type === 'error') { $('#progress').textContent = m.message; $('#run').disabled = false; }
+      if (m.type === 'result') {
+        parts[gi] = m.result;
+        w.terminate();
+        if (parts.every(Boolean)) {
+          $('#run').disabled = false;
+          state.result = foldConstellations(mergeResults(parts));
+          $('#progress').textContent = t('done_in', { n: state.result.passes.filter((p) => p.imaging_expected).length, s: ((performance.now() - t0) / 1000).toFixed(1) });
+          state.ranEntries = entries;
+          state.days = days;
+          onResult(true);
+        }
+      }
+    };
+  });
   pastElementSets(Date.parse(start), days).then((pastTles) => {
     if (id !== jobId) return;
-    worker.postMessage({ id, query: { entries, tles: pastTles ?? state.tles, roi: simp.geom, start, days } });
+    const tles = { ...(pastTles ?? state.tles), ...extraTles };
+    workers.forEach((w, gi) => w.postMessage({ id, query: { entries: groups[gi], tles, roi: simp.geom, start, days } }));
   });
 }
 
@@ -470,6 +604,27 @@ async function enrich() {
   // S2 tiles (same for every S2 pass over this ROI).
   const tiles = s2TilesForRoi(state.roi);
   for (const p of res.passes) if (/^Sentinel-2/.test(p.platform)) p.tiles = tiles;
+  // Probable manoeuvres between the element-set epoch and the pass.
+  for (const p of res.passes) {
+    const ev = (state.manoeuvres[String(p.norad_id)] ?? []).find((m) => {
+      const t = Date.parse(m.after);
+      const e = Date.parse(p.tle_epoch);
+      return t > Math.min(e, p.closest_utc) && t <= Math.max(e, p.closest_utc);
+    });
+    if (ev) p.manoeuvre = ev;
+  }
+  // ICESat-2: reference ground tracks and past tracks from NASA CMR.
+  if (res.passes.some((p) => /ATLAS/.test(p.instrument))) {
+    state.icesat2 = { granules: [], error: null, loading: true };
+    searchIcesat2(state.roi, Date.now() - 400 * 86400000, Date.now()).then((g) => {
+      if (state.result !== res) return;
+      state.icesat2 = { ...g, loading: false };
+      for (const p of res.passes) if (/ATLAS/.test(p.instrument)) p.rgt = icesat2Rgt(p, g.granules);
+      refreshViews();
+    });
+  } else {
+    state.icesat2 = { granules: [], error: null, loading: false };
+  }
   // ESA acquisition plans.
   annotatePlans(res.passes, byId, anchor).then(() => { if (state.result === res) refreshViews(); });
   // Cloud cover at the anchor.
@@ -496,7 +651,10 @@ async function enrich() {
   const r = await searchAcquisitions(state.roi, from, to);
   if (state.result !== res) return;
   state.stac = { loading: false, items: r.items, groups: groupByPass(r.items), errors: r.errors, from, to };
-  for (const p of res.passes) if (/^Sentinel-1/.test(p.platform)) p.rel_orbit = s1RelativeOrbit(p, r.items.filter((x) => x.collection === 'sentinel-1-grd'));
+  for (const p of res.passes) {
+    if (/^Sentinel-1/.test(p.platform)) p.rel_orbit = s1RelativeOrbit(p, r.items.filter((x) => x.collection === 'sentinel-1-grd'));
+    if (/^Landsat/.test(p.platform)) p.path_row = landsatPathRow(p, r.items);
+  }
   refreshViews();
 }
 
@@ -557,9 +715,7 @@ function setAnswer(main, sub, lines = []) {
     const b = document.createElement('button');
     b.type = 'button';
     b.dataset.id = l.pass.id;
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    dot.style.background = colourOf(state.catalogue.entries.find((e) => e.id === l.pass.entry_id));
+    const dot = makeDot(state.catalogue.entries.find((e) => e.id === l.pass.entry_id));
     b.append(dot, document.createTextNode(`${l.text} (${relTime(l.pass.closest_utc)})`));
     b.addEventListener('click', () => selectPass(l.pass.id, { fly: true }));
     li.append(b);
@@ -666,11 +822,11 @@ const COLS = [
   { key: 'edge_margin_km', label: 'col_edge', cell: (p) => `${p.edge_margin_km.toFixed(1)}${p.edge_uncertain ? ` (${t('edge_uncertain')})` : ''}`, num: true, warn: (p) => p.edge_uncertain },
   { key: 'view_angle_deg', label: 'col_view', cell: (p) => p.view_angle_deg.toFixed(1), num: true },
   { key: 'sun_elevation_deg', label: 'col_sun', cell: (p) => p.sun_elevation_deg.toFixed(0), num: true },
-  { key: 'tle_age_days', label: 'col_tle', cell: (p) => p.tle_age_days.toFixed(1), num: true, warn: (p) => p.tle_age_days > 7 },
+  { key: 'tle_age_days', label: 'col_tle', cell: (p) => `${p.tle_age_days.toFixed(1)}${p.manoeuvre ? ' ⚠' : ''}`, num: true, warn: (p) => p.tle_age_days > 7 || Boolean(p.manoeuvre) },
   { key: 'cloud', label: 'col_cloud', cell: (p) => cloudCell(p), num: true, sortVal: (p) => p.cloud?.total ?? 999 },
   { key: 'aod', label: 'col_aod', cell: (p) => (atmosphereKind(entriesById()[p.entry_id]) === 'optical' && p.atm?.aod != null ? p.atm.aod.toFixed(2) : ''), num: true, sortVal: (p) => p.atm?.aod ?? 9, warn: (p) => (p.atm?.aod ?? 0) > 0.4 && atmosphereKind(entriesById()[p.entry_id]) === 'optical' },
   { key: 'plan', label: 'col_plan', cell: (p) => (p.plan ? t(`plan_${p.plan.status}`) : ''), warn: (p) => p.plan?.status === 'not_planned' },
-  { key: 'tiles', label: 'col_tile_orbit', cell: (p) => p.tiles?.join(' ') ?? (p.rel_orbit ? `${t('orbit_abbr')} ${p.rel_orbit}` : '') },
+  { key: 'tiles', label: 'col_tile_orbit', cell: (p) => p.tiles?.join(' ') ?? (p.rel_orbit ? `${t('orbit_abbr')} ${p.rel_orbit}` : p.path_row ? `WRS ${p.path_row}` : p.rgt ? `RGT ${p.rgt}` : '') },
   { key: 'acquisition', label: 'col_acq', cell: (p) => t(`acq_${p.acquisition}`) },
 ];
 
@@ -730,7 +886,7 @@ function renderDrawerPanel() {
   const p = state.drawerOpen ? state.result?.passes.find((x) => x.id === state.selectedPass) : null;
   if (!p) { renderDrawer(root, { pass: null }); return; }
   const e = entriesById()[p.entry_id];
-  const tle = state.tles[String(e.norad_id)];
+  const tle = state.tles[String(p.norad_id)] ?? { omm: state.constellationTles?.[e.id]?.members?.[String(p.norad_id)]?.omm };
   const intervals = swathIntervals(e, meanAltitudeKm(satrecFrom(tle))) ?? [[0, 0]];
   const css = getComputedStyle(document.documentElement);
   renderDrawer(root, {
@@ -795,7 +951,7 @@ function renderInsarTab() {
 }
 
 function renderStacTab() {
-  renderStac($('#stac'), state.stac, { t, tz: state.tz, fmt: { date: fmtDate, dateTime: formatDateTime } });
+  renderStac($('#stac'), state.stac, { t, tz: state.tz, fmt: { date: fmtDate, dateTime: formatDateTime }, icesat2: state.icesat2 });
 }
 
 function exportAll(kind) {
@@ -881,9 +1037,7 @@ function renderTable() {
       if (c.num) td.className = 'num';
       if (c.warn?.(p)) td.classList.add('is-warn');
       if (c.key === 'platform') {
-        const dot = document.createElement('span');
-        dot.className = 'dot';
-        dot.style.background = colourOf(state.catalogue.entries.find((e) => e.id === p.entry_id));
+        const dot = makeDot(state.catalogue.entries.find((e) => e.id === p.entry_id));
         td.prepend(dot);
       }
       tr.append(td);
@@ -976,9 +1130,7 @@ function renderInstruments() {
       renderInstruments();
       rebuildTrackers();
     });
-    const gdot = document.createElement('span');
-    gdot.className = 'dot';
-    gdot.style.background = colourOf(members[0]);
+    const gdot = makeDot(members[0]);
     const gname = document.createElement('span');
     gname.textContent = `${t(`cat_${cat}`)} (${nSel}/${members.length})`;
     sum.append(gcb, gdot, gname);
@@ -1005,9 +1157,7 @@ function instrumentItem(e) {
       renderInstruments();
       rebuildTrackers();
     });
-    const dot = document.createElement('span');
-    dot.className = 'dot';
-    dot.style.background = colourOf(e);
+    const dot = makeDot(e);
     const text = document.createElement('span');
     text.className = 'inst-text';
     const name = document.createElement('span');
@@ -1145,8 +1295,9 @@ function initTabs() {
 async function init() {
   document.documentElement.dataset.theme = state.theme;
   try {
-    [state.catalogue, state.tles, state.meta] = await Promise.all([
+    [state.catalogue, state.tles, state.meta, state.manoeuvres] = await Promise.all([
       loadCatalogue(), loadTles(), loadMeta().catch(() => null),
+      fetch('data/manoeuvres.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
     ]);
   } catch (err) {
     setAnswer(t('load_error', { what: err.message }), '');
@@ -1219,6 +1370,17 @@ async function init() {
   $('#table-opp').addEventListener('change', () => { if (state.result) refreshViews(); });
   $('#max-cloud').addEventListener('change', () => { if (state.result) refreshViews(); });
   $('#max-aod').addEventListener('change', () => { if (state.result) refreshViews(); });
+  // Open the export menu towards the side with room (it must not slide under the query panel).
+  $('.exports').addEventListener('toggle', (ev) => {
+    const det = ev.currentTarget;
+    if (!det.open) return;
+    const menu = det.querySelector('.exports-menu');
+    const sum = det.querySelector('summary').getBoundingClientRect();
+    const panel = $('#results').getBoundingClientRect();
+    const toLeft = sum.right - menu.offsetWidth >= panel.left;
+    menu.style.left = toLeft ? 'auto' : '0';
+    menu.style.right = toLeft ? '0' : 'auto';
+  });
   $('#export-ics').addEventListener('click', () => exportAll('ics'));
   $('#export-geojson').addEventListener('click', () => exportAll('geojson'));
   $('#export-geolibre').addEventListener('click', () => exportAll('geolibre'));
@@ -1250,6 +1412,7 @@ async function init() {
   rebuildTrackers();
   await globe.ready;
   requestAnimationFrame(frame);
+  (window.requestIdleCallback ?? setTimeout)(() => tzReady());
   if (applyHash()) {
     renderStatic();
     rebuildTrackers();

@@ -248,11 +248,13 @@ button.link { border: 0; background: none; padding: 0; color: var(--ink); text-d
 /* ---------- calendar ---------- */
 .cal-wrap { overflow-x: auto; }
 .cal { display: grid; gap: 2px; width: 100%; font: 400 var(--fs-13)/1.2 var(--dense); font-variant-numeric: tabular-nums; align-items: stretch; }
-.cal-head { text-align: center; color: var(--ink-soft); padding: 0.2rem 0; position: sticky; top: 0; background: var(--paper); }
+.cal-head { display: flex; flex-direction: column; align-items: center; color: var(--ink-soft); padding: 0.15rem 0; position: sticky; top: 0; background: var(--paper); line-height: 1.1; }
+.cal-head .cal-month { font-size: 10px; min-height: 11px; }
 .cal-weekend { color: var(--ink); font-weight: 600; }
 .cal-corner, .cal-name { position: sticky; left: 0; background: var(--paper); z-index: 1; }
 .cal-name { padding: 0.15rem 0.5rem 0.15rem 0; white-space: nowrap; }
-.cal-group { font-weight: 600; padding: 0.5rem 0 0.1rem; position: sticky; left: 0; color: var(--ink-soft); }
+.cal-group { font-weight: 600; padding: 0.5rem 0 0.1rem; color: var(--ink-soft); }
+.cal-group-label { position: sticky; left: 0; background: var(--paper); padding-right: 0.5rem; }
 .cal-cell { min-height: 1.5rem; border: 1px solid transparent; border-radius: 3px; background: var(--surface); padding: 0; font: 600 10px var(--dense); color: var(--ink); }
 button.cal-cell { cursor: pointer; }
 .cal-cell.is-opportunity { border-width: 2px; border-style: solid; }
@@ -380,4 +382,5 @@ tbody tr.is-selected { background: var(--row-selected); box-shadow: inset 3px 0 
 
 /* Fixed width: options added after load must not re-wrap the tool bar (layout shift) */
 .results .panel-tools #table-cat { width: 13rem; }
+.results .panel-tools #table-dir { width: 9.5rem; }
 .instruments .group > details > summary input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin: 0; }

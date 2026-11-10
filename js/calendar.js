@@ -10,6 +10,9 @@
  *          cloud cover. Each cell is a button (keyboard and screen reader
  *          accessible) that selects the best pass of that day.
  *
+ * SAR rows mark the orbit direction of the day's passes (A ascending,
+ * D descending); other rows show the number of passes when there are several.
+ *
  * Limitations: one cell per day shows the pass with the highest coverage;
  * other passes on the same day are listed in its tooltip and in the table.
  * Built with HTML/CSS (no chart library) so that the instrument column can
@@ -25,6 +28,12 @@ function dayKey(ms, tz) {
 function hexToRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+/** WCAG relative luminance of an sRGB colour (0–1). */
+function luminance(r, g, b) {
+  const c = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * c(r) + 0.7152 * c(g) + 0.0722 * c(b);
 }
 
 /**
@@ -55,15 +64,29 @@ export function renderCalendar(el, o) {
   grid.style.gridTemplateColumns = `minmax(9rem, max-content) repeat(${days.length}, minmax(1.6rem, 1fr))`;
   grid.setAttribute('role', 'grid');
 
-  const head = (text, cls = '') => {
+  const head = (label, cls = '') => {
     const d = document.createElement('div');
     d.className = `cal-head ${cls}`;
     d.setAttribute('role', 'columnheader');
-    d.textContent = text;
+    if (label) {
+      // Day number on top; the month only on the first column and on the 1st.
+      const top = document.createElement('span');
+      top.textContent = label.day;
+      const bottom = document.createElement('span');
+      bottom.className = 'cal-month';
+      bottom.textContent = label.showMonth ? label.month : '';
+      d.append(top, bottom);
+      d.title = label.full;
+      d.setAttribute('aria-label', label.full);
+    }
     return d;
   };
-  grid.append(head('', 'cal-corner'));
-  for (const d of days) grid.append(head(o.dayLabel(d.ms), new Date(d.ms).getUTCDay() % 6 === 0 ? 'cal-weekend' : ''));
+  grid.append(head(null, 'cal-corner'));
+  days.forEach((d, i) => {
+    const l = o.dayLabel(d.ms);
+    l.showMonth = i === 0 || l.day === '1';
+    grid.append(head(l, l.weekend ? 'cal-weekend' : ''));
+  });
 
   for (const cat of o.categories) {
     const entries = o.entries.filter((e) => e.categories[0] === cat && byEntry.has(e.id));
@@ -71,7 +94,11 @@ export function renderCalendar(el, o) {
     const g = document.createElement('div');
     g.className = 'cal-group';
     g.style.gridColumn = `1 / span ${days.length + 1}`;
-    g.textContent = o.t(`cat_${cat}`);
+    // The label stays visible while the days scroll sideways.
+    const gl = document.createElement('span');
+    gl.className = 'cal-group-label';
+    gl.textContent = o.t(`cat_${cat}`);
+    g.append(gl);
     grid.append(g);
     for (const e of entries) {
       const name = document.createElement('div');
@@ -99,16 +126,21 @@ export function renderCalendar(el, o) {
             cell.style.borderColor = `rgb(${r},${gr},${b})`;
           } else {
             layers.push(`linear-gradient(rgba(${r},${gr},${b},${alpha.toFixed(2)}), rgba(${r},${gr},${b},${alpha.toFixed(2)}))`);
+            // Legible text on strong fills: dark on light colours, white on dark ones.
+            if (alpha >= 0.5) cell.style.color = luminance(r, gr, b) > 0.3 ? '#16161a' : '#ffffff';
           }
           cell.style.background = layers.join(', ');
           cell.type = 'button';
           cell.dataset.id = best.id;
           if (best.id === o.selectedId) cell.classList.add('is-selected');
-          const desc = list.map((p) => `${o.formatTime(p.closest_utc, o.tz)} ${Math.round(p.coverage_pct)} %${o.cloudOf(p) != null ? `, ${o.t('cloud_short', { v: Math.round(o.cloudOf(p)) })}` : ''}${p.opportunity ? `, ${o.t('acq_tasked')}` : ''}`).join('; ');
+          const sar = cat === 'sar';
+          const desc = list.map((p) => `${o.formatTime(p.closest_utc, o.tz)}${sar ? ` ${o.t(`dir_${p.direction}`)}` : ''} ${Math.round(p.coverage_pct)} %${o.cloudOf(p) != null ? `, ${o.t('cloud_short', { v: Math.round(o.cloudOf(p)) })}` : ''}${p.opportunity ? `, ${o.t('acq_tasked')}` : ''}`).join('; ');
           cell.title = `${o.nameOf(e)}, ${d.key}: ${desc}`;
           cell.setAttribute('aria-label', cell.title);
           cell.addEventListener('click', () => o.onSelect(best.id));
-          if (list.length > 1) cell.textContent = String(list.length);
+          if (sar && list.length <= 2) {
+            cell.textContent = [...list].sort((a, x) => a.closest_utc - x.closest_utc).map((p) => o.t(`dir_short_${p.direction}`)).join('');
+          } else if (list.length > 1) cell.textContent = String(list.length);
         }
         grid.append(cell);
       }

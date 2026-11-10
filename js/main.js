@@ -666,11 +666,13 @@ async function enrich() {
 /** Expected passes after the opportunity and cloud filters (used by the answer). */
 function answerPasses() {
   const opp = $('#table-opp').checked;
+  const dir = $('#table-dir').value;
   const maxCloud = $('#max-cloud').value === '' ? null : Number($('#max-cloud').value);
   return (state.result?.passes ?? []).filter((p) => p.imaging_expected
     && (opp || !p.opportunity)
     && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud)
-    && aodOk(p));
+    && aodOk(p)
+    && (!dir || p.direction === dir));
 }
 
 /** Max-AOD filter: applies to optical passes with an aerosol value. */
@@ -720,8 +722,10 @@ function setAnswer(main, sub, lines = []) {
     const b = document.createElement('button');
     b.type = 'button';
     b.dataset.id = l.pass.id;
-    const dot = makeDot(state.catalogue.entries.find((e) => e.id === l.pass.entry_id));
-    b.append(dot, document.createTextNode(`${l.text} (${relTime(l.pass.closest_utc)})`));
+    const entry = state.catalogue.entries.find((e) => e.id === l.pass.entry_id);
+    // SAR geometry depends on the orbit direction: state it in the line.
+    const dir = entry?.categories[0] === 'sar' ? `, ${t(`dir_${l.pass.direction}`)}` : '';
+    b.append(makeDot(entry), document.createTextNode(`${l.text}${dir} (${relTime(l.pass.closest_utc)})`));
     b.addEventListener('click', () => selectPass(l.pass.id, { fly: true }));
     li.append(b);
     ul.append(li);
@@ -845,22 +849,34 @@ function cloudCell(p) {
 function visiblePasses() {
   const cat = $('#table-cat').value;
   const opp = $('#table-opp').checked;
+  const dir = $('#table-dir').value;
   const byId = Object.fromEntries(state.catalogue.entries.map((e) => [e.id, e]));
   const maxCloud = $('#max-cloud').value === '' ? null : Number($('#max-cloud').value);
   return (state.result?.passes ?? []).filter((p) => p.imaging_expected
     && (opp || !p.opportunity)
     && (maxCloud == null || !p.cloud || p.cloud.total <= maxCloud)
     && aodOk(p)
+    && (!dir || p.direction === dir)
     && (!cat || byId[p.entry_id]?.categories[0] === cat));
 }
 
 // ---------- calendar, drawer, InSAR, STAC ----------
 
 const DAY_FMT = new Map();
+/** Calendar column label: {day, month, weekend, full} in the ROI time zone. */
 function dayLabel(ms) {
   const k = `${getLang()}|${state.tz}`;
-  if (!DAY_FMT.has(k)) DAY_FMT.set(k, new Intl.DateTimeFormat(getLang() === 'pt' ? 'pt-PT' : 'en-GB', { timeZone: state.tz, day: 'numeric', month: 'numeric' }));
-  return DAY_FMT.get(k).format(ms);
+  if (!DAY_FMT.has(k)) {
+    const loc = getLang() === 'pt' ? 'pt-PT' : 'en-GB';
+    DAY_FMT.set(k, {
+      parts: new Intl.DateTimeFormat('en-GB', { timeZone: state.tz, day: 'numeric', month: 'numeric', weekday: 'short' }),
+      month: new Intl.DateTimeFormat(loc, { timeZone: state.tz, month: 'short' }),
+      full: new Intl.DateTimeFormat(loc, { timeZone: state.tz, weekday: 'long', day: 'numeric', month: 'long' }),
+    });
+  }
+  const f = DAY_FMT.get(k);
+  const p = Object.fromEntries(f.parts.formatToParts(ms).map((x) => [x.type, x.value]));
+  return { day: String(Number(p.day)), month: f.month.format(ms).replace('.', ''), weekend: p.weekday === 'Sat' || p.weekday === 'Sun', full: f.full.format(ms) };
 }
 const fmtDate = (ms, tz) => new Intl.DateTimeFormat(getLang() === 'pt' ? 'pt-PT' : 'en-GB', { timeZone: tz, weekday: 'short', day: 'numeric', month: 'short' }).format(ms);
 
@@ -1376,6 +1392,7 @@ async function init() {
   $('#table-cat').addEventListener('change', () => { renderTable(); renderCalendarTab(); renderInsarTab(); });
   $('#table-opp').addEventListener('change', () => { if (state.result) refreshViews(); });
   $('#max-cloud').addEventListener('change', () => { if (state.result) refreshViews(); });
+  $('#table-dir').addEventListener('change', () => { if (state.result) refreshViews(); });
   $('#max-aod').addEventListener('change', () => { if (state.result) refreshViews(); });
   // Open the export menu towards the side with room (it must not slide under the query panel).
   $('.exports').addEventListener('toggle', (ev) => {

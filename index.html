@@ -110,6 +110,7 @@
         <div class="panel-tools">
           <label class="speed"><span data-i18n="table_cat">Categoria</span><select id="table-cat"><option value="">Todas</option></select></label>
           <label class="check"><input id="table-opp" type="checkbox" checked> <span data-i18n="table_opp">Incluir oportunidades geométricas</span></label>
+          <label class="speed"><span data-i18n="table_dir">Órbita</span><select id="table-dir"><option value="" data-i18n="dir_all">A + D</option><option value="ascending" data-i18n="dir_only_a">A (ascendente)</option><option value="descending" data-i18n="dir_only_d">D (descendente)</option></select></label>
           <label class="speed"><span data-i18n="max_cloud">Nuvens máx. (%)</span><input id="max-cloud" type="number" min="0" max="100" step="5" placeholder="–" class="narrow"></label>
           <label class="speed"><span data-i18n="max_aod">AOD máx.</span><input id="max-aod" type="number" min="0" max="5" step="0.05" placeholder="–" class="narrow"></label>
           <span class="spacer"></span>
@@ -138,7 +139,7 @@
           <button role="tab" id="tab-about" aria-controls="panel-about" aria-selected="false" tabindex="-1" data-i18n="tab_about">Sobre e limitações</button>
         </div>
         <div role="tabpanel" id="panel-calendar" aria-labelledby="tab-calendar">
-          <details class="howto"><summary data-i18n="calendar_howto">Como ler o calendário</summary><p class="hint" data-i18n="calendar_hint">Uma linha por instrumento, uma coluna por dia (hora local). A cor mais forte indica maior cobertura; o tracejado indica nuvens previstas; contorno sem preenchimento é oportunidade geométrica. O número indica várias passagens no dia.</p></details>
+          <details class="howto"><summary data-i18n="calendar_howto">Como ler o calendário</summary><p class="hint" data-i18n="calendar_hint">Uma linha por instrumento, uma coluna por dia (hora local). A cor mais forte indica maior cobertura; o tracejado indica nuvens previstas; contorno sem preenchimento é oportunidade geométrica. Nas linhas SAR, A e D indicam passagem ascendente ou descendente (um número, se forem mais de duas). Nas restantes, um número indica quantas passagens há nesse dia: a célula representa a de maior cobertura e a caixa que surge ao passar o cursor lista todas.</p></details>
           <div id="calendar" class="cal-wrap"></div>
           <p id="calendar-empty" class="hint" data-i18n="table_empty">Ainda não há passagens. Escolhe um local e calcula.</p>
         </div>

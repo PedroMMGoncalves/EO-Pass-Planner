@@ -342,8 +342,10 @@ function applyHash() {
 }
 
 function onResult(fresh = false) {
-  const a = answerSentence(state.result, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point' });
-  setAnswer(a.main, a.sub);
+  const entriesById = Object.fromEntries(state.catalogue.entries.map((e) => [e.id, e]));
+  const a = answerSentence(state.result, { tz: state.tz, days: state.days, isPoint: state.roi.type === 'Point', entriesById });
+  setAnswer(a.main, a.sub, a.lines);
+  renderTableCategories();
   renderTable();
   renderAbsences();
   renderGeo();
@@ -358,6 +360,7 @@ function selectPass(id, { fly = false } = {}) {
   const p = state.result?.passes.find((x) => x.id === id);
   renderFootprints();
   for (const tr of document.querySelectorAll('#passes tbody tr')) tr.classList.toggle('is-selected', tr.dataset.id === id);
+  markAnswerLine();
   if (!p) return;
   // Show the pass: start 90 s before closest approach at 10x (directly at closest approach with reduced motion).
   setClock(reducedMotion
@@ -377,9 +380,29 @@ function renderFootprints() {
 
 // ---------- rendering ----------
 
-function setAnswer(main, sub) {
+function setAnswer(main, sub, lines = []) {
   $('#answer-main').textContent = main;
   $('#answer-sub').textContent = sub;
+  const ul = $('#answer-lines');
+  ul.replaceChildren();
+  for (const l of lines) {
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.dataset.id = l.pass.id;
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = colourOf(state.catalogue.entries.find((e) => e.id === l.pass.entry_id));
+    b.append(dot, document.createTextNode(l.text));
+    b.addEventListener('click', () => selectPass(l.pass.id, { fly: true }));
+    li.append(b);
+    ul.append(li);
+  }
+  markAnswerLine();
+}
+
+function markAnswerLine() {
+  for (const b of document.querySelectorAll('#answer-lines button')) b.setAttribute('aria-current', String(b.dataset.id === state.selectedPass));
 }
 
 const COLS = [
@@ -395,6 +418,26 @@ const COLS = [
   { key: 'tle_age_days', label: 'col_tle', cell: (p) => p.tle_age_days.toFixed(1), num: true, warn: (p) => p.tle_age_days > 7 },
   { key: 'acquisition', label: 'col_acq', cell: (p) => t(`acq_${p.acquisition}`) },
 ];
+
+/** Expected-imaging passes after the table filters (category, opportunities). */
+function visiblePasses() {
+  const cat = $('#table-cat').value;
+  const opp = $('#table-opp').checked;
+  const byId = Object.fromEntries(state.catalogue.entries.map((e) => [e.id, e]));
+  return (state.result?.passes ?? []).filter((p) => p.imaging_expected
+    && (opp || !p.opportunity)
+    && (!cat || byId[p.entry_id]?.categories[0] === cat));
+}
+
+function renderTableCategories() {
+  const sel = $('#table-cat');
+  const keep = sel.value;
+  sel.replaceChildren(new Option(t('table_all'), ''));
+  const present = new Set((state.result?.passes ?? []).filter((p) => p.imaging_expected)
+    .map((p) => state.catalogue.entries.find((e) => e.id === p.entry_id)?.categories[0]));
+  for (const c of CATEGORIES) if (present.has(c)) sel.add(new Option(t(`cat_${c}`), c));
+  sel.value = [...sel.options].some((o) => o.value === keep) ? keep : '';
+}
 
 function renderTable() {
   const head = $('#passes thead');
@@ -419,7 +462,7 @@ function renderTable() {
 
   const body = $('#passes tbody');
   body.replaceChildren();
-  const rows = (state.result?.passes ?? []).filter((p) => p.imaging_expected);
+  const rows = visiblePasses();
   const { key, dir } = state.sort;
   rows.sort((a, b) => (a[key] < b[key] ? -dir : a[key] > b[key] ? dir : a.closest_utc - b.closest_utc));
   for (const p of rows) {
@@ -710,11 +753,13 @@ async function init() {
     rebuildTrackers();
   });
   $('#run').addEventListener('click', runPasses);
+  $('#table-cat').addEventListener('change', renderTable);
+  $('#table-opp').addEventListener('change', renderTable);
   $('#play').addEventListener('click', () => setClock({ playing: !state.clock.playing }));
   $('#speed').addEventListener('change', () => setClock({ speed: Number($('#speed').value) }));
   $('#now').addEventListener('click', () => setClock({ baseSim: Date.now(), speed: 1, playing: true }));
   $('#export-csv').addEventListener('click', () => {
-    const csv = passesToCsv(state.result.passes.filter((p) => p.imaging_expected), {
+    const csv = passesToCsv(visiblePasses(), {
       tz: state.tz, catalogueVersion: state.catalogue.version, dataUpdated: state.meta?.updated_utc ?? '', engineVersion: ENGINE_VERSION,
     });
     download(`passagens_${new Date().toISOString().slice(0, 10)}.csv`, csv);

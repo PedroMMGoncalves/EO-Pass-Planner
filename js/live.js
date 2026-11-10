@@ -16,7 +16,7 @@
 
 import * as sat from '../vendor/satellite.js';
 import { scanLine, geoInverse, wrap180 } from './geometry.js';
-import { swathIntervals, meanAltitudeKm } from './engine.js';
+import { swathIntervals, meanAltitudeKm, satrecFrom } from './engine.js';
 import { solarElevation, subsolarPoint } from './sun.js';
 
 const DEG = 180 / Math.PI;
@@ -37,7 +37,7 @@ export function makeTrackers(entries, tles) {
   return entries.flatMap((e) => {
     const tle = tles[String(e.norad_id)];
     if (!tle) return [];
-    const satrec = sat.twoline2satrec(tle.line1, tle.line2);
+    const satrec = satrecFrom(tle);
     const live = ['nadir_symmetric', 'side_looking'].includes(e.swath.model) && e.acquisition !== 'tasked';
     return [{ entry: e, satrec, intervals: live ? swathIntervals(e, meanAltitudeKm(satrec)) : null }];
   });

@@ -135,7 +135,7 @@ def main(argv=None) -> int:
     import datetime as dt  # noqa: PLC0415
     start = args.start or dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT00:00:00Z")
     tles = json.loads((ROOT / "data/tles.json").read_text(encoding="utf-8"))
-    tle_text = "\n".join(f"{t['name']}\n{t['line1']}\n{t['line2']}" for t in tles.values())
+    tle_text = "\n".join(f"{t['name']}\n{t['line1']}\n{t['line2']}" for t in tles.values() if "line1" in t)
 
     ohu = load_oracle(args.oracle_dir)
     with tempfile.TemporaryDirectory() as tmp, contextlib.redirect_stdout(io.StringIO()):

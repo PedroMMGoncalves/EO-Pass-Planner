@@ -150,6 +150,10 @@ export function createGlobe(container, { onClick, onBasemapError, theme = 'light
   map.addControl(new maplibregl.NavigationControl({ visualizePitch: false }), 'top-right');
   map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left');
   map.on('click', (ev) => onClick?.({ lat: ev.lngLat.lat, lon: ev.lngLat.lng }));
+  // Some online styles reference icons missing from their sprite; use a blank image.
+  map.on('styleimagemissing', (ev) => {
+    if (!map.hasImage(ev.id)) map.addImage(ev.id, { width: 1, height: 1, data: new Uint8Array(4) });
+  });
   map.getCanvas().style.cursor = 'crosshair';
 
   let styleVersion = 0;

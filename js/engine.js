@@ -75,6 +75,14 @@ export const DEFAULTS = {
 
 // ---------- geometry of the swath ----------
 
+/**
+ * SGP4 record from a stored element set: TLE lines, or an OMM JSON record for
+ * catalogue numbers above 99 999 (which do not fit the TLE format).
+ */
+export function satrecFrom(rec) {
+  return rec.omm ? sat.json2satrec(rec.omm) : sat.twoline2satrec(rec.line1, rec.line2);
+}
+
 /** Mean altitude (km) from the TLE mean motion (satrec.no, rad/min). */
 export function meanAltitudeKm(satrec) {
   const n = satrec.no / 60;
@@ -398,7 +406,7 @@ export function predictEntry(entry, tle, roi, startMs, endMs, options = {}) {
     };
   }
   if (!tle) return { status: 'no_tle', passes: [] };
-  const satrec = sat.twoline2satrec(tle.line1, tle.line2);
+  const satrec = satrecFrom(tle);
   const intervals = swathIntervals(entry, meanAltitudeKm(satrec));
   if (!intervals) return { status: 'unsupported_model', passes: [] };
   const reachKm = Math.max(...intervals.flat().map(Math.abs));

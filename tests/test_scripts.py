@@ -59,6 +59,25 @@ class TleHelpers(unittest.TestCase):
         self.assertEqual(len(day["25544"]), 1)
 
 
+class OmmRecords(unittest.TestCase):
+    def setUp(self):
+        self.omm = json.loads((ROOT / "tests/fixtures/omm_sentinel-3c.json").read_text(encoding="utf-8"))
+
+    def test_valid_omm(self):
+        self.assertEqual(ud.validate_omm(self.omm, 100690, "SENTINEL-3C"), [])
+        self.assertEqual(ud.omm_epoch(self.omm).tzinfo, dt.timezone.utc)
+
+    def test_omm_name_and_number_checked(self):
+        self.assertTrue(ud.validate_omm(self.omm, 100690, "SENTINEL-3A"))
+        self.assertTrue(ud.validate_omm(self.omm, 100691, "SENTINEL-3C"))
+        bad = dict(self.omm, MEAN_MOTION=40)
+        self.assertTrue(ud.validate_omm(bad, 100690, "SENTINEL-3C"))
+
+    def test_history_keeps_omm(self):
+        day = ud.merge_history({}, {"100690": {"omm": self.omm, "epoch": "2026-11-10T03:06:33.99Z"}})
+        self.assertIn("omm", day["100690"][0])
+
+
 class CatalogueValidation(unittest.TestCase):
     def setUp(self):
         self.cat = json.loads((ROOT / "data/catalogue.json").read_text(encoding="utf-8"))

@@ -103,6 +103,10 @@ label > span { display: block; font-size: var(--fs-13); color: var(--ink-soft); 
 .wordmark { font-family: var(--display); font-weight: 600; font-size: var(--fs-20); margin: 0; white-space: nowrap; }
 .answer-main { font-family: var(--display); font-weight: 600; font-size: var(--fs-31); line-height: 1.1; margin: 0; }
 .answer-sub { margin: 0.15rem 0 0; color: var(--ink-soft); font-size: var(--fs-16); }
+.answer-lines { list-style: none; margin: 0.3rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.15rem 1rem; }
+.answer-lines button { border: 0; background: none; padding: 0.05rem 0; color: var(--ink); font: 400 var(--fs-13)/1.35 var(--dense); font-variant-numeric: tabular-nums; text-align: left; display: inline-flex; align-items: center; }
+.answer-lines button:hover { text-decoration: underline; }
+.answer-lines button[aria-current="true"] { font-weight: 600; }
 .bar-tools { display: flex; gap: 0.6rem; align-items: center; }
 .badge { font-size: var(--fs-13); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
@@ -164,7 +168,9 @@ input[type="file"] { font-size: var(--fs-13); max-width: 100%; }
 .tablist [role="tab"] { border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; padding: 0.7rem 0.9rem 0.5rem; font-weight: 600; color: var(--ink-soft); }
 .tablist [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
 [role="tabpanel"] { padding-top: 0.8rem; }
-.panel-tools { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.panel-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
+.panel-tools .spacer { flex: 1; }
+.panel-tools select { width: auto; }
 .table-wrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; font-family: var(--dense); font-size: var(--fs-13); font-variant-numeric: tabular-nums; background: var(--surface); }
 th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--rule); white-space: nowrap; }

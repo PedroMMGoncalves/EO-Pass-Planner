@@ -4,7 +4,10 @@ Run by .github/workflows/update-data.yml every 6 h; can also be run locally.
 
 Inputs:  data/catalogue.json (NORAD ids, expected CelesTrak OBJECT_NAME).
 Outputs: data/tles.json        {norad: {name, line1, line2, epoch, source, fetched}}
-         data/tle_history/YYYY-MM-DD.json.gz  {norad: [{line1, line2, epoch}, ...]}
+                                or, for catalogue numbers above 99 999 (no legacy TLE
+                                exists), {norad: {name, omm, epoch, source, fetched}} where
+                                `omm` is CelesTrak's OMM JSON record (CCSDS mean elements)
+         data/tle_history/YYYY-MM-DD.json.gz  {norad: [{line1, line2, epoch} | {omm, epoch}, ...]}
          data/meta.json        last update, per-source status, stale TLEs
          --changes-file PATH   one line per change (used as the commit message)
 Exit code: 0 OK; 1 if any hard error (name mismatch, checksum failure, fetch
@@ -16,6 +19,9 @@ Rules:
 - Files are only rewritten when their content changes, and gzip is written
   with mtime=0, so an unchanged run produces no git diff.
 - A NORAD/OBJECT_NAME mismatch is a hard error and that TLE is not written.
+- Catalogue numbers above 99 999 do not fit the 5-digit TLE field. CelesTrak
+  serves them only as OMM (JSON); those are stored as OMM and propagated with
+  satellite.js json2satrec (same SGP4 mean elements).
 
 Limitations:
 - TLEs only, for now. ESA S1/S2 acquisition-plan conversion is not
@@ -97,11 +103,40 @@ def validate_tle(name: str, l1: str, l2: str, norad: int, expected_name: str) ->
     return errs
 
 
+OMM_FIELDS = ("OBJECT_NAME", "OBJECT_ID", "EPOCH", "MEAN_MOTION", "ECCENTRICITY", "INCLINATION",
+              "RA_OF_ASC_NODE", "ARG_OF_PERICENTER", "MEAN_ANOMALY", "NORAD_CAT_ID", "BSTAR",
+              "MEAN_MOTION_DOT", "MEAN_MOTION_DDOT")
+
+
+def validate_omm(omm: dict, norad: int, expected_name: str) -> list[str]:
+    """Return a list of hard errors for one OMM record (empty if valid)."""
+    errs = [f"{norad}: OMM lacks {k}" for k in OMM_FIELDS if k not in omm]
+    if errs:
+        return errs
+    if int(omm["NORAD_CAT_ID"]) != norad:
+        errs.append(f"{norad}: OMM catalogue number is {omm['NORAD_CAT_ID']}")
+    if omm["OBJECT_NAME"] != expected_name:
+        errs.append(f"{norad}: CelesTrak OBJECT_NAME is '{omm['OBJECT_NAME']}', catalogue expects '{expected_name}'")
+    try:
+        mm = float(omm["MEAN_MOTION"]); ecc = float(omm["ECCENTRICITY"])
+        if not (0.5 < mm < 20 and 0 <= ecc < 1):
+            errs.append(f"{norad}: OMM elements out of range (mean motion {mm}, eccentricity {ecc})")
+        dt.datetime.fromisoformat(omm["EPOCH"])
+    except (TypeError, ValueError) as exc:
+        errs.append(f"{norad}: OMM value error: {exc}")
+    return errs
+
+
+def omm_epoch(omm: dict) -> dt.datetime:
+    return dt.datetime.fromisoformat(omm["EPOCH"]).replace(tzinfo=dt.timezone.utc)
+
+
 def merge_history(day: dict, tles: dict) -> dict:
-    """Add each TLE to a day's history if its epoch is not already present."""
+    """Add each element set to a day's history if its epoch is not already present."""
     out = {k: list(v) for k, v in day.items()}
     for norad, t in tles.items():
-        rec = {"line1": t["line1"], "line2": t["line2"], "epoch": t["epoch"]}
+        rec = ({"omm": t["omm"], "epoch": t["epoch"]} if "omm" in t
+               else {"line1": t["line1"], "line2": t["line2"], "epoch": t["epoch"]})
         lst = out.setdefault(norad, [])
         if all(r["epoch"] != rec["epoch"] for r in lst):
             lst.append(rec)
@@ -167,6 +202,28 @@ def fetch_tles(catalogue: dict, old: dict, now: dt.datetime) -> tuple[dict, list
         wanted[norad] = e["object_name"]
 
     for norad, expected in sorted(wanted.items()):
+        if norad > 99999:
+            try:
+                data = json.loads(get(session, {"CATNR": norad, "FORMAT": "JSON"}))
+                if len(data) != 1:
+                    raise RuntimeError(f"expected 1 OMM record, got {len(data)}")
+                omm = data[0]
+                errs = validate_omm(omm, norad, expected)
+                if errs:
+                    errors.extend(errs)
+                    continue
+                key = str(norad)
+                prev = old.get(key)
+                if prev and prev.get("omm") == omm:
+                    continue
+                tles[key] = {"name": omm["OBJECT_NAME"], "omm": omm, "epoch": iso(omm_epoch(omm)),
+                             "source": "celestrak-omm", "fetched": iso(now)}
+                changes.append(f"OMM {omm['OBJECT_NAME']} ({norad}) epoch {tles[key]['epoch']}")
+            except Exception as exc:  # noqa: BLE001
+                errors.append(f"{norad}: fetch failed: {exc}")
+            finally:
+                time.sleep(REQUEST_PAUSE_S)
+            continue
         try:
             text = get(session, {"CATNR": norad, "FORMAT": "TLE"})
             parsed = parse_tle_text(text)
@@ -179,7 +236,7 @@ def fetch_tles(catalogue: dict, old: dict, now: dt.datetime) -> tuple[dict, list
                 continue
             key = str(norad)
             prev = old.get(key)
-            if prev and prev["line1"] == l1 and prev["line2"] == l2:
+            if prev and prev.get("line1") == l1 and prev.get("line2") == l2:
                 continue
             tles[key] = {
                 "name": name, "line1": l1, "line2": l2,

@@ -25,7 +25,7 @@ Work in progress.
   reproduces the query.
 - [x] Dark theme (Dracula palette) and basemaps: offline Natural Earth, Sentinel-2
   cloudless 2024 (EOX), OpenStreetMap light/dark/detailed (OpenFreeMap).
-- [x] Catalogue of 63 instrument entries (58 not inactive) across optical, VHR,
+- [x] Catalogue of 66 instrument entries (61 not inactive) across optical, VHR,
   hyperspectral, thermal, SAR, lidar/altimetry, meteorological, atmospheric and
   geophysics missions, each with sources; swath models nadir_symmetric (with
   optional nadir gap), side_looking, field_of_regard, profile, continuous_geo and

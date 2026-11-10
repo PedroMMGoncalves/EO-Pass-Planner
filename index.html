@@ -15,6 +15,7 @@
     <p class="wordmark">EO Pass Planner</p>
     <div class="answer" aria-live="polite">
       <p id="answer-main" class="answer-main" data-i18n="answer_idle">Escolhe um local no globo para saber que satélites o vão observar.</p>
+      <ul id="answer-lines" class="answer-lines"></ul>
       <p id="answer-sub" class="answer-sub" data-i18n="answer_idle_sub"></p>
     </div>
     <div class="bar-tools">
@@ -98,6 +99,9 @@
     </div>
     <div role="tabpanel" id="panel-table" aria-labelledby="tab-table">
       <div class="panel-tools">
+        <label class="speed"><span data-i18n="table_cat">Categoria</span><select id="table-cat"></select></label>
+        <label class="check"><input id="table-opp" type="checkbox" checked> <span data-i18n="table_opp">Incluir oportunidades geométricas</span></label>
+        <span class="spacer"></span>
         <span id="link-status" class="hint" aria-live="polite"></span>
         <button id="copy-link" type="button" class="secondary" disabled data-i18n="copy_link">Copiar link</button>
         <button id="export-csv" type="button" class="secondary" disabled data-i18n="export_csv">Exportar CSV</button>

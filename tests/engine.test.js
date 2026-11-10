@@ -235,3 +235,17 @@ test('continuous_geo: view zenith angle, no passes', () => {
   assert.equal(r.passes.length, 0);
   assert.ok(r.usable && r.view_zenith_deg > 30 && r.view_zenith_deg < 50, `Maputo VZA ${r.view_zenith_deg}`);
 });
+
+test('six-digit catalogue numbers: OMM record propagates like a TLE', async () => {
+  const { satrecFrom, meanAltitudeKm } = await import('../js/engine.js');
+  const omm = read('./fixtures/omm_sentinel-3c.json');
+  const rec = satrecFrom({ omm });
+  assert.equal(String(rec.satnum), '100690');
+  const pv = sat.propagate(rec, new Date(omm.EPOCH + 'Z'));
+  const alt = Math.hypot(pv.position.x, pv.position.y, pv.position.z) - 6371;
+  assert.ok(alt > 780 && alt < 830, `altitude ${alt}`);
+  assert.ok(meanAltitudeKm(rec) > 780 && meanAltitudeKm(rec) < 830);
+  const e = { ...entry('S2C_MSI'), id: 'S3C_TEST', norad_id: 100690, swath: { model: 'nadir_symmetric', width_km: 1270 } };
+  const r = predictEntry(e, { omm, epoch: omm.EPOCH + 'Z' }, prepareRoi({ type: 'Point', coordinates: [-8, 38] }), Date.parse(omm.EPOCH + 'Z'), Date.parse(omm.EPOCH + 'Z') + 3 * 86400000);
+  assert.ok(r.passes.length >= 2, `${r.passes.length} passes`);
+});

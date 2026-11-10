@@ -40,6 +40,19 @@ test('answer sentence (pt and en)', () => {
   assert.match(none.main, /Nenhum instrumento/);
 });
 
+test('per-category highlights: one line per category, earliest headline', async () => {
+  const { categoryHighlights } = await import('../js/absences.js');
+  setLang('pt');
+  const byId = Object.fromEntries(catalogue.entries.map((e) => [e.id, e]));
+  const hl = categoryHighlights(result, byId);
+  const cats = hl.map((h) => h.cat);
+  assert.ok(cats.includes('optical_multispectral'));
+  assert.equal(new Set(cats).size, cats.length);
+  const a = answerSentence(result, { tz: 'Europe/Lisbon', days: 16, isPoint: true, entriesById: byId });
+  assert.equal(a.best.closest_utc, Math.min(...hl.map((h) => h.pass.closest_utc)));
+  if (hl.length > 1) assert.equal(a.lines.length, hl.length);
+});
+
 test('absences explain a missed swath with distance and side', () => {
   setLang('pt');
   const short = predictPasses({ entries, tles, roi: point, start: START, days: 1 });

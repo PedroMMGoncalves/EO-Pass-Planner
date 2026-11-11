@@ -991,6 +991,9 @@ function exportAll(kind) {
       labelOf: (c) => t(`cat_${c}`),
     });
     download(`eo-pass-planner_${stamp}.geolibre`, JSON.stringify(project), 'application/json');
+    // GeoLibre opens projects by URL only from public addresses; the results
+    // never leave the browser, so the file is loaded there with Open From → File.
+    window.open('https://web.geolibre.app/', '_blank', 'noopener');
   }
 }
 

@@ -214,3 +214,12 @@ test('readable time-zone names', async () => {
   assert.equal(zoneName('Atlantic/Cape_Verde'), 'Cape Verde');
   setLang('pt');
 });
+
+test('spectral ruler: chemical notation and non-overlapping feature labels', async () => {
+  const { chemLabel, stackLabels } = await import('../js/spectral.js');
+  assert.equal(chemLabel('Fe3+'), 'Fe³⁺');
+  assert.equal(chemLabel('Mg-OH / CO3'), 'Mg-OH / CO₃');
+  assert.equal(chemLabel('Al-OH'), 'Al-OH');
+  // Two close labels go to different rows; a distant one stays on the first.
+  assert.deepEqual(stackLabels([{ x: 100, w: 30 }, { x: 110, w: 40 }, { x: 300, w: 20 }]), [0, 1, 0]);
+});

@@ -4,6 +4,8 @@
 
 # EO Pass Planner
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24131234.svg)](https://doi.org/10.5281/zenodo.24131234)
+
 **When will an Earth-observation satellite actually image my site?**
 
 EO Pass Planner is a web application that predicts, for a point or polygon
@@ -279,8 +281,15 @@ Prof. Qiusheng Wu), with thanks for that work
 
 ## Citation
 
-Citation metadata are in [`CITATION.cff`](CITATION.cff) (GitHub: "Cite this
-repository"). Releases are archived on Zenodo.
+Please cite the version used:
+
+> Gonçalves, P. (2026). *EO Pass Planner: browser-based prediction of
+> Earth-observation satellite passes over a region of interest* (v1.0.0).
+> Zenodo. https://doi.org/10.5281/zenodo.24131235
+
+The concept DOI [10.5281/zenodo.24131234](https://doi.org/10.5281/zenodo.24131234)
+always resolves to the latest version. Citation metadata are in
+[`CITATION.cff`](CITATION.cff) (GitHub: "Cite this repository").
 
 ## Licence
 

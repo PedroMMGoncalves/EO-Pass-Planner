@@ -10,6 +10,14 @@ authors:
     affiliation: "LNEG — Laboratório Nacional de Energia e Geologia"
     orcid: "https://orcid.org/0000-0002-6556-6086"
 version: 1.0.0
+doi: 10.5281/zenodo.24131234
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24131234
+    description: "Concept DOI — all versions (resolves to the latest release)"
+  - type: doi
+    value: 10.5281/zenodo.24131235
+    description: "Version DOI — v1.0.0"
 date-released: 2026-11-11
 license: MIT
 repository-code: "https://github.com/PedroMMGoncalves/EO-Pass-Planner"

@@ -163,23 +163,49 @@ when the engine changes; the browser test and the Lighthouse audit
 ## External services used by the page
 
 All are free, need no key and allow requests from the page (checked
-2026-11-10): Open-Meteo (cloud cover), Earth Search and Copernicus Data Space
-STAC (past acquisitions), EOX and OpenFreeMap (optional basemaps). Without a
+2026-11-10): Open-Meteo (weather forecast, ERA5 archive and CAMS air
+quality), Earth Search and Copernicus Data Space STAC (past acquisitions),
+NASA CMR (ICESat-2 tracks), EOX and OpenFreeMap (optional basemaps). Without a
 connection the page still computes passes from the bundled data; these parts
 stay empty.
 
 ## Credit
 
+### Method
+
 This is a clean-room reimplementation inspired by
 [eo-overpass-predictor](https://github.com/julianManning/eo-overpass-predictor)
-by Julian Manning (MIT), whose engine is used only as a validation reference.
-See [NOTICE](NOTICE).
+by Julian Manning (MIT,
+[doi:10.5281/zenodo.23629976](https://doi.org/10.5281/zenodo.23629976)), whose
+engine is used only as a validation reference. See [NOTICE](NOTICE).
+
+### Data sources
+
+| Data | Source | Terms / attribution |
+|---|---|---|
+| Orbital elements (TLE, OMM) | [CelesTrak](https://celestrak.org/) GP data (T.S. Kelso) | courtesy of CelesTrak |
+| Sentinel-1 and Sentinel-2 acquisition plans | [ESA](https://sentiwiki.copernicus.eu/), Copernicus programme | © ESA |
+| Weather and cloud cover, forecast | [Open-Meteo](https://open-meteo.com/), from national weather service models (ECMWF, DWD, NOAA, Météo-France and others) | CC BY 4.0, "Weather data by Open-Meteo.com" |
+| Weather and cloud cover, past dates | ERA5 reanalysis, Copernicus Climate Change Service (C3S), via Open-Meteo ([Hersbach et al., 2020](https://doi.org/10.1002/qj.3803)) | Copernicus licence |
+| Aerosols and dust | Copernicus Atmosphere Monitoring Service (CAMS), via Open-Meteo | Copernicus licence |
+| Past Sentinel-2 and Landsat acquisitions | [Earth Search](https://earth-search.aws.element84.com/v1) STAC (Element 84): Sentinel-2 L2A (Copernicus Sentinel data, ESA) and Landsat Collection 2 Level-2 (USGS) | Copernicus licence; USGS public domain |
+| Past Sentinel-1 acquisitions | [Copernicus Data Space Ecosystem](https://dataspace.copernicus.eu/) STAC, Sentinel-1 GRD | Copernicus licence |
+| ICESat-2 reference ground tracks | NASA [Common Metadata Repository](https://cmr.earthdata.nasa.gov/), ATL08 granules (NSIDC DAAC) | NASA open data |
+| Mission and instrument parameters | [WMO OSCAR](https://space.oscar.wmo.int/), [ESA SentiWiki](https://sentiwiki.copernicus.eu/), [eoPortal](https://www.eoportal.org/) and agency documentation (NASA, USGS, NOAA, EUMETSAT, JAXA, DLR, CNES, ASI, CONAE, INPE, ISRO) and commercial operators | cited per entry in [`data/catalogue.json`](data/catalogue.json) |
+| Spectral bands | the same agency and operator sources | cited per group in [`data/bands.json`](data/bands.json) |
+| Mineral absorption features | Hunt (1979, 1981), compiled in Lee and Raines (1984), USGS Open-File Reports 84-96 and 81-787; Reddy et al. (2015) | cited per feature in [`data/bands.json`](data/bands.json) |
+| Offline basemap | [Natural Earth](https://www.naturalearthdata.com/) 1:110m and 1:50m | public domain |
+| Satellite imagery basemap | [EOxCloudless 2024](https://cloudless.eox.at) by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024) | CC BY-NC-SA 4.0 |
+| Street basemaps | [OpenFreeMap](https://openfreemap.org/), [OpenMapTiles](https://openmaptiles.org/), © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors | ODbL |
+
+Third-party libraries and fonts: see [vendor/README.md](vendor/README.md). Dark
+theme colours: [Dracula](https://draculatheme.com/) palette.
+
+### GeoLibre
 
 Projects can be exported to [GeoLibre](https://geolibre.app) (opengeos,
 Prof. Qiusheng Wu), with thanks for that work
 ([doi:10.5281/zenodo.20785400](https://doi.org/10.5281/zenodo.20785400)).
-
-Third-party libraries, fonts and basemaps: see [vendor/README.md](vendor/README.md).
 
 ## Licence
 

@@ -1,0 +1,50 @@
+{
+  "title": "EO Pass Planner: browser-based prediction of Earth-observation satellite passes over a region of interest",
+  "description": "<p>Static, client-side web application that predicts when Earth-observation instruments image a point or polygon region of interest. Orbital elements (CelesTrak) are propagated with SGP4, and each instrument swath is intersected with the region in a local equal-area projection. Swath models cover nadir-symmetric imagers, side-looking SAR, tasked sensors (field of regard), lidar and altimeter profiles and geostationary view geometry, for a catalogue of 74 optical, hyperspectral, thermal, SAR, lidar, meteorological, atmospheric and geophysics missions.</p><p>For each pass it reports time (UTC and local), region coverage, viewing and illumination geometry, orbit direction, expected cloud and atmospheric conditions, and whether the acquisition is systematic or a tasking opportunity. Sentinel-1 and Sentinel-2 passes are cross-checked against ESA acquisition plans, and past passes against real acquisitions in STAC catalogues. Results export as CSV, iCalendar, GeoJSON and GeoLibre projects.</p><p>The engine agrees with the reference implementation (eo-overpass-predictor) to within 0.06 s and 0.1 percentage points of coverage, and predicted times agree with 330 Sentinel-2 and Landsat scenes to about 1 s with element sets less than a week old. The archive contains the application and the orbital data at the time of release; the live application updates its data every 6 h.</p>",
+  "upload_type": "software",
+  "license": "mit",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Gonçalves, Pedro",
+      "affiliation": "LNEG — Laboratório Nacional de Energia e Geologia",
+      "orcid": "0000-0002-6556-6086"
+    }
+  ],
+  "keywords": [
+    "Earth observation",
+    "remote sensing",
+    "satellite pass prediction",
+    "SGP4",
+    "swath",
+    "acquisition planning",
+    "Sentinel-1",
+    "Sentinel-2",
+    "Landsat",
+    "SAR",
+    "InSAR",
+    "field campaigns",
+    "GIS"
+  ],
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "https://pedrommgoncalves.github.io/EO-Pass-Planner/",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.5281/zenodo.23629976",
+      "relation": "references",
+      "resource_type": "software",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.20785400",
+      "relation": "references",
+      "resource_type": "software",
+      "scheme": "doi"
+    }
+  ]
+}

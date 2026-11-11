@@ -1,0 +1,46 @@
+# Citation metadata (Citation File Format 1.2.0). GitHub shows them under
+# "Cite this repository"; Zenodo reads .zenodo.json for the archived record.
+cff-version: 1.2.0
+message: "If you use this software, please cite the version used."
+type: software
+title: "EO Pass Planner: browser-based prediction of Earth-observation satellite passes over a region of interest"
+authors:
+  - family-names: "Gonçalves"
+    given-names: "Pedro"
+    affiliation: "LNEG — Laboratório Nacional de Energia e Geologia"
+    orcid: "https://orcid.org/0000-0002-6556-6086"
+version: 1.0.0
+date-released: 2026-11-11
+license: MIT
+repository-code: "https://github.com/PedroMMGoncalves/EO-Pass-Planner"
+url: "https://pedrommgoncalves.github.io/EO-Pass-Planner/"
+keywords:
+  - Earth observation
+  - remote sensing
+  - satellite pass prediction
+  - SGP4
+  - swath
+  - acquisition planning
+  - Sentinel
+  - Landsat
+  - SAR
+  - field campaigns
+abstract: >-
+  Static, client-side web application that predicts when Earth-observation
+  instruments image a point or polygon region of interest, from orbital
+  elements propagated with SGP4 and the intersection of each instrument swath
+  with the region in a local equal-area projection. It reports time (UTC and
+  local), coverage, viewing and illumination geometry, orbit direction,
+  expected cloud and atmospheric conditions, and whether the acquisition is
+  systematic or a tasking opportunity, and cross-checks Sentinel-1/-2 passes
+  against ESA acquisition plans and past passes against real acquisitions in
+  STAC catalogues.
+references:
+  - type: software
+    title: "eo-overpass-predictor"
+    authors:
+      - family-names: "Manning"
+        given-names: "Julian"
+    doi: 10.5281/zenodo.23629976
+    repository-code: "https://github.com/julianManning/eo-overpass-predictor"
+    notes: "Method that inspired this implementation; used as the validation reference."

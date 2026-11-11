@@ -4,85 +4,116 @@
 
 # EO Pass Planner
 
-A browser-only tool that answers, for a point or polygon region of interest
-(ROI) and a date window, future or past:
+**When will an Earth-observation satellite actually image my site?**
 
-> Which Earth-observation instruments will image (or have geometrically imaged)
-> this ROI, when (UTC and local time), with what coverage, geometry,
-> illumination and expected cloud, and is the acquisition systematic or only an
-> opportunity that must be tasked?
+EO Pass Planner is a web application that predicts, for a point or polygon
+region of interest (ROI) and a date window, which Earth-observation
+instruments will image it (or have geometrically imaged it), when (UTC and
+local time), with what coverage, viewing and illumination geometry, orbit
+direction and expected cloud, and whether the acquisition is systematic or an
+opportunity that must be tasked.
 
-**Live:** <https://pedrommgoncalves.github.io/EO-Pass-Planner/>
+**Open the application:** <https://pedrommgoncalves.github.io/EO-Pass-Planner/>
 
-Static site for GitHub Pages: no server, no build step, no framework. The
-orbital data and ESA acquisition plans are refreshed every 6 h by a GitHub
-Action and committed as static files.
+It runs entirely in the browser: no installation, no account, no server.
+Orbital data and ESA acquisition plans are refreshed every 6 h.
 
-## What it does
+![Globe with the swaths of the predicted passes over a site in southern Portugal, the answer sentence and the revisit calendar](docs/img/overview.jpg)
 
-- **Globe** (MapLibre GL JS, globe projection) with live satellite positions,
-  past and future ground tracks, the instantaneous swath of each sensor while it
-  would acquire, and the night side. Five basemaps (an offline Natural Earth
-  map, Sentinel-2 cloudless 2024 imagery, three OpenStreetMap styles) and a light
-  or dark (Dracula palette) theme.
-- **Region of interest**: a point (globe click or typed coordinates), a polygon
-  or rectangle drawn on the globe, typed coordinates in WGS 84, ETRS89/PT-TM06,
-  UTM 28N/29N/32N/36S/37S or any proj4 definition, or a GeoJSON, KML, KMZ or
-  zipped Shapefile file; optional buffer.
-- **Pass prediction** (SGP4, swath/ROI intersection in an ROI-centred
-  equal-area projection) for 74 catalogue entries: optical, very-high
-  resolution, hyperspectral, thermal, SAR, lidar and altimetry, meteorological,
-  atmospheric, geostationary and geophysics missions. Swath models:
-  nadir-symmetric (with optional nadir gap), side-looking SAR, field of regard
-  for tasked sensors (geometric opportunities only), lidar/altimeter profiles,
-  ground-track proximity and geostationary view geometry. Optional commercial
-  constellations (PlanetScope, SkySat, ICEYE, Capella, Umbra, WorldView Legion)
-  are expanded to their current members, loaded only when selected.
-  Computation runs in parallel Web Workers.
-- **Answer first**: a sentence with the earliest useful pass and one line per
-  instrument category, with a countdown; when results arrive, the footprints
-  are swept across the globe in time order before the best pass is shown.
-- **Evidence**: revisit calendar (instrument × day), sortable table, pass drawer
-  with a to-scale cross-section, cloud forecast and a drone window, spectral
-  ruler with diagnostic mineral absorption features, absences ("why no pass"),
-  geostationary view angles, candidate InSAR pairs (Sentinel-1, NISAR), and
-  real past acquisitions from STAC catalogues.
-- **Cross-checks**: ESA Sentinel-1/-2 acquisition plans (planned / not planned /
-  no plan), cloud cover and atmospheric conditions at pass time (Open-Meteo,
-  CAMS), Sentinel-2 MGRS tiles, Sentinel-1 relative orbits, Landsat WRS-2
-  path/row, ICESat-2 reference ground tracks (NASA CMR), and probable orbit
-  manoeuvres detected in the element-set archive.
-- **Accessibility**: category colours checked for colour-vision deficiency
-  (`scripts/check_palette.mjs`) and backed up by marker shapes.
-- **Exports**: CSV, iCalendar (.ics), GeoJSON footprints, a GeoLibre project,
-  a printable field sheet, and links that reproduce a query or open a given pass.
+## Quick start
+
+1. **Choose the place**: click the globe, draw a polygon or rectangle, type
+   coordinates, or load a GeoJSON, KML, KMZ or zipped Shapefile.
+2. **Choose the window and instruments**: start date, length (16 days by
+   default) and the instrument categories of interest.
+3. **Compute passes**: the answer bar gives the next useful pass and one line
+   per instrument category; the calendar, the table and the pass details hold
+   the evidence.
+
+Example: [the next 16 days over Neves-Corvo, Portugal](https://pedrommgoncalves.github.io/EO-Pass-Planner/#roi=p:37.57300,-7.97100&d=16&l=en).
+Every query and every pass has a link that reproduces it.
+
+<table>
+  <tr>
+    <td width="70%"><img src="docs/img/calendar.png" alt="Revisit calendar: one row per instrument, one column per day; colour strength gives coverage, hatching forecast cloud, outlines tasking opportunities, A and D the orbit direction of SAR passes"></td>
+    <td width="30%"><img src="docs/img/pass-drawer.png" alt="Pass details: to-scale cross-section, geometry, cloud forecast, ESA plan status, atmospheric conditions and a drone window"></td>
+  </tr>
+  <tr>
+    <td><b>Revisit calendar.</b> One row per instrument and one column per local day. Colour strength gives ROI coverage, hatching forecast cloud, an outline a tasking opportunity; SAR rows mark ascending (A) and descending (D) passes.</td>
+    <td><b>Pass details.</b> To-scale cross-section, geometry, cloud, ESA plan status, atmospheric conditions and a drone window.</td>
+  </tr>
+</table>
+
+## Features
+
+- **Globe** (MapLibre GL JS) with live satellite positions, ground tracks, the
+  swath of each sensor while it would acquire, and the night side; offline,
+  satellite-imagery and OpenStreetMap basemaps; light and dark themes.
+- **Region of interest** as a point, polygon or rectangle, typed in WGS 84,
+  ETRS89/PT-TM06, UTM or any proj4 definition, or read from a file; optional
+  buffer.
+- **Answer first**: a sentence with the earliest useful pass, one line per
+  instrument category and a countdown.
+- **Evidence**: revisit calendar, sortable table, pass details with a to-scale
+  cross-section, spectral ruler with diagnostic mineral absorption features,
+  explanation of absences ("why no pass"), geostationary view angles and
+  candidate InSAR pairs.
+- **Cross-checks**: ESA Sentinel-1/-2 acquisition plans (planned, not planned,
+  no plan), cloud and atmospheric conditions at pass time, real past
+  acquisitions from STAC catalogues, Sentinel-2 MGRS tiles, Sentinel-1
+  relative orbits, Landsat WRS-2 path/row, ICESat-2 reference ground tracks and
+  probable orbit manoeuvres.
+- **Filters**: category, tasking opportunities, orbit direction, maximum cloud
+  and maximum aerosol optical depth.
+- **Exports**: CSV, iCalendar (.ics), GeoJSON footprints, a
+  [GeoLibre](https://geolibre.app) project and a printable field sheet.
+- **Accessibility**: colour-vision-safe category palette backed up by marker
+  shapes, keyboard navigation, screen-reader labels.
 - Portuguese (pt-PT) and English interface.
 
-## Run locally
+## Catalogue
 
-Any static file server from the repository root, for example:
+74 entries in [`data/catalogue.json`](data/catalogue.json), each with cited
+sources for its status, swath and orbit; values not yet confirmed are marked.
+Satellites in commissioning or at the end of their mission are optional, and
+commercial constellations are expanded to their current members when
+selected.
 
-```sh
-python -m http.server 8000
-```
+| Category | Entries | Examples |
+|---|---:|---|
+| Optical multispectral | 14 | Landsat 8/9, Sentinel-2B/2C, Sentinel-3 OLCI, MODIS, CBERS-4A, PlanetScope |
+| Optical very high resolution | 9 | SPOT 6, Pléiades, Pléiades Neo, SkySat, WorldView-3, WorldView Legion |
+| Hyperspectral | 7 | EnMAP, PRISMA, EMIT, DESIS, PACE OCI, FLEX |
+| Thermal infrared | 5 | Sentinel-3 SLSTR, ECOSTRESS |
+| Radar (SAR) | 15 | Sentinel-1C/1D, NISAR, SAOCOM, ALOS-2/4, TerraSAR-X, PAZ, ICEYE, Capella, Umbra |
+| Lidar and altimetry | 8 | ICESat-2, GEDI, SWOT, Sentinel-6, CryoSat-2, Sentinel-3 SRAL |
+| Polar meteorological | 6 | Metop AVHRR, Metop-SG METimage, VIIRS |
+| Geostationary meteorological | 3 | Meteosat MTG FCI, Meteosat SEVIRI |
+| Atmosphere | 2 | Sentinel-5P TROPOMI, Sentinel-5 |
+| Geophysics | 5 | Swarm, GRACE-FO |
 
-then open <http://localhost:8000/>. Opening `index.html` as a file does not
-work, because ES modules and `fetch` need http.
+## How it works
 
-## Data
+1. **Orbits.** Element sets from CelesTrak (TLE, or OMM for catalogue numbers
+   above 99 999) are propagated with SGP4 (satellite.js) on a coarse time
+   grid, refined around each approach.
+2. **Swaths.** For each instrument, the swath is built across the ground track
+   from its swath model: nadir-symmetric (with an optional nadir gap),
+   side-looking SAR from nominal incidence angles, field of regard for tasked
+   sensors (geometric opportunities only), beam profiles for lidar and
+   altimeters, and view geometry for geostationary imagers.
+3. **Intersection.** Swath and ROI are intersected in an equal-area projection
+   centred on the ROI, which gives the coverage, the closest-approach time,
+   the nadir offset, the edge margin and the viewing and solar angles.
+4. **Acquisition rules.** Each entry states when it acquires (for example,
+   daytime descending passes within its latitude limits), whether acquisition
+   is systematic, partial or tasked, and its minimum coverage.
+5. **Cross-checks.** Sentinel-1/-2 passes are compared with ESA acquisition
+   plans; weather, cloud and aerosols at pass time come from Open-Meteo; past
+   passes are compared with products in STAC catalogues.
 
-- `data/catalogue.json` is maintained by hand. Every entry cites sources for
-  its status, swath and NORAD id; values not yet confirmed are listed in
-  `unverified_fields`. `scripts/validate_catalogue.py` enforces these rules.
-- `data/bands.json` holds the band tables and absorption features of the
-  spectral ruler, with sources.
-- `data/tles.json`, `data/tle_history/`, `data/plans/` and `data/meta.json`
-  (plus `data/manoeuvres.json` and `data/tles_constellations.json`) are
-  generated by [`update-data`](.github/workflows/update-data.yml) every 6 h:
-  element sets from [CelesTrak](https://celestrak.org/) (TLE, or OMM for
-  catalogue numbers above 99 999) and ESA acquisition plans from Sentinel Online
-  (`scripts/esa_plans.py`). The workflow never overwrites good data with a
-  failed fetch.
+Computation runs in parallel Web Workers; 16 days for the default selection
+take a few seconds.
 
 ## Validation
 
@@ -92,7 +123,7 @@ work, because ES modules and `fetch` need http.
 element sets over 16 days and five ROIs (Port Phillip Bay, Neves-Corvo,
 Ossa-Morena, Maputo, mainland Portugal); 68 expected passes. Both found the same
 passes for every ROI. Full table: [docs/oracle_residuals.md](docs/oracle_residuals.md).
-CI repeats the comparison on every push.
+CI repeats the comparison whenever the engine changes.
 
 | Quantity (JS − reference) | mean | s.d. | max \|Δ\| |
 |---|---:|---:|---:|
@@ -128,23 +159,22 @@ systematic instruments over the mainland Portugal polygon take 3.4 s (target:
 under 10 s); all non-inactive entries take 6.4 s. In the browser the default
 selection for a point takes about 2.6 s.
 
-## Tests
+## Data and updates
 
-```sh
-npm test                                              # JavaScript (node --test, no dependencies)
-python -m unittest discover -s tests -p "test_*.py"   # Python scripts
-python scripts/validate_catalogue.py                  # catalogue rules
-python scripts/oracle_compare.py --oracle-dir <clone>  # needs the reference environment
-node scripts/ground_truth.mjs --days 16                # validation against real acquisitions
-python scripts/make_sgp4_fixtures.py                   # regenerate SGP4/sun fixtures (needs skyfield)
-node scripts/check_palette.mjs                         # colour-vision-deficiency check of the palette
-node scripts/e2e.mjs                                   # browser test (needs playwright and a local server)
-```
+| Data | Where | Updated |
+|---|---|---|
+| Catalogue and band tables | [`data/catalogue.json`](data/catalogue.json), [`data/bands.json`](data/bands.json) | by hand; every value cites a source, and `scripts/validate_catalogue.py` enforces the rules |
+| Orbital elements, element-set archive, detected manoeuvres | `data/tles.json`, `data/tles_constellations.json`, `data/tle_history/`, `data/manoeuvres.json` | every 6 h by the [`update-data`](.github/workflows/update-data.yml) workflow, which commits the files |
+| ESA acquisition plans (Sentinel-1/-2) | `data/plans/` | every 6 h, converted from the ESA KML files (`scripts/esa_plans.py`) |
+| Weather, cloud, aerosols, real acquisitions, ICESat-2 tracks | requested by the page at query time | live; nothing is stored |
 
-Continuous integration is kept light: unit tests run on code changes only; the
-reference comparison ([oracle.yml](.github/workflows/oracle.yml)) runs only
-when the engine changes; the browser test and the Lighthouse audit
-([e2e.yml](.github/workflows/e2e.yml)) run on demand from the Actions tab.
+The workflow never overwrites good data with a failed fetch, and the page
+shows the age of its data. The page requests only services that are free,
+need no key and accept requests from any page (checked 2026-11-10):
+Open-Meteo (forecast, ERA5 archive, CAMS air quality), Earth Search and
+Copernicus Data Space STAC, NASA CMR, EOX and OpenFreeMap. Without a
+connection it still computes passes from the bundled data; the live parts
+stay empty.
 
 ## Limitations
 
@@ -160,14 +190,54 @@ when the engine changes; the browser test and the Lighthouse audit
 - ISS-hosted instruments depend on ISS attitude and operations that the
   element sets do not capture.
 
-## External services used by the page
+## Development
 
-All are free, need no key and allow requests from the page (checked
-2026-11-10): Open-Meteo (weather forecast, ERA5 archive and CAMS air
-quality), Earth Search and Copernicus Data Space STAC (past acquisitions),
-NASA CMR (ICESat-2 tracks), EOX and OpenFreeMap (optional basemaps). Without a
-connection the page still computes passes from the bundled data; these parts
-stay empty.
+Static site: no build step, no framework, no runtime CDN; libraries are
+vendored in [`vendor/`](vendor/). Serve the repository root with any static
+server, for example
+
+```sh
+python -m http.server 8000
+```
+
+and open <http://localhost:8000/> (opening `index.html` as a file does not
+work, because ES modules and `fetch` need http).
+
+```sh
+npm test                                              # JavaScript unit tests (node --test, no dependencies)
+python -m unittest discover -s tests -p "test_*.py"   # Python scripts
+python scripts/validate_catalogue.py                  # catalogue rules
+python scripts/oracle_compare.py --oracle-dir <clone>  # comparison with the reference implementation
+node scripts/ground_truth.mjs --days 16                # validation against real acquisitions
+python scripts/make_sgp4_fixtures.py                   # regenerate SGP4/sun fixtures (needs skyfield)
+node scripts/check_palette.mjs                         # colour-vision-deficiency check of the palette
+node scripts/e2e.mjs                                   # browser test (needs playwright and a local server)
+```
+
+Continuous integration runs the unit tests on code changes, the reference
+comparison ([oracle.yml](.github/workflows/oracle.yml)) when the engine
+changes, and the browser test and Lighthouse audit
+([e2e.yml](.github/workflows/e2e.yml)) on demand.
+
+## Relation to eo-overpass-predictor
+
+The method follows
+[eo-overpass-predictor](https://github.com/julianManning/eo-overpass-predictor)
+by Julian Manning: SGP4 propagation, swath construction across the ground
+track, intersection with the ROI in a local equal-area projection, daytime
+descending filters, edge margin, element-set age, the ESA plan cross-check and
+time-zone-aware local times. EO Pass Planner is an independent JavaScript
+implementation of that method (no code is shared), validated against it, and
+extended in scope:
+
+| | eo-overpass-predictor | EO Pass Planner |
+|---|---|---|
+| Form | Python, Jupyter notebooks | static web application |
+| Instruments | Landsat 8/9, Sentinel-2A/B/C | 74 catalogue entries in 10 categories |
+| Swath models | nadir-symmetric | nadir-symmetric, side-looking SAR, field of regard, profile, geostationary |
+| ESA plans | Sentinel-2 | Sentinel-1 and Sentinel-2, refreshed every 6 h |
+| Outputs | tables, CSV, GeoPackage, maps, live tracker | answer sentence, calendar, table, pass details; CSV, iCalendar, GeoJSON, GeoLibre, field sheet |
+| Additional | | cloud and atmosphere, real acquisitions, InSAR pairs, spectral ruler, absences, manoeuvre detection, Portuguese and English |
 
 ## Credit
 
@@ -206,6 +276,11 @@ theme colours: [Dracula](https://draculatheme.com/) palette.
 Projects can be exported to [GeoLibre](https://geolibre.app) (opengeos,
 Prof. Qiusheng Wu), with thanks for that work
 ([doi:10.5281/zenodo.20785400](https://doi.org/10.5281/zenodo.20785400)).
+
+## Citation
+
+Citation metadata are in [`CITATION.cff`](CITATION.cff) (GitHub: "Cite this
+repository"). Releases are archived on Zenodo.
 
 ## Licence
 

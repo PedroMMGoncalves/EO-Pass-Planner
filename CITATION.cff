@@ -9,7 +9,7 @@ authors:
     given-names: "Pedro"
     affiliation: "LNEG — Laboratório Nacional de Energia e Geologia"
     orcid: "https://orcid.org/0000-0002-6556-6086"
-version: 1.0.0
+version: 1.0.1
 doi: 10.5281/zenodo.24131234
 identifiers:
   - type: doi

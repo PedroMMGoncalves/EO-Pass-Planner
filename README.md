@@ -284,8 +284,8 @@ Prof. Qiusheng Wu), with thanks for that work
 Please cite the version used:
 
 > Gonçalves, P. (2026). *EO Pass Planner: browser-based prediction of
-> Earth-observation satellite passes over a region of interest* (v1.0.0).
-> Zenodo. https://doi.org/10.5281/zenodo.24131235
+> Earth-observation satellite passes over a region of interest* (v1.0.1).
+> Zenodo. https://doi.org/10.5281/zenodo.24134791
 
 The concept DOI [10.5281/zenodo.24131234](https://doi.org/10.5281/zenodo.24131234)
 always resolves to the latest version. Citation metadata are in

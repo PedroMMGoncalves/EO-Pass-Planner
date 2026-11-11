@@ -18,6 +18,9 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.24131235
     description: "Version DOI — v1.0.0"
+  - type: doi
+    value: 10.5281/zenodo.24134791
+    description: "Version DOI — v1.0.1"
 date-released: 2026-11-11
 license: MIT
 repository-code: "https://github.com/PedroMMGoncalves/EO-Pass-Planner"

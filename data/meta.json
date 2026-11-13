@@ -1,13 +1,15 @@
 {
- "updated_utc": "2026-11-13T04:10:46.503Z",
+ "updated_utc": "2026-11-13T13:39:36.811Z",
  "catalogue_version": "2026-11-10.5",
  "tle_count": 51,
  "stale_tles": [],
  "catalogue_alerts": [],
  "sources": {
   "celestrak": {
-   "ok": true,
-   "errors": []
+   "ok": false,
+   "errors": [
+    "65053: fetch failed: HTTP 500"
+   ]
   },
   "esa_plans": {
    "ok": true,

@@ -1,9 +1,15 @@
 {
- "updated_utc": "2026-11-16T14:19:13.190Z",
+ "updated_utc": "2026-11-17T01:18:30.833Z",
  "catalogue_version": "2026-11-10.5",
  "tle_count": 51,
  "stale_tles": [],
- "catalogue_alerts": [],
+ "catalogue_alerts": [
+  {
+   "id": "ALOS2_PALSAR2",
+   "kind": "note_expired",
+   "detail": "2026-11-16"
+  }
+ ],
  "sources": {
   "celestrak": {
    "ok": true,

@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-11-26T01:20:20.247Z",
+ "updated_utc": "2026-11-26T16:02:09.323Z",
  "catalogue_version": "2026-11-10.5",
  "tle_count": 51,
  "stale_tles": [],
@@ -12,8 +12,15 @@
  ],
  "sources": {
   "celestrak": {
-   "ok": true,
-   "errors": []
+   "ok": false,
+   "errors": [
+    "25544: fetch failed: HTTPSConnectionPool(host='celestrak.org', port=443): Read timed out. (read timeout=30)",
+    "25994: fetch failed: HTTPSConnectionPool(host='celestrak.org', port=443): Read timed out. (read timeout=30)",
+    "27424: fetch failed: HTTP 503",
+    "31698: fetch failed: HTTP 503",
+    "36508: fetch failed: HTTP 503",
+    "36605: fetch failed: HTTP 503"
+   ]
   },
   "esa_plans": {
    "ok": true,

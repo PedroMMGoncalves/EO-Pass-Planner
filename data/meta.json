@@ -1,5 +1,5 @@
 {
- "updated_utc": "2026-11-25T01:45:24.522Z",
+ "updated_utc": "2026-11-26T01:20:20.247Z",
  "catalogue_version": "2026-11-10.5",
  "tle_count": 51,
  "stale_tles": [],
@@ -12,75 +12,16 @@
  ],
  "sources": {
   "celestrak": {
-   "ok": false,
-   "errors": [
-    "25544: fetch failed: HTTP 503",
-    "25994: fetch failed: HTTP 503",
-    "27424: fetch failed: HTTP 503",
-    "31698: fetch failed: HTTP 503",
-    "36508: fetch failed: HTTP 503",
-    "36605: fetch failed: HTTP 503",
-    "38012: fetch failed: HTTP 503",
-    "38552: fetch failed: HTTP 503",
-    "38755: fetch failed: HTTP 503",
-    "38771: fetch failed: HTTP 503",
-    "39019: fetch failed: HTTP 503",
-    "39084: fetch failed: HTTP 503",
-    "39451: fetch failed: HTTP 503",
-    "39452: fetch failed: HTTP 503",
-    "39453: fetch failed: HTTP 503",
-    "39766: fetch failed: HTTP 503",
-    "40115: fetch failed: HTTP 503",
-    "40697: fetch failed: HTTP 503",
-    "40732: fetch failed: HTTP 503",
-    "41335: fetch failed: HTTP 503",
-    "42063: fetch failed: HTTP 503",
-    "42969: fetch failed: HTTP 503",
-    "43013: fetch failed: HTTP 503",
-    "43215: fetch failed: HTTP 503",
-    "43437: fetch failed: HTTP 503",
-    "43476: fetch failed: HTTP 503",
-    "43477: fetch failed: HTTP 503",
-    "43613: fetch failed: HTTP 503",
-    "43641: fetch failed: HTTP 503",
-    "43689: fetch failed: HTTP 503",
-    "44072: fetch failed: HTTP 503",
-    "44883: fetch failed: HTTP 503",
-    "46265: fetch failed: HTTP 503",
-    "46984: fetch failed: HTTP 503",
-    "47699: fetch failed: HTTP 503",
-    "48268: fetch failed: HTTP 503",
-    "49070: fetch failed: HTTP 503",
-    "49260: fetch failed: HTTP 503",
-    "52159: fetch failed: HTTP 503",
-    "54234: fetch failed: HTTP 503",
-    "54743: fetch failed: HTTP 503",
-    "54754: fetch failed: HTTP 503",
-    "58928: fetch failed: HTTP 503",
-    "60182: fetch failed: HTTP 503",
-    "60989: fetch failed: HTTP 503",
-    "62261: fetch failed: HTTP 503",
-    "65053: fetch failed: HTTP 503",
-    "65159: fetch failed: HTTP 503",
-    "66315: fetch failed: HTTP 503",
-    "100689: fetch failed: HTTP 503",
-    "100690: fetch failed: HTTP 503"
-   ]
+   "ok": true,
+   "errors": []
   },
   "esa_plans": {
    "ok": true,
    "errors": []
   },
   "constellations": {
-   "ok": false,
-   "errors": [
-    "PLANETSCOPE_SD: fetch failed: 503 Server Error: Service Unavailable for url: https://celestrak.org/NORAD/elements/gp.php?FORMAT=JSON&GROUP=planet",
-    "SKYSAT: fetch failed: 503 Server Error: Service Unavailable for url: https://celestrak.org/NORAD/elements/gp.php?FORMAT=JSON&GROUP=planet",
-    "ICEYE_SAR_STRIP: fetch failed: 503 Server Error: Service Unavailable for url: https://celestrak.org/NORAD/elements/gp.php?FORMAT=JSON&NAME=ICEYE",
-    "CAPELLA_SAR: fetch failed: 503 Server Error: Service Unavailable for url: https://celestrak.org/NORAD/elements/gp.php?FORMAT=JSON&NAME=CAPELLA",
-    "UMBRA_SAR: fetch failed: 503 Server Error: Service Unavailable for url: https://celestrak.org/NORAD/elements/gp.php?FORMAT=JSON&NAME=UMBRA",
-    "WVLEGION: fetch failed: 503 Server Error: Service Unavailable for url: https://celestrak.org/NORAD/elements/gp.php?FORMAT=JSON&NAME=LEGION"
-   ]
+   "ok": true,
+   "errors": []
   }
  }
 }
